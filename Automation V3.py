@@ -1,9 +1,9 @@
 import os
-import shutil
 import re
+import shutil
+
 import pymongo
-# import everythings (variables, classes, methods...) inside moviepy.editor
-from moviepy.editor import *
+from moviepy.editor import VideoFileClip
 from PIL import Image
 
 
@@ -34,7 +34,7 @@ class Automation:
                 self.channelMetaData.drop()
                 print("channelMetaData Collection Dropped")
             return True
-        except:
+        except Exception:
             print("Couldnt drop the Collection")
             return False
 
@@ -78,7 +78,7 @@ class Automation:
     def getVideoBasicData(self, dirpath, filename):
         dirpath = dirpath.replace("\\", "/")
         noExtFileName = filename[0:-4]
-        fileExt = filename[-4:]
+        # fileExt = filename[-4:]
         channel = "Unknown"
         newFileName = noExtFileName
         if(noExtFileName[0] == "["):
@@ -92,7 +92,7 @@ class Automation:
             cleanFileName = re.split('[-]', newFileName)[0]
             for m in modelSplitup:
                 model.append(m.strip())
-        except:
+        except Exception:
             cleanFileName = newFileName
             if(dirpath.find("Models") != -1):
                 model = [channel]
@@ -122,7 +122,7 @@ class Automation:
         nframes = clip.reader.nframes  # return number of frame in the video
         duration = clip.duration  # return duration of the video in second
         dimensions = clip.size
-        max_duration = int(clip.duration) + 1
+        # max_duration = int(clip.duration) + 1
         # here is the time where you want to take the thumbnail at second, it should be smaller than max_duration
         frame_at_second = 28
         # Gets a numpy array representing the RGB picture of the clip at time frame_at_second
@@ -138,7 +138,9 @@ class Automation:
 
         return fps, nframes, duration, dimensions
 
-    def saveVideoMetaData(self, newFileName, originalFileName, videoDirPath, videoPath, channel, tagList, modelList, fps, nframes, duration, dimensions):
+    def saveVideoMetaData(self, newFileName, originalFileName, videoDirPath,
+                          videoPath, channel, tagList, modelList, fps, nframes,
+                          duration, dimensions):
         video = {}
         video['filename'] = newFileName
         video['originalfilename'] = originalFileName
@@ -154,7 +156,7 @@ class Automation:
         savedVideo = self.videoMetaData.insert_one(video)
         return savedVideo.inserted_id
 
-    def Automate(self, path: str, saveDataInDB: int = 1, createThumbnail: int = 1) -> int:
+    def Automate(self, path: str, saveDataInDB: int = 1, createThumbnail: int = 1):
         if(createThumbnail):
             self.createThumbnailsFolder()
         fileCount = 0
@@ -173,7 +175,7 @@ class Automation:
                     if(dirpath.find("Groups")):
                         channelData = self.channelMetaData.find_one(
                             {"name": channel})
-                        if(channelData == None):
+                        if(channelData is None):
                             channelID = self.createChannel(channel)
                         else:
                             channelID = channelData["_id"]
@@ -181,13 +183,23 @@ class Automation:
                         for model in modelList:
                             modelData = self.modelMetaData.find_one(
                                 {"name": model})
-                            if(modelData == None):
+                            if(modelData is None):
                                 modelListIDs.append(self.createModel(model))
                             else:
                                 modelListIDs.append(modelData["_id"])
 
                     videoID = self.saveVideoMetaData(
-                        newFileName, filename, videoDirPath, videoPath, channelID, tagList, modelListIDs, fps, nframes, duration, dimensions)
+                        newFileName,
+                        filename,
+                        videoDirPath,
+                        videoPath,
+                        channelID,
+                        tagList,
+                        modelListIDs,
+                        fps,
+                        nframes,
+                        duration,
+                        dimensions)
 
                     self.channelMetaData.update_one(
                         {"_id": channelID}, {"$push": {"videoList": videoID}})
@@ -209,9 +221,9 @@ while(1):
     if(choice == 1):
         commands = list(map(int, input().split()))
         if(commands == []):
-            auto.Automate(".\Files")
+            auto.Automate(r".\Files")
         else:
-            auto.Automate(".\Files", commands[0], commands[1])
+            auto.Automate(r".\Files", commands[0], commands[1])
     elif(choice == 2):
         commands = list(map(int, input().split()))
         if(commands == []):
