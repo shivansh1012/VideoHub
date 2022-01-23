@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family:
+  /* font-family:
     -apple-system,
     'BlinkMacSystemFont',
     'Segoe UI',
@@ -15,12 +15,12 @@ body {
     'Cantarell',
     'Fira Sans',
     'Droid Sans',
-    'Helvetica Neue';
+    'Helvetica Neue'; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
+/* code {
   font-family:
     source-code-pro,
     Menlo,
@@ -28,7 +28,7 @@ code {
     Consolas,
     'Courier New',
     monospace;
-}
+} */
 
 .light-content {
   background: #fff;
