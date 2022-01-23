@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {Link} from "react-router-dom";
-// import axios from 'axios';
-import { apiBaseURL } from '../../config.js';
+import { ApiBaseUrl } from '../../config.js';
 
 export default function VideoList() {
     const [videoList, setVideoList] = useState([]);
 
     const getVideoList = async () => {
-        // const response = await axios.get(`${apiBaseURL}/meta/list`);
-        await fetch(`${apiBaseURL}/meta/list`).then(response => 
+        await fetch(`${ApiBaseUrl}/meta/list`).then(response => 
             response.json()).then((json) => {
             console.log(json.videoList)
             setVideoList(json.videoList);

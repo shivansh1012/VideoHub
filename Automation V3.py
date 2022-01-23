@@ -109,7 +109,7 @@ class Automation:
         VIDEOFILENAME = filename
         source_path = os.path.join(dirpath, VIDEOFILENAME) # get the path to our sample video
         
-        clip = VideoFileClip(source_path) #
+        clip = VideoFileClip(source_path)
 
         fps = clip.reader.fps # return number of frame per second
         nframes = clip.reader.nframes # return number of frame in the video

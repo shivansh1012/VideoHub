@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import VideoMatrix from '../../Layout/VideoMatrix/VideoMatrix';
-import { apiBaseURL } from '../../config';
+import { ApiBaseUrl } from '../../config';
 import * as ReactBootstrap from "react-bootstrap";
 
 export default function SearchPage(props) {
@@ -13,7 +13,7 @@ export default function SearchPage(props) {
             return
         }
         setLoading(true)
-        await fetch(`${apiBaseURL}/meta/search?query=${props.searchQuery}`).then(response =>
+        await fetch(`${ApiBaseUrl}/meta/search?query=${props.searchQuery}`).then(response =>
             response.json()).then((json) => {
                 // console.log(json.videoData)
                 setResultVideoList(json.resultVideoList)

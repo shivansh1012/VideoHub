@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useParams, Link } from 'react-router-dom'
 import VideoPlayer from "../../Layout/VideoPlayer/VideoPlayer.jsx"
-import { apiBaseURL } from '../../config.js';
+import { ApiBaseUrl } from '../../config.js';
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
 import * as ReactBootstrap from "react-bootstrap";
 
@@ -31,7 +31,7 @@ export default function VideoInfo() {
   }
 
   const getVideoMetaData = useCallback(async () => {
-    await fetch(`${apiBaseURL}/meta?id=${id}`).then(response =>
+    await fetch(`${ApiBaseUrl}/meta?id=${id}`).then(response =>
       response.json()).then((json) => {
         // console.log(json.videoData)
         setVideoData(json.videoData);
