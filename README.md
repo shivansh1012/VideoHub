@@ -16,14 +16,14 @@ Python    - Automation to create thumbnails and add data to database of videos i
   npm i
   ```
   
-in backend and frontend folders.
+in webapp and server folders.
 ### Executing program
 
-* To start server, Go  in ./backend and execute
+* To start client, Go into .\webapp\ and execute
   ```bash
   npm start
   ```
-* To start client, Go into ./frontend and execute
+* To start server, Go  in .\server\ and execute
   ```bash
   npm start
   ```

@@ -14,6 +14,7 @@ import Settings from './Views/Settings/Settings.jsx'
 import ModelInfo from './Views/ModelInfo/ModelInfo.jsx'
 import ChannelInfo from './Views/ChannelInfo/ChannelInfo.jsx'
 import SearchPage from './Views/SearchPage/SearchPage.jsx'
+import AboutApp from './Views/AboutApp/AboutApp.jsx'
 
 function App () {
   const [searchQuery, setSearchQuery] = useState('')
@@ -27,6 +28,7 @@ function App () {
         <Route path='/model/:id' element={<ModelInfo />} />
         <Route path='/channel/:id' element={<ChannelInfo />} />
         <Route path='/settings' element={<Settings />} />
+        <Route path='/about' element={<AboutApp />} />
         <Route path='/search' element={<SearchPage searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />
       </Switch>
     </Router>

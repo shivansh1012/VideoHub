@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ApiBaseUrl } from '../../config.js';
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
 

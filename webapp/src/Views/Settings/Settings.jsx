@@ -1,6 +1,4 @@
-import React, {useContext} from 'react'
-
-// import { Button, InputGroup } from 'reactstrap';
+import {useContext} from 'react'
 
 import ThemeContext, {themes} from "../../Theme/themeContextWrapper.js"
 

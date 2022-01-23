@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams, Link } from 'react-router-dom'
 import VideoPlayer from "../../Layout/VideoPlayer/VideoPlayer.jsx"
 import { ApiBaseUrl } from '../../config.js';

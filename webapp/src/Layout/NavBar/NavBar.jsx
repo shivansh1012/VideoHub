@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link, Navigate } from 'react-router-dom'
 
 export default function NavBar(props) {
@@ -15,7 +14,7 @@ export default function NavBar(props) {
                         <Link className="btn bg-white" to="/search">Search</Link>
                     </form>
                     {/* <ul className="navbar-nav me-auto mb-2 mb-lg-0"> */}
-                    <ul className="navbar-nav ms-auto">
+                    <ul className="navbar-nav ms-auto" style={{fontSize:"15px", textAlign:"center"}}>
                         <li className="nav-item">
                             <Link className="nav-link active" to="/">Home</Link>
                         </li>
@@ -24,6 +23,9 @@ export default function NavBar(props) {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link active" to="/settings">Settings</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link active" to="/about">About</Link>
                         </li>
                     </ul>
                 </div>
