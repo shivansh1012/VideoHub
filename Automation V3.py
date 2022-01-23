@@ -132,7 +132,7 @@ class Automation:
         if createThumbnail:
             new_image_filepath = os.path.join(
                 self.thumbnails_dir, f"{cleanFileName}.jpg"
-                )
+            )
             new_image = Image.fromarray(frame)  # convert numpy array to image
             new_image.save(new_image_filepath)  # save the image
 
@@ -152,7 +152,7 @@ class Automation:
         fps,
         nframes,
         duration,
-        dimensions
+        dimensions,
     ):
         video = {}
         video["filename"] = newFileName
@@ -178,12 +178,13 @@ class Automation:
                 if filename[-4:] not in [".mp4", ".mkv"]:
                     continue
 
-                (newFileName,
-                videoDirPath,
-                videoPath,
-                channel,
-                tagList,
-                modelList
+                (
+                    newFileName,
+                    videoDirPath,
+                    videoPath,
+                    channel,
+                    tagList,
+                    modelList,
                 ) = self.getVideoBasicData(dirpath, filename)
 
                 fps, nframes, duration, dimensions = self.getVideoProperties(
@@ -234,8 +235,11 @@ class Automation:
 
 
 while True:
-    choice = int(input(
-        "1. Insert Data and Create Thumbnails\n2. Drop Collections and Thumbnails\n3. Exit\n"))
+    choice = int(
+        input(
+            "1. Insert Data and Create Thumbnails\n2. Drop Collections and Thumbnails\n3. Exit\n"
+            )
+        )
 
     auto = Automation()
     if choice == 1:
