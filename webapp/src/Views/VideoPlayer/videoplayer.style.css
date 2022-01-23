@@ -1,0 +1,12 @@
+#player-overlay {
+    width: 70%;
+    height: 70%;
+    /* z-index: 999; */
+  }
+  
+  video {
+    border-radius: 50px;
+    display: block;
+    width: 100%;
+    max-height: 70%;
+  }
