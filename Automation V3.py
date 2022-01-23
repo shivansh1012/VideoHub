@@ -13,8 +13,7 @@ class Automation:
         ABS_PATH = os.path.abspath(__file__)
         # get the chemin for this current directory
         BASE_DIR = os.path.dirname(ABS_PATH)
-        self.thumbnails_dir = os.path.join(
-            BASE_DIR, 'webapp\\public\\thumbnails')
+        self.thumbnails_dir = os.path.join(BASE_DIR, r"webapp\public\thumbnails")
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]
@@ -22,15 +21,17 @@ class Automation:
         self.modelMetaData = mydb["ModelMetaData"]
         self.channelMetaData = mydb["ChannelMetaData"]
 
-    def dropCollections(self, deleteVideoMetaData=1, deleteModelMetaData=1, deleteChannelMetaData=1) -> bool:
+    def dropCollections(
+        self, deleteVideoMetaData=1, deleteModelMetaData=1, deleteChannelMetaData=1
+    ) -> bool:
         try:
-            if(deleteVideoMetaData):
+            if deleteVideoMetaData:
                 self.videoMetaData.drop()
                 print("videoMetaData Collection Dropped")
-            if(deleteModelMetaData):
+            if deleteModelMetaData:
                 self.modelMetaData.drop()
                 print("modelMetaData Collection Dropped")
-            if(deleteChannelMetaData):
+            if deleteChannelMetaData:
                 self.channelMetaData.drop()
                 print("channelMetaData Collection Dropped")
             return True
@@ -50,7 +51,7 @@ class Automation:
 
     def createThumbnailsFolder(self):
         try:
-            # create the folder 'thumbnails'  at Ex : path/to/your/project/folder/data/outputs/thumbnails
+            # create the folder "thumbnails"  at Ex : path/to/your/project/folder/data/outputs/thumbnails
             os.makedirs(self.thumbnails_dir, exist_ok=True)
             print("Thumbnails Folder Created")
             return True
@@ -61,16 +62,16 @@ class Automation:
 
     def createModel(self, name) -> str:
         model = {}
-        model['name'] = name
-        model['videoList'] = []
+        model["name"] = name
+        model["videoList"] = []
 
         saveModel = self.modelMetaData.insert_one(model)
         return saveModel.inserted_id
 
     def createChannel(self, name) -> str:
         channel = {}
-        channel['name'] = name
-        channel['videoList'] = []
+        channel["name"] = name
+        channel["videoList"] = []
 
         saveChannel = self.channelMetaData.insert_one(channel)
         return saveChannel.inserted_id
@@ -81,20 +82,20 @@ class Automation:
         # fileExt = filename[-4:]
         channel = "Unknown"
         newFileName = noExtFileName
-        if(noExtFileName[0] == "["):
+        if noExtFileName[0] == "[":
             channel = noExtFileName.split("]")[0][1:].strip()
             newFileName = noExtFileName.split("]")[1].strip()
         path = os.path.join(dirpath, filename).replace("\\", "/")
 
         model = []
         try:
-            modelSplitup = re.split('[-]', newFileName)[1].strip().split(',')
-            cleanFileName = re.split('[-]', newFileName)[0]
+            modelSplitup = re.split("[-]", newFileName)[1].strip().split(",")
+            cleanFileName = re.split("[-]", newFileName)[0]
             for m in modelSplitup:
                 model.append(m.strip())
         except Exception:
             cleanFileName = newFileName
-            if(dirpath.find("Models") != -1):
+            if dirpath.find("Models") != -1:
                 model = [channel]
             else:
                 model = []
@@ -128,9 +129,10 @@ class Automation:
         # Gets a numpy array representing the RGB picture of the clip at time frame_at_second
         frame = clip.get_frame(frame_at_second)
 
-        if(createThumbnail):
+        if createThumbnail:
             new_image_filepath = os.path.join(
-                self.thumbnails_dir, f"{cleanFileName}.jpg")
+                self.thumbnails_dir, f"{cleanFileName}.jpg"
+                )
             new_image = Image.fromarray(frame)  # convert numpy array to image
             new_image.save(new_image_filepath)  # save the image
 
@@ -138,52 +140,67 @@ class Automation:
 
         return fps, nframes, duration, dimensions
 
-    def saveVideoMetaData(self, newFileName, originalFileName, videoDirPath,
-                          videoPath, channel, tagList, modelList, fps, nframes,
-                          duration, dimensions):
+    def saveVideoMetaData(
+        self,
+        newFileName,
+        originalFileName,
+        videoDirPath,
+        videoPath,
+        channel,
+        tagList,
+        modelList,
+        fps,
+        nframes,
+        duration,
+        dimensions
+    ):
         video = {}
-        video['filename'] = newFileName
-        video['originalfilename'] = originalFileName
-        video['dir'] = videoDirPath
-        video['path'] = videoPath
-        video['channel'] = channel
-        video['tags'] = tagList
-        video['model'] = modelList
-        video['fps'] = fps
-        video['nframes'] = nframes
-        video['duration'] = duration
-        video['dimensions'] = dimensions
+        video["filename"] = newFileName
+        video["originalfilename"] = originalFileName
+        video["dir"] = videoDirPath
+        video["path"] = videoPath
+        video["channel"] = channel
+        video["tags"] = tagList
+        video["model"] = modelList
+        video["fps"] = fps
+        video["nframes"] = nframes
+        video["duration"] = duration
+        video["dimensions"] = dimensions
         savedVideo = self.videoMetaData.insert_one(video)
         return savedVideo.inserted_id
 
     def Automate(self, path: str, saveDataInDB: int = 1, createThumbnail: int = 1):
-        if(createThumbnail):
+        if createThumbnail:
             self.createThumbnailsFolder()
         fileCount = 0
         for dirpath, dirs, files in os.walk(path):
             for filename in files:
-                if(filename[-4:] not in [".mp4", ".mkv"]):
+                if filename[-4:] not in [".mp4", ".mkv"]:
                     continue
 
-                newFileName, videoDirPath, videoPath, channel, tagList, modelList = self.getVideoBasicData(
-                    dirpath, filename)
+                (newFileName,
+                videoDirPath,
+                videoPath,
+                channel,
+                tagList,
+                modelList
+                ) = self.getVideoBasicData(dirpath, filename)
 
                 fps, nframes, duration, dimensions = self.getVideoProperties(
-                    dirpath, filename, newFileName, createThumbnail)
+                    dirpath, filename, newFileName, createThumbnail
+                )
 
-                if(saveDataInDB):
-                    if(dirpath.find("Groups")):
-                        channelData = self.channelMetaData.find_one(
-                            {"name": channel})
-                        if(channelData is None):
+                if saveDataInDB:
+                    if dirpath.find("Groups"):
+                        channelData = self.channelMetaData.find_one({"name": channel})
+                        if channelData is None:
                             channelID = self.createChannel(channel)
                         else:
                             channelID = channelData["_id"]
                         modelListIDs = []
                         for model in modelList:
-                            modelData = self.modelMetaData.find_one(
-                                {"name": model})
-                            if(modelData is None):
+                            modelData = self.modelMetaData.find_one({"name": model})
+                            if modelData is None:
                                 modelListIDs.append(self.createModel(model))
                             else:
                                 modelListIDs.append(modelData["_id"])
@@ -199,39 +216,42 @@ class Automation:
                         fps,
                         nframes,
                         duration,
-                        dimensions)
+                        dimensions,
+                    )
 
                     self.channelMetaData.update_one(
-                        {"_id": channelID}, {"$push": {"videoList": videoID}})
+                        {"_id": channelID}, {"$push": {"videoList": videoID}}
+                    )
 
                     for modelID in modelListIDs:
                         self.modelMetaData.update_one(
-                            {"_id": modelID}, {"$push": {"videoList": videoID}})
+                            {"_id": modelID}, {"$push": {"videoList": videoID}}
+                        )
 
                 fileCount += 1
 
-                print("File Number:"+str(fileCount), newFileName, channel)
+                print("File Number:" + str(fileCount), newFileName, channel)
 
 
-while(1):
+while True:
     choice = int(input(
         "1. Insert Data and Create Thumbnails\n2. Drop Collections and Thumbnails\n3. Exit\n"))
 
     auto = Automation()
-    if(choice == 1):
+    if choice == 1:
         commands = list(map(int, input().split()))
-        if(commands == []):
+        if commands == []:
             auto.Automate(r".\Files")
         else:
             auto.Automate(r".\Files", commands[0], commands[1])
-    elif(choice == 2):
+    elif choice == 2:
         commands = list(map(int, input().split()))
-        if(commands == []):
+        if commands == []:
             auto.dropCollections()
             auto.deleteThumbnails()
-        elif(commands[0] == 1):
+        elif commands[0] == 1:
             auto.dropCollections()
-        elif(commands[1] == 1):
+        elif commands[1] == 1:
             auto.deleteThumbnails()
     else:
         break
