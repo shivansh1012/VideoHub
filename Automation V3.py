@@ -238,8 +238,8 @@ while True:
     choice = int(
         input(
             "1. Insert Data and Create Thumbnails\n2. Drop Collections and Thumbnails\n3. Exit\n"
-            )
         )
+    )
 
     auto = Automation()
     if choice == 1:
