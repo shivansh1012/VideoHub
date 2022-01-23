@@ -1,13 +1,13 @@
 {
-  "name": "hidden",
+  "name": "videohubserver",
   "version": "1.0.0",
-  "description": "",
+  "description": "VideoHub is a platfrom to watch videos, get recommendations related to videos and searching any videos.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
   },
-  "author": "",
+  "author": "shivansh1012",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^2.0.15"

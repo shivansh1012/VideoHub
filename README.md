@@ -21,7 +21,7 @@ in backend and frontend folders.
 
 * To start server, Go  in ./backend and execute
   ```
-  npm run dev
+  npm start
   ```
 * To start client, Go into ./frontend and execute
   ```
