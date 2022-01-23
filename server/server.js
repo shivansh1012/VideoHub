@@ -13,11 +13,11 @@ app.use(cookieParser())
 // cors
 app.use(cors({
   origin: true,
-  credentials: true,
+  credentials: true
 }))
 
 // logging middleware
-const requestLogger = (req, res, next) => { 
+const requestLogger = (req, res, next) => {
   const method = req.method
   const url = req.url
   const log = `${method}:${url}`

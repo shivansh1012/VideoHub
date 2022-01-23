@@ -10,11 +10,11 @@ router.get('/', async (req, res) => {
     if (!videoID) {
       return res.status(400).send('Requires Video ID')
     }
-    const videoData = await VideoMetaData.findById(req.query.id).populate('channel','name').populate('model')
+    const videoData = await VideoMetaData.findById(req.query.id).populate('channel', 'name').populate('model')
 
     const channelVideoList = await ChannelMetaData.findById(videoData.channel._id).populate('videoList')
 
-    let moreVideos=channelVideoList.videoList
+    const moreVideos = channelVideoList.videoList
     // for (let i = 0 i < videoData.model.length i++) {
     //   let modelVideoList = await ModelMetaData.findById(videoData.model[i]['_id']).populate('videoList')
     //   moreVideos=moreVideos.concat(modelVideoList.videoList)
@@ -73,21 +73,21 @@ router.get('/list', async (req, res) => {
 router.get('/search', async (req, res) => {
   try {
     const query = req.query.query
-    
+
     if (!query) {
       return res.status(400).send('Requires Query')
     }
 
-    let queryOptions = {
+    const queryOptions = {
       $and: [{
         filename: {
-          '$regex': query,
-          '$options': 'i'
+          $regex: query,
+          $options: 'i'
         }
       }]
     }
-    
-    let resultVideoList = await VideoMetaData.find(queryOptions).populate('channel', 'name').populate('model')
+
+    const resultVideoList = await VideoMetaData.find(queryOptions).populate('channel', 'name').populate('model')
     res.status(200).json({ resultVideoList })
   } catch (e) {
     console.error(e)

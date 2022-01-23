@@ -7,7 +7,7 @@ console.log('Connecting to DB...')
 
 mongoose.connect(process.env.MERN_DB_URI_LOCAL, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 }, (err) => {
   if (err) return console.log(err)
   console.log('LOCAL DB connection Success')

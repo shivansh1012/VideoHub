@@ -19,7 +19,7 @@ router.get('', async (req, res) => {
   if (!tempVideoData) {
     return res.status(400).send('Invalid Video ID')
   }
-  let path = tempVideoData.path.substr(1)
+  const path = tempVideoData.path.substr(1)
 
   // get video stats (about 61MB)
   const videoPath = '..' + path

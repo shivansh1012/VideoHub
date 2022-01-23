@@ -12,8 +12,7 @@ Python    - Automation to create thumbnails and add data to database of videos i
 ### Installing
 
 * After cloning the repository run command
-  ```
-  #!/bin/bash
+  ```bash
   npm i
   ```
   
@@ -21,13 +20,11 @@ in backend and frontend folders.
 ### Executing program
 
 * To start server, Go  in ./backend and execute
-  ```
-  #!/bin/bash
+  ```bash
   npm start
   ```
 * To start client, Go into ./frontend and execute
-  ```
-  #!/bin/bash
+  ```bash
   npm start
   ```
 * !The Client and Server has to run together for it to work.
