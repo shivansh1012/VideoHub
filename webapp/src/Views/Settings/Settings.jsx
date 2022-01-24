@@ -1,6 +1,6 @@
 import {useContext} from 'react'
 
-import ThemeContext, {themes} from "../../Theme/themeContextWrapper.js"
+import ThemeContext, {themes} from "../../Service/Theme/themeContextWrapper.js"
 
 export default function SettingsComponent() {
     const { changeTheme } = useContext(ThemeContext);

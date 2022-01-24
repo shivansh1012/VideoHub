@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ApiBaseUrl } from "../../config";
 
-function useFetch(offset) {
+export default function useFetchForVideo(offset) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
     const [videoList, setVideoList] = useState([]);
@@ -34,8 +34,6 @@ function useFetch(offset) {
 
         return () => cancel();
     }, [offset]);
-    
-        return { isLoading, error, videoList, hasMore };
-    }
 
-export default useFetch;
+    return { isLoading, error, videoList, hasMore };
+}

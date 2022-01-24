@@ -1,10 +1,10 @@
 import { useState, useRef, useCallback } from "react";
-import useFetch from "../../Service/useFetch/useFetchForVideo.jsx";
+import useFetchForVideo from "../../Service/useFetch/useFetchForVideo.jsx";
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
 
 export default function Home() {
     const [offset, setOffset] = useState(0);
-    const { isLoading, error, videoList, hasMore } = useFetch(offset);
+    const { isLoading, error, videoList, hasMore } = useFetchForVideo(offset);
 
     const observer = useRef();
     const lastVideoElementRef = useCallback(
@@ -48,6 +48,8 @@ export default function Home() {
     return (
         <div className="p-5">
             <VideoMatrix videoList={videoList} lastVideoElementRef={lastVideoElementRef}/>
+            <div>{isLoading && "Loading..."}</div>
+            <div>{error && "Error..."}</div>
         </div>
     )
 }

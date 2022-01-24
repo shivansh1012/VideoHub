@@ -13,7 +13,6 @@ export default function ChannelInfo() {
     const getVideoMetaData = useCallback(async () => {
         await fetch(`${ApiBaseUrl}/meta/channel?id=${id}`).then(response =>
             response.json()).then((json) => {
-                console.log(json.channelData)
                 setChannelData(json.channelData);
             })
         setLoading(false);

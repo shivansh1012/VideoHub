@@ -13,7 +13,6 @@ export default function ModelInfo() {
     const getVideoMetaData = useCallback(async () => {
         await fetch(`${ApiBaseUrl}/meta/model?id=${id}`).then(response =>
             response.json()).then((json) => {
-                console.log(json.modelData)
                 setModelData(json.modelData);
             })
         setLoading(false);

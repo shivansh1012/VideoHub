@@ -1,12 +1,13 @@
 import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import useFetch from "../../Service/useFetch/useFetchForChannel.jsx"
+import useFetchForChannel from "../../Service/useFetch/useFetchForChannel.jsx"
 
 export default function ModelList() {
     const [offset, setOffset] = useState(0);
-    const { isLoading, error, channelList, hasMore } = useFetch(offset);
+    const { isLoading, error, channelList, hasMore } = useFetchForChannel(offset);
 
     const observer = useRef();
+
     const lastChannelElementRef = useCallback(
         (node) => {
             if (isLoading) return;
@@ -20,6 +21,17 @@ export default function ModelList() {
         },
         [isLoading, hasMore]
     );
+
+    const returnRow = (channel, index) => {
+        return (
+            <>
+                <th scope="row">{index + 1}</th>
+                <td>{channel.name}</td>
+                <td>{channel.videoList.length}</td>
+                <td><Link to={`/channel/${channel._id}`}>View</Link></td>
+            </>
+        )
+    }
 
     return (
         <div className="container" style={{ "textAlign": "center" }}>
@@ -37,19 +49,13 @@ export default function ModelList() {
                             if (channelList.length === index + 1) {
                                 return (
                                     <tr key={channel._id} ref={lastChannelElementRef}>
-                                        <th scope="row">{index + 1}</th>
-                                        <td>{channel.name}</td>
-                                        <td>{channel.videoList.length}</td>
-                                        <td><Link to={`/channel/${channel._id}`}>View</Link></td>
+                                        {returnRow(channel, index)}
                                     </tr>
                                 );
                             } else {
                                 return (
                                     <tr key={channel._id}>
-                                        <th scope="row">{index + 1}</th>
-                                        <td>{channel.name}</td>
-                                        <td>{channel.videoList.length}</td>
-                                        <td><Link to={`/channel/${channel._id}`}>View</Link></td>
+                                        {returnRow(channel, index)}
                                     </tr>
                                 );
                             }
