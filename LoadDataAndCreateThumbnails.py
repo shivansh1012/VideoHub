@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Loads Data in DB and generates thumbnails for Video Files.
 
-The VideoFiles in folder "./Files" are scanned and the details of video files are 
+The VideoFiles in folder "./Files" are scanned and the details of video files are
 inserted into the MongoDB and A thumbnail is generated for the same in "./thumbnails" Folder"""
 
 import os
@@ -19,6 +19,7 @@ __license__ = "GPL"
 __version__ = "1.0.1"
 __maintainer__ = "shivansh1012"
 __status__ = "Production"
+
 
 class Automation:
     def __init__(self) -> None:

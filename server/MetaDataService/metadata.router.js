@@ -61,7 +61,10 @@ router.get('/channel', async (req, res) => {
 
 router.get('/list', async (req, res) => {
   try {
-    const videoList = await VideoMetaData.find().populate('channel', 'name').populate('model')
+    const limit = req.query.limit
+    const offset = req.query.offset
+    const videoList = await VideoMetaData.find().skip(offset)
+      .limit(limit).populate('channel', 'name').populate('model')
 
     res.status(200).json({ videoList })
   } catch (e) {

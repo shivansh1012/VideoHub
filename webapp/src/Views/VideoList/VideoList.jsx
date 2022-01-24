@@ -3,14 +3,26 @@ import {Link} from "react-router-dom";
 import { ApiBaseUrl } from '../../config.js';
 
 export default function VideoList() {
+    let offset=0;
     const [videoList, setVideoList] = useState([]);
 
     const getVideoList = async () => {
-        await fetch(`${ApiBaseUrl}/meta/list`).then(response => 
+        await fetch(`${ApiBaseUrl}/meta/list?limit=15&offset=${offset}`).then(response => 
             response.json()).then((json) => {
             console.log(json.videoList)
-            setVideoList(json.videoList);
+            // setVideoList(json.videoList);
+            setVideoList((oldVideoList) => [...oldVideoList,...json.videoList]);
+            offset+=15;
         })
+    }
+
+    const handleScroll = (e) => {
+        if (
+            window.innerHeight + e.target.documentElement.scrollTop + 1 >=
+            e.target.documentElement.scrollHeight
+        ) {
+            getVideoList()
+        }
     }
 
     const rowRender = (video) => {
@@ -33,6 +45,7 @@ export default function VideoList() {
 
     useEffect(() => {
         getVideoList();
+        window.addEventListener("scroll", handleScroll)
     }, [])
     return (
         <div className="container" style={{"textAlign":"center"}}>

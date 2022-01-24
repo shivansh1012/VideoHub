@@ -40,7 +40,10 @@ export default function VideoInfo() {
     setLoading(false);
   }, [id])
 
-  useEffect(getVideoMetaData, [getVideoMetaData])
+  useEffect(() => {
+    getVideoMetaData()
+    window.scrollTo(0, 0)
+  }, [getVideoMetaData])
 
   return (
     <div className="container py-3">
