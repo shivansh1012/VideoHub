@@ -31,7 +31,7 @@ export default function VideoInfo() {
   }
 
   const getVideoMetaData = useCallback(async () => {
-    await fetch(`${ApiBaseUrl}/meta?id=${id}`).then(response =>
+    await fetch(`${ApiBaseUrl}/meta/video?id=${id}`).then(response =>
       response.json()).then((json) => {
         // console.log(json.videoData)
         setVideoData(json.videoData);

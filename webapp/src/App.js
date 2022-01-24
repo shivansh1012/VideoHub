@@ -23,7 +23,7 @@ function App () {
       <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <Switch>
         <Route path='/' element={<Home />} />
-        <Route path='/list' element={<VideoList />} />
+        <Route path='/video/list' element={<VideoList />} />
         <Route path='/video/:id' element={<VideoInfo />} />
         <Route path='/model/:id' element={<ModelInfo />} />
         <Route path='/channel/:id' element={<ChannelInfo />} />

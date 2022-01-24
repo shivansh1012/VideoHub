@@ -19,7 +19,13 @@ export default function NavBar(props) {
                             <Link className="nav-link active" to="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link active" to="/list">List</Link>
+                            <Link className="nav-link active" to="/video/list">VideoList</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link active" to="/model/list">ModelList</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link active" to="/channel/list">ChannelList</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link active" to="/settings">Settings</Link>

@@ -3,16 +3,16 @@ import { ApiBaseUrl } from '../../config.js';
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
 
 export default function Home() {
-    let offset=0;
+    let offset = 0;
     const [videoList, setVideoList] = useState([]);
 
     const getVideoList = async () => {
-        await fetch(`${ApiBaseUrl}/meta/list?limit=15&offset=${offset}`).then(response =>
+        await fetch(`${ApiBaseUrl}/meta/list/video?limit=15&offset=${offset}`).then(response =>
             response.json()).then((json) => {
                 // const newVideoListSet=[];
                 // console.log(json)
-                setVideoList((oldVideoList) => [...oldVideoList,...json.videoList]);
-                offset+=15;
+                setVideoList((oldVideoList) => [...oldVideoList, ...json.videoList]);
+                offset += 15;
             })
     }
 
@@ -32,7 +32,7 @@ export default function Home() {
 
     return (
         <div className="p-5">
-            <VideoMatrix videoList={videoList}/>
+            <VideoMatrix videoList={videoList} />
         </div>
     )
 }
