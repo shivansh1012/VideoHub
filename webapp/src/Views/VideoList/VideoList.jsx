@@ -1,52 +1,43 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ApiBaseUrl } from '../../config.js';
+import useFetch from "../../Service/useFetch/useFetchForVideo.jsx"
 
 export default function VideoList() {
-    let offset = 0;
-    const [videoList, setVideoList] = useState([]);
+    const [offset, setOffset] = useState(0);
+    const { isLoading, error, videoList, hasMore } = useFetch(offset);
 
-    const getVideoList = async () => {
-        await fetch(`${ApiBaseUrl}/meta/list/video?limit=15&offset=${offset}`).then(response =>
-            response.json()).then((json) => {
-                console.log(json.videoList)
-                // setVideoList(json.videoList);
-                setVideoList((oldVideoList) => [...oldVideoList, ...json.videoList]);
-                offset += 15;
-            })
-    }
+    const observer = useRef();
+    const lastVideoElementRef = useCallback(
+        (node) => {
+            if (isLoading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    setOffset((prev) => prev + 20);
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, hasMore]
+    );
 
-    const handleScroll = (e) => {
-        if (
-            window.innerHeight + e.target.documentElement.scrollTop + 1 >=
-            e.target.documentElement.scrollHeight
-        ) {
-            getVideoList()
-        }
-    }
+    // const rowRender = (video) => {
+    //     let modelList = ""
+    //     video.model.forEach(myFunction);
 
-    const rowRender = (video) => {
-        let modelList = ""
-        video.model.forEach(myFunction);
-
-        function myFunction(value, index, array) {
-            modelList += value["name"] + " ";
-        }
-        return (
-            <tr key={video._id}>
-                {/* <th scope="row">{index+1}</th> */}
-                <td>{video.channel.name}</td>
-                <td>{video.filename}</td>
-                <td>{modelList}</td>
-                <td><Link to={`/video/${video._id}`}>View</Link></td>
-            </tr>
-        )
-    }
-
-    useEffect(() => {
-        getVideoList();
-        window.addEventListener("scroll", handleScroll)
-    }, [])
+    //     function myFunction(value, index, array) {
+    //         modelList += value["name"] + " ";
+    //     }
+    //     return (
+    //         <tr key={video._id}>
+    //             {/* <th scope="row">{index+1}</th> */}
+    //             <td>{video.channel.name}</td>
+    //             <td>{video.filename}</td>
+    //             <td>{modelList}</td>
+    //             <td><Link to={`/video/${video._id}`}>View</Link></td>
+    //         </tr>
+    //     )
+    // }
     return (
         <div className="container" style={{ "textAlign": "center" }}>
             <table className="table">
@@ -60,12 +51,56 @@ export default function VideoList() {
                 </thead>
                 <tbody>
                     {
-                        videoList.map((video, index) => {
-                            return rowRender(video)
+                        videoList.map((video, i) => {
+                            if (videoList.length === i + 1) {
+                                return (
+                                    <tr key={video._id} ref={lastVideoElementRef}>
+                                        {/* <th scope="row">{index+1}</th> */}
+                                        <td>{video.channel.name}</td>
+                                        <td>{video.filename}</td>
+                                        <td><Link to={`/video/${video._id}`}>View</Link></td>
+                                    </tr>
+                                );
+                            } else {
+                                return (
+                                    <tr key={video._id}>
+                                        {/* <th scope="row">{index+1}</th> */}
+                                        <td>{video.channel.name}</td>
+                                        <td>{video.filename}</td>
+                                        <td><Link to={`/video/${video._id}`}>View</Link></td>
+                                    </tr>
+                                );
+                            }
                         })
                     }
                 </tbody>
             </table>
+            <div>{isLoading && "Loading..."}</div>
+            <div>{error && "Error..."}</div>
         </div>
     )
+
+    // return (
+    //     <div style={{fontSize:"40px"}}>
+    //     {
+    //         videoList.map((video, i) => {
+    //             if (videoList.length === i + 1) {
+    //                 return (
+    //                     <div key={i} ref={lastBookElementRef}>
+    //                         {video.filename}
+    //                     </div>
+    //                 );
+    //             } else {
+    //                 return (
+    //                     <div key={i}>
+    //                         {video.filename}
+    //                     </div>
+    //                 );
+    //             }
+    //         })
+    //     }
+    //     <div>{isLoading && "Loading..."}</div>
+    //     <div>{error && "Error..."}</div>
+    //     </div>
+    // )
 }

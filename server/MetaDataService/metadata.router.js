@@ -111,7 +111,7 @@ router.get('/search', async (req, res) => {
 
     const queryOptions = {
       $and: [{
-        filename: {
+        originalfilename: {
           $regex: query,
           $options: 'i'
         }

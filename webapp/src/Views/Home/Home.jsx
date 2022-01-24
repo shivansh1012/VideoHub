@@ -1,38 +1,53 @@
-import { useState, useEffect } from "react";
-import { ApiBaseUrl } from '../../config.js';
+import { useState, useRef, useCallback } from "react";
+import useFetch from "../../Service/useFetch/useFetchForVideo.jsx";
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
 
 export default function Home() {
-    let offset = 0;
-    const [videoList, setVideoList] = useState([]);
+    const [offset, setOffset] = useState(0);
+    const { isLoading, error, videoList, hasMore } = useFetch(offset);
 
-    const getVideoList = async () => {
-        await fetch(`${ApiBaseUrl}/meta/list/video?limit=15&offset=${offset}`).then(response =>
-            response.json()).then((json) => {
-                // const newVideoListSet=[];
-                // console.log(json)
-                setVideoList((oldVideoList) => [...oldVideoList, ...json.videoList]);
-                offset += 15;
-            })
-    }
+    const observer = useRef();
+    const lastVideoElementRef = useCallback(
+        (node) => {
+            if (isLoading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    setOffset((prev) => prev + 20);
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, hasMore]
+    );
 
-    const handleScroll = (e) => {
-        if (
-            window.innerHeight + e.target.documentElement.scrollTop + 1 >=
-            e.target.documentElement.scrollHeight
-        ) {
-            getVideoList()
-        }
-    }
+    // const getVideoList = async () => {
+    //     await fetch(`${ApiBaseUrl}/meta/list/video?limit=15&offset=${offset}`).then(response =>
+    //         response.json()).then((json) => {
+    //             // const newVideoListSet=[];
+    //             // console.log(json)
+    //             setVideoList((oldVideoList) => [...oldVideoList, ...json.videoList]);
+    //             offset += 15;
+    //         })
+    // }
 
-    useEffect(() => {
-        getVideoList();
-        window.addEventListener("scroll", handleScroll)
-    }, [])
+    // const handleScroll = (e) => {
+    //     if (
+    //         window.innerHeight + e.target.documentElement.scrollTop + 1 >=
+    //         e.target.documentElement.scrollHeight
+    //     ) {
+    //         getVideoList()
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     getVideoList();
+    //     window.addEventListener("scroll", handleScroll)
+    // }, [])
 
     return (
         <div className="p-5">
-            <VideoMatrix videoList={videoList} />
+            <VideoMatrix videoList={videoList} lastVideoElementRef={lastVideoElementRef}/>
         </div>
     )
 }
