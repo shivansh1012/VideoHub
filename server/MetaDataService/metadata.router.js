@@ -8,7 +8,7 @@ router.get('/video', async (req, res) => {
   try {
     const videoID = req.query.id
     if (!videoID) {
-      return res.status(400).send('Requires Video ID')
+      return res.status(400).json({ message: 'Requires Video ID' })
     }
     const videoData = await VideoMetaData.findById(req.query.id).populate('channel', 'name').populate('model')
 
@@ -33,7 +33,7 @@ router.get('/model', async (req, res) => {
   try {
     const modelID = req.query.id
     if (!modelID) {
-      return res.status(400).send('Requires Model ID')
+      return res.status(400).json({ message: 'Requires Model ID' })
     }
     const modelData = await ModelMetaData.findById(modelID).populate('videoList')
 
@@ -48,7 +48,7 @@ router.get('/channel', async (req, res) => {
   try {
     const channelID = req.query.id
     if (!channelID) {
-      return res.status(400).send('Requires Channel ID')
+      return res.status(400).json({ message: 'Requires Channel ID' })
     }
     const channelData = await ChannelMetaData.findById(channelID).populate('videoList')
 

@@ -9,4 +9,4 @@ export const TetheredSourceUrl = 'http://192.168.137.76:3000'
 export const GlobalSourceUrl = 'http://_._._._:3000'
 
 export const ApiBaseUrl = LanServerUrl
-export const SourceBaseUrl = LanSourceUrl
+export const SourceBaseUrl = LanServerUrl

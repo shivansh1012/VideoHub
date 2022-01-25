@@ -27,7 +27,7 @@ class Automation:
         ABS_PATH = os.path.abspath(__file__)
         # get the chemin for this current directory
         BASE_DIR = os.path.dirname(ABS_PATH)
-        self.thumbnails_dir = os.path.join(BASE_DIR, r"webapp\public\thumbnails")
+        self.thumbnails_dir = os.path.join(BASE_DIR, r"server\public\thumbnails")
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]

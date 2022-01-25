@@ -6,7 +6,7 @@ export default function VideoMatrix(props) {
         return (
             <div className="card border-0 bg-transparent" style={{ "borderRadius": "20px" }}>
                 <Link to={`/video/${video._id}`}>
-                    <img src={`${SourceBaseUrl}/thumbnails/${video.filename}.jpg`} className="card-img-top" alt={video.filename} style={{ "borderRadius": "20px" }} />
+                    <img src={`${SourceBaseUrl}/static/thumbnails/${video.filename}.jpg`} className="card-img-top" alt={video.filename} style={{ "borderRadius": "20px" }} />
                 </Link>
                 <div className="card-body">
                     <h5 className="card-title">{video.channel['name']}</h5>
