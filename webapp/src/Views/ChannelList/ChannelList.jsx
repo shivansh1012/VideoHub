@@ -1,13 +1,14 @@
 import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import useFetchForVideo from "../../Service/useFetch/useFetchForVideo.jsx"
+import useFetchForChannel from "../../Service/useFetch/useFetchForChannel.jsx"
 
-export default function VideoList() {
+export default function ModelList() {
     const [offset, setOffset] = useState(0);
-    const { isLoading, error, videoList, hasMore } = useFetchForVideo(offset);
+    const { isLoading, error, channelList, hasMore } = useFetchForChannel(offset);
 
     const observer = useRef();
-    const lastVideoElementRef = useCallback(
+
+    const lastChannelElementRef = useCallback(
         (node) => {
             if (isLoading) return;
             if (observer.current) observer.current.disconnect();
@@ -21,47 +22,40 @@ export default function VideoList() {
         [isLoading, hasMore]
     );
 
-    const returnRow = (video, index) => {
-        let modelList = ""
-        video.model.forEach(myFunction);
-
-        function myFunction(value, index, array) {
-            modelList += value["name"] + " ";
-        }
+    const returnRow = (channel, index) => {
         return (
             <>
                 <th scope="row">{index + 1}</th>
-                <td>{video.channel.name}</td>
-                <td>{video.filename}</td>
-                <td>{modelList}</td>
-                <td><Link to={`/video/${video._id}`}>View</Link></td>
+                <td>{channel.name}</td>
+                <td>{channel.videoList.length}</td>
+                <td><Link to={`/channel/${channel._id}`}>View</Link></td>
             </>
         )
     }
+
     return (
         <div className="container" style={{ "textAlign": "center" }}>
             <table className="table">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Channel</th>
-                        <th scope="col">FileName</th>
-                        <th scope="col">Model</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Videos</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        videoList.map((video, index) => {
-                            if (videoList.length === index + 1) {
+                        channelList.map((channel, index) => {
+                            if (channelList.length === index + 1) {
                                 return (
-                                    <tr key={video._id} ref={lastVideoElementRef}>
-                                        {returnRow(video, index)}
+                                    <tr key={channel._id} ref={lastChannelElementRef}>
+                                        {returnRow(channel, index)}
                                     </tr>
                                 );
                             } else {
                                 return (
-                                    <tr key={video._id}>
-                                        {returnRow(video, index)}
+                                    <tr key={channel._id}>
+                                        {returnRow(channel, index)}
                                     </tr>
                                 );
                             }

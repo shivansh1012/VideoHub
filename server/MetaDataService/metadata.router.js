@@ -4,11 +4,11 @@ const VideoMetaData = require('../Models/VideoMetaData.js')
 const ChannelMetaData = require('../Models/ChannelMetaData.js')
 const ModelMetaData = require('../Models/ModelMetaData.js')
 
-router.get('/', async (req, res) => {
+router.get('/video', async (req, res) => {
   try {
     const videoID = req.query.id
     if (!videoID) {
-      return res.status(400).send('Requires Video ID')
+      return res.status(400).json({ message: 'Requires Video ID' })
     }
     const videoData = await VideoMetaData.findById(req.query.id).populate('channel', 'name').populate('model')
 
@@ -33,7 +33,7 @@ router.get('/model', async (req, res) => {
   try {
     const modelID = req.query.id
     if (!modelID) {
-      return res.status(400).send('Requires Model ID')
+      return res.status(400).json({ message: 'Requires Model ID' })
     }
     const modelData = await ModelMetaData.findById(modelID).populate('videoList')
 
@@ -48,7 +48,7 @@ router.get('/channel', async (req, res) => {
   try {
     const channelID = req.query.id
     if (!channelID) {
-      return res.status(400).send('Requires Channel ID')
+      return res.status(400).json({ message: 'Requires Channel ID' })
     }
     const channelData = await ChannelMetaData.findById(channelID).populate('videoList')
 
@@ -59,11 +59,42 @@ router.get('/channel', async (req, res) => {
   }
 })
 
-router.get('/list', async (req, res) => {
+router.get('/list/video', async (req, res) => {
   try {
-    const videoList = await VideoMetaData.find().populate('channel', 'name').populate('model')
+    const limit = req.query.limit
+    const offset = req.query.offset
+    const videoList = await VideoMetaData.find().skip(offset)
+      .limit(limit).populate('channel', 'name').populate('model')
 
     res.status(200).json({ videoList })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.get('/list/model', async (req, res) => {
+  try {
+    const limit = req.query.limit
+    const offset = req.query.offset
+    const modelList = await ModelMetaData.find().skip(offset)
+      .limit(limit)
+
+    res.status(200).json({ modelList })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.get('/list/channel', async (req, res) => {
+  try {
+    const limit = req.query.limit
+    const offset = req.query.offset
+    const channelList = await ChannelMetaData.find().skip(offset)
+      .limit(limit)
+
+    res.status(200).json({ channelList })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -80,7 +111,7 @@ router.get('/search', async (req, res) => {
 
     const queryOptions = {
       $and: [{
-        filename: {
+        originalfilename: {
           $regex: query,
           $options: 'i'
         }

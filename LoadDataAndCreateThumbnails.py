@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+"""Loads Data in DB and generates thumbnails for Video Files.
+
+The VideoFiles in folder "./Files" are scanned and the details of video files are
+inserted into the MongoDB and A thumbnail is generated for the same in "./thumbnails" Folder"""
+
 import os
 import re
 import shutil
@@ -6,6 +12,14 @@ import pymongo
 from moviepy.editor import VideoFileClip
 from PIL import Image
 
+__author__ = "Shivansh Pandey"
+__copyright__ = "MIT"
+__credits__ = ["shivansh1012"]
+__license__ = "GPL"
+__version__ = "1.0.1"
+__maintainer__ = "shivansh1012"
+__status__ = "Production"
+
 
 class Automation:
     def __init__(self) -> None:
@@ -13,7 +27,7 @@ class Automation:
         ABS_PATH = os.path.abspath(__file__)
         # get the chemin for this current directory
         BASE_DIR = os.path.dirname(ABS_PATH)
-        self.thumbnails_dir = os.path.join(BASE_DIR, r"webapp\public\thumbnails")
+        self.thumbnails_dir = os.path.join(BASE_DIR, r"server\public\thumbnails")
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]

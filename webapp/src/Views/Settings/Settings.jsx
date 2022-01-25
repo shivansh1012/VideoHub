@@ -1,8 +1,6 @@
-import React, {useContext} from 'react'
+import {useContext} from 'react'
 
-// import { Button, InputGroup } from 'reactstrap';
-
-import ThemeContext, {themes} from "../../Theme/themeContextWrapper.js"
+import ThemeContext, {themes} from "../../Service/Theme/themeContextWrapper.js"
 
 export default function SettingsComponent() {
     const { changeTheme } = useContext(ThemeContext);

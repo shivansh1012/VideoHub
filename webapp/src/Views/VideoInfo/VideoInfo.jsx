@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams, Link } from 'react-router-dom'
 import VideoPlayer from "../../Layout/VideoPlayer/VideoPlayer.jsx"
 import { ApiBaseUrl } from '../../config.js';
@@ -31,7 +31,7 @@ export default function VideoInfo() {
   }
 
   const getVideoMetaData = useCallback(async () => {
-    await fetch(`${ApiBaseUrl}/meta?id=${id}`).then(response =>
+    await fetch(`${ApiBaseUrl}/meta/video?id=${id}`).then(response =>
       response.json()).then((json) => {
         // console.log(json.videoData)
         setVideoData(json.videoData);
@@ -40,7 +40,10 @@ export default function VideoInfo() {
     setLoading(false);
   }, [id])
 
-  useEffect(getVideoMetaData, [getVideoMetaData])
+  useEffect(() => {
+    getVideoMetaData()
+    window.scrollTo(0, 0)
+  }, [getVideoMetaData])
 
   return (
     <div className="container py-3">

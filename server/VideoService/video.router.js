@@ -7,17 +7,17 @@ router.get('', async (req, res) => {
   // Ensure there is a range given for the video
   const range = req.headers.range
   if (!range) {
-    return res.status(400).send('Requires Range header')
+    return res.status(400).json({ message: 'Requires Range header' })
   }
 
   const videoID = req.query.id
   if (!videoID) {
-    return res.status(400).send('Requires Video ID')
+    return res.status(400).json({ message: 'Requires Video ID' })
   }
 
   const tempVideoData = await VideoMetaData.findById(req.query.id)
   if (!tempVideoData) {
-    return res.status(400).send('Invalid Video ID')
+    return res.status(400).json({ message: 'Invalid Video ID' })
   }
   const path = tempVideoData.path.substr(1)
 

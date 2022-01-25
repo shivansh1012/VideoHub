@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom'
 import { ApiBaseUrl } from '../../config.js';
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
@@ -13,7 +13,6 @@ export default function ChannelInfo() {
     const getVideoMetaData = useCallback(async () => {
         await fetch(`${ApiBaseUrl}/meta/channel?id=${id}`).then(response =>
             response.json()).then((json) => {
-                console.log(json.channelData)
                 setChannelData(json.channelData);
             })
         setLoading(false);
