@@ -1,11 +1,11 @@
 # VideoHub
-VideoHub is a platfrom to watch videos, get recommendations related to videos and searching any videos.  
+VideoHub - watch videos, get recommendations and search any videos.  
 
 ## Tech Used
 ExpressJS - Server  
 ReactJS   - Frontend  
 MongoDB   - Database  
-Python    - Automation to create thumbnails and add data to database of videos in a folder  
+Python    - Automated Code to create thumbnails and add data to database of videos in a folder  
 
 ## Getting Started
 
