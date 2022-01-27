@@ -2,7 +2,7 @@ import { Link, Navigate } from 'react-router-dom'
 
 export default function NavBar(props) {
     return (
-        <nav className="navbar sticky-top navbar-expand-sm navbar-light bg-white">
+        <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-white">
             <div className="container">
                 <Link className="navbar-link my-3" style={{ "fontSize": "40px", "color": "black", textDecoration: "none"}} to="/">VideoHub</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">

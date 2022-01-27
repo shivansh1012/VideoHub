@@ -1,6 +1,6 @@
 export default function AboutApp() {
     return (
-        <div className="container" style={{"textAlign":"center"}}>
+        <div className="customcontainer" style={{"textAlign":"center"}}>
             <h1 style={{margin:"30px"}}>VideoHub</h1>
             <hr/>
             <h5 style={{margin:"30px"}}>VideoHub is a platfrom to watch videos, get recommendations related to videos and searching any videos.</h5>

@@ -15,7 +15,6 @@ export default function ModelInfo() {
         await fetch(`${ApiBaseUrl}/meta/model?id=${id}`).then(response =>
             response.json()).then((json) => {
                 setModelData(json.modelData);
-                console.log(json.modelData.videoList['0'].filename)
             })
         setLoading(false);
     }, [id])

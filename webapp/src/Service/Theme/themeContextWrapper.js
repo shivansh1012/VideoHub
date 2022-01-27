@@ -12,19 +12,18 @@ const ThemeContext = createContext({
 
 function ThemeContextWrapper (props) {
   const [theme, setTheme] = useState(themes.dark)
-
-  function changeTheme (theme) {
-    setTheme(theme)
-  }
+  const [themeState, setThemeState] = useState()
 
   useEffect(() => {
     switch (theme) {
       case themes.light:
+        setThemeState(false)
         document.body.classList.remove('dark-content')
         document.body.classList.add('light-content')
         break
       case themes.dark:
       default:
+        setThemeState(true)
         document.body.classList.remove('light-content')
         document.body.classList.add('dark-content')
         break
@@ -32,7 +31,7 @@ function ThemeContextWrapper (props) {
   }, [theme])
 
   return (
-    <ThemeContext.Provider value={{ theme: theme, changeTheme: changeTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, themeState, setThemeState }}>
       {props.children}
     </ThemeContext.Provider>
   )
