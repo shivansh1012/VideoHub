@@ -10,7 +10,7 @@ export default function AboutApp() {
             <h3 style={{margin:"30px"}}>Python : Automation : 1.0.1</h3>
             <h3 style={{margin:"30px"}}>MongoDB : Database : 3.0.0</h3>
             <hr/>
-            <h2 style={{margin:"30px"}}><a href="https://github.com/shivansh1012/VideoHub/">GitHub</a></h2>
+            <h2 style={{margin:"30px"}}><a href="https://github.com/shivansh1012/VideoHub/" target="_blank" rel="noreferrer">GitHub</a></h2>
         </div>
     )
 }

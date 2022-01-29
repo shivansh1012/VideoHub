@@ -1,7 +1,10 @@
 UselessStuff
 Files
 thumbnails
+thumbnailfriends
 profilepics
+fileRenamer.py
+filenameoutput.txt
 
 # dependencies
 node_modules

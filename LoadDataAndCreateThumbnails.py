@@ -5,7 +5,6 @@ The VideoFiles in folder "./Files" are scanned and the details of video files ar
 inserted into the MongoDB and A thumbnail is generated for the same in "./thumbnails" Folder"""
 
 import os
-import re
 import shutil
 
 import pymongo
@@ -94,31 +93,30 @@ class Automation:
         dirpath = dirpath.replace("\\", "/")
         noExtFileName = filename[0:-4]
         # fileExt = filename[-4:]
-        channel = "Unknown"
-        newFileName = noExtFileName
-        if noExtFileName[0] == "[":
-            channel = noExtFileName.split("]")[0][1:].strip()
-            newFileName = noExtFileName.split("]")[1].strip()
-        path = os.path.join(dirpath, filename).replace("\\", "/")
+        cleanFileName=""
+        models=[]
+        channel="Unknown"
+        newFileName = noExtFileName.split("-")
+        if len(newFileName)==1:
+            cleanFileName=newFileName[0].strip()
+        elif len(newFileName)==2:
+            cleanFileName=newFileName[0].strip()
+            for m in newFileName[1].split(","):
+                models.append(m.strip())
+            channel=models[0]
+        else:
+            cleanFileName=newFileName[0].strip()
+            for m in newFileName[1].split(","):
+                models.append(m.strip())
+            channel=newFileName[2].strip()
 
-        model = []
-        try:
-            modelSplitup = re.split("[-]", newFileName)[1].strip().split(",")
-            cleanFileName = re.split("[-]", newFileName)[0]
-            for m in modelSplitup:
-                model.append(m.strip())
-        except Exception:
-            cleanFileName = newFileName
-            if dirpath.find("Models") != -1:
-                model = [channel]
-            else:
-                model = []
+        path = os.path.join(dirpath, filename).replace("\\", "/")
 
         tag = [t for t in cleanFileName.split() if len(t) >= 3]
         # tag.extend([channel])
-        # tag.extend(model)
+        # tag.extend(models)
 
-        return cleanFileName, dirpath, path, channel, list(set(tag)), model
+        return cleanFileName, dirpath, path, channel, list(set(tag)), models
 
     def getVideoProperties(self, dirpath, filename, cleanFileName, createThumbnail):
         # noExtFileName = filename[0:-4]
@@ -245,7 +243,7 @@ class Automation:
 
                 fileCount += 1
 
-                print("File Number:" + str(fileCount), newFileName, channel)
+                print(f"File Number:{fileCount}\n    {newFileName}\n    {modelList}\n    {channel}\n")
 
 
 while True:

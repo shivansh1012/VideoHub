@@ -1,6 +1,6 @@
 :root {
   --background: white;
-  --text-primary: #ffffff;
+  --text-primary: black;
   --text-secondary: royalblue;
   --accent: purple;
 }
@@ -39,21 +39,25 @@
     max-width: 540px;
   }
 }
+
 @media (min-width: 768px) {
   .customcontainer {
     max-width: 720px;
   }
 }
+
 @media (min-width: 992px) {
   .customcontainer {
     max-width: 960px;
   }
 }
+
 @media (min-width: 1200px) {
   .customcontainer {
     max-width: 1140px;
   }
 }
+
 @media (min-width: 1400px) {
   .customcontainer {
     max-width: 1320px;
