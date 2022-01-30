@@ -59,5 +59,5 @@ in webapp and server folders.
 ### Video Player
 ![image](https://github.com/shivansh1012/VideoHub/blob/WebDev/ReadMEPics/Videoplayer.png)
 
-### Basic Details about video and more videos to continue watching.
+### Basic Details about video and more videos to continue watching
 ![image](https://github.com/shivansh1012/VideoHub/blob/WebDev/ReadMEPics/Videoplayermorevideos.png)

@@ -93,22 +93,22 @@ class Automation:
         dirpath = dirpath.replace("\\", "/")
         noExtFileName = filename[0:-4]
         # fileExt = filename[-4:]
-        cleanFileName=""
-        models=[]
-        channel="Unknown"
+        cleanFileName = ""
+        models = []
+        channel = "Unknown"
         newFileName = noExtFileName.split("-")
-        if len(newFileName)==1:
-            cleanFileName=newFileName[0].strip()
-        elif len(newFileName)==2:
-            cleanFileName=newFileName[0].strip()
+        if len(newFileName) == 1:
+            cleanFileName = newFileName[0].strip()
+        elif len(newFileName) == 2:
+            cleanFileName = newFileName[0].strip()
             for m in newFileName[1].split(","):
                 models.append(m.strip())
-            channel=models[0]
+            channel = models[0]
         else:
-            cleanFileName=newFileName[0].strip()
+            cleanFileName = newFileName[0].strip()
             for m in newFileName[1].split(","):
                 models.append(m.strip())
-            channel=newFileName[2].strip()
+            channel = newFileName[2].strip()
 
         path = os.path.join(dirpath, filename).replace("\\", "/")
 
@@ -243,7 +243,9 @@ class Automation:
 
                 fileCount += 1
 
-                print(f"File Number:{fileCount}\n    {newFileName}\n    {modelList}\n    {channel}\n")
+                print(
+                    f"File Number:{fileCount}\n    {newFileName}\n    {modelList}\n    {channel}\n"
+                )
 
 
 while True:

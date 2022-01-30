@@ -5,7 +5,7 @@ const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
 const ThemeContext = createContext()
 
-function NewThemeContext(props) {
+function NewThemeContext (props) {
   const [theme, setTheme] = useLocalStorage('theme', defaultDark ? 'dark' : 'light')
   const changeThemeToDark = () => {
     document.documentElement.setAttribute('data-theme', 'dark')

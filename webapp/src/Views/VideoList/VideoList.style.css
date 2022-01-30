@@ -5,13 +5,13 @@ table {
 }
 
 th {
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid var(--font-color);
   padding: 15px;
   font-size: 15px;
 }
 
 td {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid var(--font-color);
   padding: 11px;
   font-size: 15px;
 }
