@@ -7,7 +7,7 @@ export default function NavBar(props) {
             <div className="container">
                 <Link className="navbar-link my-3" style={{ "fontSize": "40px"}} to="/">VideoHub</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                    <span className="navbar-toggler-icon"></span>
+                    More
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <form className="d-flex" style={{marginLeft:"auto"}} onSubmit={()=>{return <Navigate to="/search"/>}}>
