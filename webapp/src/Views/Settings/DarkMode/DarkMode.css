@@ -31,7 +31,7 @@
   transition: 0.2s;
 }
 
-.slider:before {
+.slider::before {
   background-color: #fff;
   bottom: 4px;
   content: "";
@@ -42,7 +42,7 @@
   width: 26px;
 }
 
-input:checked + .slider:before {
+input:checked + .slider::before {
   transform: translateX(26px);
 }
 
@@ -54,6 +54,6 @@ input:checked + .slider {
   border-radius: 34px;
 }
 
-.slider.round:before {
+.slider.round::before {
   border-radius: 50%;
 }

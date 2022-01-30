@@ -10,6 +10,7 @@ export default function SearchPage(props) {
     const getSearchResult = useCallback(async () => {
         if(props.searchQuery==="") {
             setResultVideoList([])
+            setLoading(false);
             return
         }
         setLoading(true)
@@ -17,8 +18,8 @@ export default function SearchPage(props) {
             response.json()).then((json) => {
                 // console.log(json.videoData)
                 setResultVideoList(json.resultVideoList)
+                setLoading(false);
             })
-        setLoading(false);
     }, [props.searchQuery])
 
     useEffect(getSearchResult, [getSearchResult]);
