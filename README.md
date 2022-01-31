@@ -45,19 +45,19 @@ in webapp and server folders.
 ## Views
 
 ### HomePage with top videos
-![image](https://github.com/shivansh1012/VideoHub/blob/WebDev/ReadMEPics/HomePage%20darkmode.png)
+![image](https://github.com/shivansh1012/VideoHub/blob/main/ReadMEPics/HomePage%20darkmode.png)
 
 ### Option for dark and light theme
-![image](https://github.com/shivansh1012/VideoHub/blob/WebDev/ReadMEPics/SettingsPage.png)
+![image](https://github.com/shivansh1012/VideoHub/blob/main/ReadMEPics/SettingsPage.png)
 
 ### HomePage in light theme
-![image](https://github.com/shivansh1012/VideoHub/blob/WebDev/ReadMEPics/HomePage.png)
+![image](https://github.com/shivansh1012/VideoHub/blob/main/ReadMEPics/HomePage.png)
 
 ### A List of all videos
-![image](https://github.com/shivansh1012/VideoHub/blob/WebDev/ReadMEPics/VideoList.png)
+![image](https://github.com/shivansh1012/VideoHub/blob/main/ReadMEPics/VideoList.png)
 
 ### Video Player
-![image](https://github.com/shivansh1012/VideoHub/blob/WebDev/ReadMEPics/Videoplayer.png)
+![image](https://github.com/shivansh1012/VideoHub/blob/main/ReadMEPics/Videoplayer.png)
 
 ### Basic Details about video and more videos to continue watching
-![image](https://github.com/shivansh1012/VideoHub/blob/WebDev/ReadMEPics/Videoplayermorevideos.png)
+![image](https://github.com/shivansh1012/VideoHub/blob/main/ReadMEPics/Videoplayermorevideos.png)
