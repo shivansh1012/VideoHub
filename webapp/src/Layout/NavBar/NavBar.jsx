@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './NavBar.css'
 import axios from 'axios'
 import { ApiBaseUrl } from '../../config.js'
@@ -9,6 +9,11 @@ export default function NavBar(props) {
     let navigate = useNavigate()
     const { userLoggedIn, getUserLoggedIn, userName } = useContext(UserAuthContext);
 
+    const handleSearch = (e) => {
+        e.preventDefault()
+        navigate('/search')
+    }
+    
     const handleLogout = async () => {
         await axios.get(`${ApiBaseUrl}/user/logout`);
         await getUserLoggedIn();
@@ -23,7 +28,7 @@ export default function NavBar(props) {
                     More
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <form className="d-flex" style={{ marginLeft: "auto" }} onSubmit={() => { return <Navigate to="/search" /> }}>
+                    <form className="d-flex" style={{ marginLeft: "auto" }} onSubmit={handleSearch}>
                         <input className="form-control me-2" type="search" placeholder="Search Video" value={props.searchQuery} onChange={(e) => props.setSearchQuery(e.target.value)} />
                         <Link className="btn" to="/search">Search</Link>
                     </form>

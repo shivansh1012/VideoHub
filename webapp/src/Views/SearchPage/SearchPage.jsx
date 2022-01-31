@@ -7,7 +7,8 @@ export default function SearchPage(props) {
     const [resultVideoList, setResultVideoList] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const getSearchResult = useCallback(async () => {
+    const getSearchResult = useCallback(async (e) => {
+        e.preventDefault()
         if(props.searchQuery==="") {
             setResultVideoList([])
             setLoading(false);

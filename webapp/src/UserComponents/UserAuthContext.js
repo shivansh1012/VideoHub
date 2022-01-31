@@ -4,29 +4,29 @@ import { ApiBaseUrl } from '../config.js'
 
 const UserAuthContext = createContext()
 
-function UserAuthContextProvider (props) {
-	const [userLoggedIn, setUserLoggedIn] = useState(undefined)
-	const [userID, setUserID] = useState(undefined)
-	const [userName, setUserName] = useState(undefined)
-	const [userEmail, setUserEmail] = useState(undefined)
+function UserAuthContextProvider(props) {
+  const [userLoggedIn, setUserLoggedIn] = useState(undefined)
+  const [userID, setUserID] = useState(undefined)
+  const [userName, setUserName] = useState(undefined)
+  const [userEmail, setUserEmail] = useState(undefined)
 
-	async function getUserLoggedIn () {
-		const loggedInRes = await axios.get(`${ApiBaseUrl}/user/verify`)
-		setUserLoggedIn(loggedInRes.data.authorized)
-		setUserID(loggedInRes.data.id)
-		setUserName(loggedInRes.data.name)
-		setUserEmail(loggedInRes.data.email)
-	}
+  async function getUserLoggedIn() {
+    const loggedInRes = await axios.get(`${ApiBaseUrl}/user/verify`)
+    setUserLoggedIn(loggedInRes.data.authorized)
+    setUserID(loggedInRes.data.id)
+    setUserName(loggedInRes.data.name)
+    setUserEmail(loggedInRes.data.email)
+  }
 
-	useEffect(() => {
-		getUserLoggedIn()
-	}, [])
+  useEffect(() => {
+    getUserLoggedIn()
+  }, [])
 
-	return (
-		<UserAuthContext.Provider value={{ userLoggedIn, userID, userName, userEmail, getUserLoggedIn }}>
-			{props.children}
-		</UserAuthContext.Provider>
-	)
+  return (
+    <UserAuthContext.Provider value={{ userLoggedIn, userID, userName, userEmail, getUserLoggedIn }}>
+      {props.children}
+    </UserAuthContext.Provider>
+  )
 }
 
 export default UserAuthContext
