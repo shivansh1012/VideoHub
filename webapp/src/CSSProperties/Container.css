@@ -1,0 +1,37 @@
+.customcontainer {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .customcontainer {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .customcontainer {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .customcontainer {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .customcontainer {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .customcontainer {
+    max-width: 1320px;
+  }
+}

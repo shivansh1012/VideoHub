@@ -74,7 +74,7 @@ export default function VideoList() {
                     }
                 </tbody>
             </table>
-            <div>{isLoading && "Loading..."}</div>
+            <div>{isLoading && ! error && <div className="spinner"></div>}</div>
             <div>{error && "Error..."}</div>
         </div>
     )

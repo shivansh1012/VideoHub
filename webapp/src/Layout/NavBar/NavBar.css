@@ -2,3 +2,7 @@
   background-color: var(--background-color);
   color: var(--font-color);
 }
+
+.navbar-custom button {
+  color: var(--font-color);
+}
