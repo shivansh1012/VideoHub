@@ -64,6 +64,8 @@ export default function NavBar(props) {
                                 <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown" style={{ cursor: "pointer" }}>Hello, {userName}</div>
                                 <div className="custom-dropdown-menu dropdown-menu">
                                     <Link className="dropdown-item" to="/settings">Settings</Link>
+                                    <Link className="dropdown-item" to="/profile/myvideos">My Videos</Link>
+                                    <Link className="dropdown-item" to="/profile/videolist">My Video List</Link>
                                     <Link className="dropdown-item" to="/about">About</Link>
                                     <div className="dropdown-item" style={{ cursor: "pointer" }} onClick={handleLogout}>Logout</div>
                                 </div>

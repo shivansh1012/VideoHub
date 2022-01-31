@@ -23,10 +23,12 @@ export default function VideoList() {
     );
 
     const returnRow = (video, index) => {
+        let channelName=""
+        if(video['channel']) channelName=video.channel.name
         return (
             <>
                 <td>{index + 1}</td>
-                <td>{video.channel.name}</td>
+                <td>{channelName}</td>
                 <td>{video.filename}</td>
                 <td>{video.model.map((model, i) => {
                     return <p key={i}style={{margin:"0"}}>{model.name}</p>

@@ -24,6 +24,8 @@ import SignIn from './UserComponents/SignIn/SignIn.jsx'
 import SignUp from './UserComponents/SignUp/SignUp.jsx'
 
 import UserAuthContext from './UserComponents/UserAuthContext.js'
+import UserVideoList from './UserComponents/UserVideoList/UserVideoList.jsx'
+import UserVideoGrid from './UserComponents/UserVideoGrid/UserVideoGrid'
 
 import axios from 'axios'
 axios.defaults.withCredentials = true
@@ -53,12 +55,12 @@ function App () {
             <Route path='/signup' element={<SignUp />} />
           </>
         )}
-        {/* {(userLoggedIn === true) && (
+        {(userLoggedIn === true) && (
             <>
-              <Route path='/signin' element={<SignIn />} />
-              <Route path='/signup' element={<SignUp />} />
+              <Route path='/profile/videolist' element={<UserVideoList />} />
+              <Route path='/profile/myvideos' element={<UserVideoGrid />} />
             </>
-          )} */}
+          )}
       </Switch>
     </Router>
   )

@@ -33,9 +33,7 @@ class Automation:
         self.videoMetaData = mydb["VideoMetaData"]
         self.Profile = mydb["Profile"]
 
-    def dropCollections(
-        self, deleteVideoMetaData=1, ProfileData=1
-    ) -> bool:
+    def dropCollections(self, deleteVideoMetaData=1, ProfileData=1) -> bool:
         try:
             if deleteVideoMetaData:
                 self.videoMetaData.drop()
@@ -68,7 +66,7 @@ class Automation:
             print(error)
             print("Thumbnails Folder Creation Failed")
             return False
-    
+
     def createProfile(self, name, accountType) -> str:
         profile = {}
         email = name.split(" ")
@@ -200,17 +198,18 @@ class Automation:
 
                 if saveDataInDB:
                     if channel:
-                        profileData = self.Profile.find_one({"name":channel})
+                        profileData = self.Profile.find_one({"name": channel})
                         if profileData is None:
                             channelID = self.createProfile(channel, "channel")
                         else:
                             channelID = profileData["_id"]
-                    else: channelID=""
+                    else:
+                        channelID = ""
                     modelListIDs = []
                     for model in modelList:
-                        profileData = self.Profile.find_one({"name":model})
+                        profileData = self.Profile.find_one({"name": model})
                         if profileData is None:
-                            modelListIDs.append(self.createProfile(model,"model"))
+                            modelListIDs.append(self.createProfile(model, "model"))
                         else:
                             modelListIDs.append(profileData["_id"])
 

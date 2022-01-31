@@ -2,7 +2,7 @@ const router = require('express').Router()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-// const VideoMetaData = require('../Models/VideoMetaData.js')
+const VideoMetaData = require('../Models/VideoMetaData.js')
 const Profile = require('../Models/Profile.js')
 const ProfileAuth = require('./profileAuth.js')
 
@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
     const newProfile = new Profile({
       name: name,
       email: email,
-      accountType: "user",
+      accountType: 'user',
       password: password,
       hashedpassword: hashedpassword
     })
@@ -53,11 +53,11 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid Email or Password' })
     }
 
-    if(! existingProfile['hashedpassword']) {
+    if (!existingProfile.hashedpassword) {
       const salt = await bcrypt.genSalt()
       const hashedpassword = await bcrypt.hash(existingProfile.password, salt)
-      existingProfile['hashedpassword'] = hashedpassword
-      await Profile.findOneAndUpdate({email},{"hashedpassword" : hashedpassword})
+      existingProfile.hashedpassword = hashedpassword
+      await Profile.findOneAndUpdate({ email }, { hashedpassword })
     }
 
     const isPasswordValid = await bcrypt.compare(password, existingProfile.hashedpassword)
@@ -75,6 +75,20 @@ router.post('/login', async (req, res) => {
     return res.status(200)
       .cookie('UserToken', userToken, { httpOnly: true })
       .json({ message: 'Login Success' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.get('/myvideos', ProfileAuth, async (req, res) => {
+  try {
+    const { id } = req.userInfo
+    // const limit = req.query.limit
+    // const offset = req.query.offset
+    // const videoList = await Profile.findById(id).skip(offset).limit(limit)
+    const videoList = (await Profile.findById(id).populate({ path: 'videoList', populate: { path: 'model channel' } })).videoList
+    res.status(200).json({ videoList })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })

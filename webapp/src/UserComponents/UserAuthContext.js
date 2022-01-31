@@ -4,13 +4,13 @@ import { ApiBaseUrl } from '../config.js'
 
 const UserAuthContext = createContext()
 
-function UserAuthContextProvider(props) {
+function UserAuthContextProvider (props) {
   const [userLoggedIn, setUserLoggedIn] = useState(undefined)
   const [userID, setUserID] = useState(undefined)
   const [userName, setUserName] = useState(undefined)
   const [userEmail, setUserEmail] = useState(undefined)
 
-  async function getUserLoggedIn() {
+  async function getUserLoggedIn () {
     const loggedInRes = await axios.get(`${ApiBaseUrl}/profile/verify`)
     setUserLoggedIn(loggedInRes.data.authorized)
     setUserID(loggedInRes.data.id)

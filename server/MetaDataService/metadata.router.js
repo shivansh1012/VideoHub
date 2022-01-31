@@ -9,20 +9,40 @@ router.get('/video', async (req, res) => {
     if (!videoID) {
       return res.status(400).json({ message: 'Requires Video ID' })
     }
-    const videoData = await VideoMetaData.findById(req.query.id).populate('channel', 'name').populate('model')
+    const videoData = await VideoMetaData.findById(req.query.id)
+      .populate({ path: 'channel', populate: { path: 'videoList', populate: { path: 'channel model' } } })
+      .populate({ path: 'model', populate: { path: 'videoList', populate: { path: 'channel model' } } })
 
-    let moreVideos = []
+    let moreChannelVideos = new Set()
+    let moreModelVideos = new Set()
+
     if (videoData['channel']) {
-      moreVideos = moreVideos.concat((await Profile.findById(videoData.channel._id).populate('videoList')).videoList)
-    } else if (videoData.model.length !== 0) {
-      for (let i = 0; i < videoData.model.length; i++) {
-        let modelVideoList = (await Profile.findById(videoData.model[i]._id).populate('videoList')).videoList
-        for (let j = 0; j < modelVideoList.length; j++) {
-          moreVideos = moreVideos.concat((await VideoMetaData.findById(modelVideoList[j]._id).populate('channel', 'name').populate('model')))
+      // videoData.channel.videoList.forEach(moreChannelVideos.add, moreChannelVideos)
+      for (let i = 0; i < videoData.channel.videoList.length; i++) {
+        if (videoData.channel.videoList[i]._id.toString() === videoID) {
+          continue
         }
+        moreChannelVideos.add(videoData.channel.videoList[i])
       }
     }
-    res.status(200).json({ videoData, moreVideos: Array.from(moreVideos) })
+    if (videoData.model.length !== 0) {
+      for (let i = 0; i < videoData.model.length; i++) {
+        for (let j = 0; j < videoData.model[i].videoList.length; j++) {
+          if (videoData.model[i].videoList[j]._id.toString() === videoID) {
+            continue
+          }
+          moreModelVideos.add(videoData.model[i].videoList[j])
+        }
+        // videoData.model[i].videoList.forEach(moreModelVideos.add, moreModelVideos)
+      }
+    }
+    moreVideos = []
+    if (moreChannelVideos.size > moreModelVideos.size) {
+      moreVideos = Array.from(moreChannelVideos)
+    } else {
+      moreVideos = Array.from(moreModelVideos)
+    }
+    res.status(200).json({ videoData, moreVideos })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
