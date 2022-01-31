@@ -5,8 +5,8 @@ import {
   Route
 } from 'react-router-dom'
 
-import "./CSSProperties/Spinner.css";
-import "./CSSProperties/Container.css";
+import './CSSProperties/Spinner.css'
+import './CSSProperties/Container.css'
 
 import NavBar from './Layout/NavBar/NavBar.jsx'
 
