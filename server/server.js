@@ -28,9 +28,10 @@ const requestLogger = (req, res, next) => {
 app.use(requestLogger)
 
 // Links
-app.use('/static', express.static('public'))
-app.use('/video', require('./VideoService/video.router.js'))
 app.use('/meta', require('./MetaDataService/metadata.router.js'))
+app.use('/static', express.static('public'))
+app.use('/user', require('./UserService/user.router.js'))
+app.use('/video', require('./VideoService/video.router.js'))
 
 app.use('*', (req, res) => res.status(404).json({ message: 'link not found' }))
 

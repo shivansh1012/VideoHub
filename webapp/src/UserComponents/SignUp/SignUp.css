@@ -1,0 +1,35 @@
+.signUp-form {
+  height: 100%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  margin-top: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 350px;
+  padding: 30px;
+}
+
+.form-container {
+  margin: 30px 0;
+}
+
+.signUp-form h2 {
+  text-align: center;
+  color: var(--secondary-color);
+}
+
+.signUp-form input {
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+.btn-success {
+  margin-top: 20px;
+  width: 100px;
+  background-color: var(--primary-color);
+}
+
+.btn-success:hover {
+  background-color: var(--secondary-color);
+}

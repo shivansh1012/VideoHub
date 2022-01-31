@@ -6,3 +6,16 @@
 .navbar-custom button {
   color: var(--font-color);
 }
+
+.navbar-custom div {
+  color: var(--font-color);
+}
+
+.dropdown-toggle:hover {
+  color: var(--font-color) !important;
+}
+
+.custom-dropdown-menu{
+  background-color: var(--background-color) !important;
+  text-align: center !important;
+}

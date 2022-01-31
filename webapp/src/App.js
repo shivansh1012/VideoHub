@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, useContext } from 'react'
 import {
   BrowserRouter as Router,
   Routes as Switch,
@@ -20,9 +20,19 @@ import ChannelInfo from './Views/ChannelInfo/ChannelInfo.jsx'
 import SearchPage from './Views/SearchPage/SearchPage.jsx'
 import AboutApp from './Views/AboutApp/AboutApp.jsx'
 import ModelList from './Views/ModelList/ModelList.jsx'
+import SignIn from './UserComponents/SignIn/SignIn.jsx'
+import SignUp from './UserComponents/SignUp/SignUp.jsx'
+
+import UserAuthContext from './UserComponents/UserAuthContext.js'
+
+import axios from 'axios'
+axios.defaults.withCredentials = true
 
 function App () {
   const [searchQuery, setSearchQuery] = useState('')
+
+  const { userLoggedIn } = useContext(UserAuthContext)
+
   return (
     <Router>
       <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -37,6 +47,18 @@ function App () {
         <Route path='/settings' element={<Settings />} />
         <Route path='/about' element={<AboutApp />} />
         <Route path='/search' element={<SearchPage searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />
+        {(userLoggedIn === false || userLoggedIn === undefined) && (
+          <>
+            <Route path='/signin' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+          </>
+        )}
+        {/* {(userLoggedIn === true) && (
+            <>
+              <Route path='/signin' element={<SignIn />} />
+              <Route path='/signup' element={<SignUp />} />
+            </>
+          )} */}
       </Switch>
     </Router>
   )
