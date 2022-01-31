@@ -2,7 +2,6 @@ import { useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom'
 import { ApiBaseUrl } from '../../config.js';
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
-import * as ReactBootstrap from "react-bootstrap";
 import { SourceBaseUrl } from '../../config.js';
 
 export default function ModelInfo() {
@@ -15,7 +14,6 @@ export default function ModelInfo() {
         await fetch(`${ApiBaseUrl}/meta/model?id=${id}`).then(response =>
             response.json()).then((json) => {
                 setModelData(json.modelData);
-                console.log(json.modelData.videoList['0'].filename)
             })
         setLoading(false);
     }, [id])
@@ -25,12 +23,12 @@ export default function ModelInfo() {
         <div className="container py-3">
             <div className="d-flex flex-row">
                 {
-                    loading ? <ReactBootstrap.Spinner animation="border" /> :
+                    loading ? <div className="simple-spinner"></div> :
                         <img src={`${SourceBaseUrl}/static/profilepics/${modelData.name}.jpg`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={modelData.name} />
                 }
                 <div className="mx-4">
                     {
-                        loading ? <ReactBootstrap.Spinner animation="border" /> :
+                        loading ? <div className="simple-spinner"></div> :
                             <>
                                 <h3>{modelData.name}</h3>
                                 <h5>Total Videos: {modelData.videoList.length}</h5>
@@ -41,7 +39,7 @@ export default function ModelInfo() {
             <div>
                 <h3 className="py-3">More Videos</h3>
                 {
-                    loading ? <ReactBootstrap.Spinner animation="border" /> :
+                    loading ? <div className="simple-spinner"></div> :
                         <>
                             <VideoMatrix videoList={modelData.videoList} />
                         </>

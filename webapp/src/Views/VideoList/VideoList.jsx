@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import useFetchForVideo from "../../Service/useFetch/useFetchForVideo.jsx"
+import "./VideoList.style.css"
 
 export default function VideoList() {
     const [offset, setOffset] = useState(0);
@@ -22,31 +23,35 @@ export default function VideoList() {
     );
 
     const returnRow = (video, index) => {
-        let modelList = ""
-        video.model.forEach(myFunction);
-
-        function myFunction(value, index, array) {
-            modelList += value["name"] + " ";
-        }
         return (
             <>
-                <th scope="row">{index + 1}</th>
+                <td>{index + 1}</td>
                 <td>{video.channel.name}</td>
                 <td>{video.filename}</td>
-                <td>{modelList}</td>
+                <td>{video.model.map((model, i) => {
+                    return <p key={i}style={{margin:"0"}}>{model.name}</p>
+                })}</td>
                 <td><Link to={`/video/${video._id}`}>View</Link></td>
             </>
         )
     }
     return (
-        <div className="container" style={{ "textAlign": "center" }}>
-            <table className="table">
+        <div className="customcontainer" style={{ overflowX: "auto" }}>
+            <table>
+                <colgroup>
+                    <col style={{width:"5%"}}/>
+                    <col style={{width:"10%"}}/>
+                    <col style={{width:"55%"}}/>
+                    <col style={{width:"20%"}}/>
+                    <col style={{width:"10%"}}/>
+                </colgroup>
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Channel</th>
-                        <th scope="col">FileName</th>
-                        <th scope="col">Model</th>
+                        <th>ID</th>
+                        <th>Channel</th>
+                        <th>FileName</th>
+                        <th>Model</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,7 +74,7 @@ export default function VideoList() {
                     }
                 </tbody>
             </table>
-            <div>{isLoading && "Loading..."}</div>
+            <div>{isLoading && ! error && <div className="spinner"></div>}</div>
             <div>{error && "Error..."}</div>
         </div>
     )

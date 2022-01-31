@@ -5,6 +5,9 @@ import {
   Route
 } from 'react-router-dom'
 
+import './CSSProperties/Spinner.css'
+import './CSSProperties/Container.css'
+
 import NavBar from './Layout/NavBar/NavBar.jsx'
 
 import Home from './Views/Home/Home.jsx'

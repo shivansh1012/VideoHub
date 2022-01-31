@@ -4,13 +4,10 @@ import './index.css'
 import App from './App'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
-import { ThemeContextWrapper } from './Service/Theme/themeContextWrapper.js'
 
 ReactDOM.render(
-  <ThemeContextWrapper>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </ThemeContextWrapper>,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
   document.getElementById('root')
 )

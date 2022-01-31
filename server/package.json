@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "client": "npm run start --prefix ../webapp",
+    "server": "nodemon index.js",
+    "dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "author": "shivansh1012",
   "license": "ISC",
@@ -13,6 +16,7 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "concurrently": "^7.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^14.1.0",

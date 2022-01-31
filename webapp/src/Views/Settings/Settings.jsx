@@ -1,15 +1,13 @@
-import {useContext} from 'react'
-
-import ThemeContext, {themes} from "../../Service/Theme/themeContextWrapper.js"
+import DarkMode from './DarkMode/DarkMode.jsx';
 
 export default function SettingsComponent() {
-    const { changeTheme } = useContext(ThemeContext);
-    // changeTheme(themes.dark)
+
     return (
-        <div className="container text-center">
-            <div className="m-5">Theme : </div>
-            <button className="m-5" onClick={()=>changeTheme(themes.light)}>Light</button>
-            <button className="m-5" onClick={()=>changeTheme(themes.dark)}>Dark</button>
+        <div className="container" style={{ width: "100vw", height: "60vh", alignItems: "center", display: "flex", justifyContent: "center" }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <div className="p-4">Theme : </div>
+                <DarkMode/>
+            </div>
         </div>
     )
 }

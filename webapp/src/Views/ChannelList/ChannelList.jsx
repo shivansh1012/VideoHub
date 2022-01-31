@@ -25,7 +25,7 @@ export default function ModelList() {
     const returnRow = (channel, index) => {
         return (
             <>
-                <th scope="row">{index + 1}</th>
+                <td>{index + 1}</td>
                 <td>{channel.name}</td>
                 <td>{channel.videoList.length}</td>
                 <td><Link to={`/channel/${channel._id}`}>View</Link></td>
@@ -34,17 +34,24 @@ export default function ModelList() {
     }
 
     return (
-        <div className="container" style={{ "textAlign": "center" }}>
-            <table className="table">
+        <div className="customcontainer" style={{ overflowX: "auto" }}>
+            <table>
+                <colgroup>
+                    <col style={{ width: "10%" }} />
+                    <col style={{ width: "70%" }} />
+                    <col style={{ width: "10%" }} />
+                    <col style={{ width: "10%" }} />
+                </colgroup>
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Videos</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Total Videos</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {
+                {
                         channelList.map((channel, index) => {
                             if (channelList.length === index + 1) {
                                 return (
@@ -63,7 +70,7 @@ export default function ModelList() {
                     }
                 </tbody>
             </table>
-            <div>{isLoading && "Loading..."}</div>
+            <div>{isLoading && ! error && <div className="spinner"></div>}</div>
             <div>{error && "Error..."}</div>
         </div>
     )

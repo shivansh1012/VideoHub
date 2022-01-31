@@ -1,36 +1,26 @@
 :root {
-  --primary-color: #01afd1;
-  --secondary-color: #043263;
-  --accent-color: #dbe5ff;
+  --font-color: rgb(102, 102, 102);
+  --background-color: #eee;
+  --link-color: rgb(71, 76, 85);
+}
+
+[data-theme="dark"] {
+  --font-color: #eee;
+  --background-color: rgb(124, 124, 124);
+  --link-color: peachpuff;
 }
 
 body {
-  /* font-family:
-    -apple-system,
-    'BlinkMacSystemFont',
-    'Segoe UI',
-    'Roboto',
-    'Oxygen',
-    'Ubuntu',
-    'Cantarell',
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue'; */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color) !important;
+  color: var(--font-color) !important;
 }
 
-/* code {
-  font-family:
-    source-code-pro,
-    Menlo,
-    Monaco,
-    Consolas,
-    'Courier New',
-    monospace;
-} */
+a {
+  color: var(--font-color) !important;
+  text-decoration: none !important;
+}
 
-.light-content {
+/* .light-content {
   background: #fff;
   color: black;
 }
@@ -38,4 +28,4 @@ body {
 .dark-content {
   background: #a1a1a1;
   color: white;
-}
+} */

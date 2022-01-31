@@ -46,9 +46,11 @@ export default function Home() {
     // }, [])
 
     return (
-        <div className="p-5">
-            <VideoMatrix videoList={videoList} lastVideoElementRef={lastVideoElementRef}/>
-            <div>{isLoading && "Loading..."}</div>
+        <div className="py-3">
+            <div className="animate-bottom">
+                <VideoMatrix videoList={videoList} lastVideoElementRef={lastVideoElementRef} />
+            </div>
+            <div>{isLoading && ! error && <div className="spinner"></div>}</div>
             <div>{error && "Error..."}</div>
         </div>
     )

@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom'
 import VideoPlayer from "../../Layout/VideoPlayer/VideoPlayer.jsx"
 import { ApiBaseUrl } from '../../config.js';
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
-import * as ReactBootstrap from "react-bootstrap";
 
 export default function VideoInfo() {
   const [videoData, setVideoData] = useState([]);
@@ -48,16 +47,16 @@ export default function VideoInfo() {
   return (
     <div className="container py-3">
       {/* <div className="d-flex flex-column"> */}
-        <div style={{ "textAlign":"center"}}>
+        <div style={{ "textAlign":"center", "display":"flex", "justifyContent":"center"}}>
           {
-            loading ? <ReactBootstrap.Spinner animation="border" /> :
+            loading ? <div className="simple-spinner"></div> :
               <VideoPlayer id={videoData["_id"]} />
           }
         </div>
-        <div>
+        <div className="py-3">
           {
-            loading ? <ReactBootstrap.Spinner animation="border" /> :
-              <>
+            loading ? <div className="simple-spinner"></div> :
+              <div>
                 <h3>{videoData.filename}</h3>
                 <h5><Link to={`/channel/${videoData.channel['_id']}`}>{videoData.channel.name}</Link></h5>
                 <hr />
@@ -83,14 +82,14 @@ export default function VideoInfo() {
                     })
                   }
                 </div>
-              </>
+              </div>
           }
         {/* </div> */}
       </div>
       <div>
-        <h3 className="py-3">More Videos</h3>
+        <h3 className="py-3" style={{ "textAlign":"center"}}>More Videos</h3>
         {
-          loading ? <ReactBootstrap.Spinner animation="border" /> :
+          loading ? <div className="simple-spinner"></div> :
             <>
               <VideoMatrix videoList={moreVideos} />
             </>
