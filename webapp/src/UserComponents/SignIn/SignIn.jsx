@@ -18,7 +18,7 @@ export default function SignIn() {
       email,
       password
     }
-    await axios.post(`${ApiBaseUrl}/user/login`, loginData, {
+    await axios.post(`${ApiBaseUrl}/profile/login`, loginData, {
       headers: {
         "Content-Type": "application/json",
       },

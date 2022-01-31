@@ -15,7 +15,7 @@ __author__ = "Shivansh Pandey"
 __copyright__ = "MIT"
 __credits__ = ["shivansh1012"]
 __license__ = "GPL"
-__version__ = "1.0.1"
+__version__ = "2.0.1"
 __maintainer__ = "shivansh1012"
 __status__ = "Production"
 
@@ -31,22 +31,18 @@ class Automation:
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]
         self.videoMetaData = mydb["VideoMetaData"]
-        self.modelMetaData = mydb["ModelMetaData"]
-        self.channelMetaData = mydb["ChannelMetaData"]
+        self.Profile = mydb["Profile"]
 
     def dropCollections(
-        self, deleteVideoMetaData=1, deleteModelMetaData=1, deleteChannelMetaData=1
+        self, deleteVideoMetaData=1, ProfileData=1
     ) -> bool:
         try:
             if deleteVideoMetaData:
                 self.videoMetaData.drop()
-                print("videoMetaData Collection Dropped")
-            if deleteModelMetaData:
-                self.modelMetaData.drop()
-                print("modelMetaData Collection Dropped")
-            if deleteChannelMetaData:
-                self.channelMetaData.drop()
-                print("channelMetaData Collection Dropped")
+                print("videoMetaDatas Dropped")
+            if ProfileData:
+                self.Profile.drop()
+                print("Profiles Dropped")
             return True
         except Exception:
             print("Couldnt drop the Collection")
@@ -72,22 +68,22 @@ class Automation:
             print(error)
             print("Thumbnails Folder Creation Failed")
             return False
+    
+    def createProfile(self, name, accountType) -> str:
+        profile = {}
+        email = name.split(" ")
+        email = "".join(email)
+        email = email.lower()
+        profile["name"] = name
+        profile["accountType"] = accountType
+        profile["email"] = email + "@videohub.inf"
+        profile["password"] = "login1234"
+        profile["hashedpassword"] = ""
+        profile["profilepicURL"] = ""
+        profile["videoList"] = []
 
-    def createModel(self, name) -> str:
-        model = {}
-        model["name"] = name
-        model["videoList"] = []
-
-        saveModel = self.modelMetaData.insert_one(model)
-        return saveModel.inserted_id
-
-    def createChannel(self, name) -> str:
-        channel = {}
-        channel["name"] = name
-        channel["videoList"] = []
-
-        saveChannel = self.channelMetaData.insert_one(channel)
-        return saveChannel.inserted_id
+        savedProfile = self.Profile.insert_one(profile)
+        return savedProfile.inserted_id
 
     def getVideoBasicData(self, dirpath, filename):
         dirpath = dirpath.replace("\\", "/")
@@ -95,7 +91,7 @@ class Automation:
         # fileExt = filename[-4:]
         cleanFileName = ""
         models = []
-        channel = "Unknown"
+        channel = ""
         newFileName = noExtFileName.split("-")
         if len(newFileName) == 1:
             cleanFileName = newFileName[0].strip()
@@ -103,7 +99,6 @@ class Automation:
             cleanFileName = newFileName[0].strip()
             for m in newFileName[1].split(","):
                 models.append(m.strip())
-            channel = models[0]
         else:
             cleanFileName = newFileName[0].strip()
             for m in newFileName[1].split(","):
@@ -204,19 +199,20 @@ class Automation:
                 )
 
                 if saveDataInDB:
-                    if dirpath.find("Groups"):
-                        channelData = self.channelMetaData.find_one({"name": channel})
-                        if channelData is None:
-                            channelID = self.createChannel(channel)
+                    if channel:
+                        profileData = self.Profile.find_one({"name":channel})
+                        if profileData is None:
+                            channelID = self.createProfile(channel, "channel")
                         else:
-                            channelID = channelData["_id"]
-                        modelListIDs = []
-                        for model in modelList:
-                            modelData = self.modelMetaData.find_one({"name": model})
-                            if modelData is None:
-                                modelListIDs.append(self.createModel(model))
-                            else:
-                                modelListIDs.append(modelData["_id"])
+                            channelID = profileData["_id"]
+                    else: channelID=""
+                    modelListIDs = []
+                    for model in modelList:
+                        profileData = self.Profile.find_one({"name":model})
+                        if profileData is None:
+                            modelListIDs.append(self.createProfile(model,"model"))
+                        else:
+                            modelListIDs.append(profileData["_id"])
 
                     videoID = self.saveVideoMetaData(
                         newFileName,
@@ -232,12 +228,12 @@ class Automation:
                         dimensions,
                     )
 
-                    self.channelMetaData.update_one(
+                    self.Profile.update_one(
                         {"_id": channelID}, {"$push": {"videoList": videoID}}
                     )
 
                     for modelID in modelListIDs:
-                        self.modelMetaData.update_one(
+                        self.Profile.update_one(
                             {"_id": modelID}, {"$push": {"videoList": videoID}}
                         )
 

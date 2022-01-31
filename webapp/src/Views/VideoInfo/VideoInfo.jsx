@@ -32,7 +32,6 @@ export default function VideoInfo() {
   const getVideoMetaData = useCallback(async () => {
     await fetch(`${ApiBaseUrl}/meta/video?id=${id}`).then(response =>
       response.json()).then((json) => {
-        // console.log(json.videoData)
         setVideoData(json.videoData);
         setMoreVideos(json.moreVideos)
       })
@@ -47,47 +46,52 @@ export default function VideoInfo() {
   return (
     <div className="container py-3">
       {/* <div className="d-flex flex-column"> */}
-        <div style={{ "textAlign":"center", "display":"flex", "justifyContent":"center"}}>
-          {
-            loading ? <div className="simple-spinner"></div> :
-              <VideoPlayer id={videoData["_id"]} />
-          }
-        </div>
-        <div className="py-3">
-          {
-            loading ? <div className="simple-spinner"></div> :
-              <div>
-                <h3>{videoData.filename}</h3>
-                <h5><Link to={`/channel/${videoData.channel['_id']}`}>{videoData.channel.name}</Link></h5>
-                <hr />
-                <div className="d-flex flex-wrap">
-                  <p>Models: </p>
-                  {
-                    videoData.model.map((model, index) => {
-                      return (
-                        <p key={index} style={{ paddingInline: "3px", marginInline: "2px", border: "1px", borderRadius: "10px", backgroundColor: "pink" }}>
-                          <Link to={`/model/${model['_id']}`}>{model.name}</Link>
-                          <br />
-                        </p>
-                      )
-                    })
-                  }
-                </div>
-                <p>Duration: {fancyTimeFormat(videoData.duration)}</p>
-                <div className="d-flex flex-wrap">
-                  <p>Tags: </p>
-                  {
-                    videoData.tags.map((tag, index) => {
-                      return <p key={index} style={{ paddingInline: "3px", marginInline: "2px", border: "1px", borderRadius: "10px", backgroundColor: "orange" }}>{tag}</p>
-                    })
-                  }
-                </div>
+      <div style={{ "textAlign": "center", "display": "flex", "justifyContent": "center" }}>
+        {
+          loading ? <div className="simple-spinner"></div> :
+            <VideoPlayer id={videoData["_id"]} />
+        }
+      </div>
+      <div className="py-3">
+        {
+          loading ? <div className="simple-spinner"></div> :
+            <div>
+              <h3>{videoData.filename}</h3>
+              {
+                videoData.hasOwnProperty('channel') &&
+                <h5>
+                  <Link to={`/channel/${videoData.channel['_id']}`}>{videoData.channel.name}</Link>
+                </h5>
+              }
+              <hr />
+              <div className="d-flex flex-wrap">
+                <p>Models: </p>
+                {
+                  videoData.model.map((model, index) => {
+                    return (
+                      <p key={index} style={{ paddingInline: "3px", marginInline: "2px", border: "1px", borderRadius: "10px", backgroundColor: "pink" }}>
+                        <Link to={`/model/${model['_id']}`}>{model.name}</Link>
+                        <br />
+                      </p>
+                    )
+                  })
+                }
               </div>
-          }
+              <p>Duration: {fancyTimeFormat(videoData.duration)}</p>
+              <div className="d-flex flex-wrap">
+                <p>Tags: </p>
+                {
+                  videoData.tags.map((tag, index) => {
+                    return <p key={index} style={{ paddingInline: "3px", marginInline: "2px", border: "1px", borderRadius: "10px", backgroundColor: "orange" }}>{tag}</p>
+                  })
+                }
+              </div>
+            </div>
+        }
         {/* </div> */}
       </div>
       <div>
-        <h3 className="py-3" style={{ "textAlign":"center"}}>More Videos</h3>
+        <h3 className="py-3" style={{ "textAlign": "center" }}>More Videos</h3>
         {
           loading ? <div className="simple-spinner"></div> :
             <>

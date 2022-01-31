@@ -19,7 +19,7 @@ const VideoMetaDataSchema = new mongoose.Schema({
   },
   channel: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'ChannelMetaData',
+    ref: 'Profile',
     default: 'Unknown'
   },
   tags: {
@@ -28,7 +28,7 @@ const VideoMetaDataSchema = new mongoose.Schema({
   },
   model: {
     type: [mongoose.Schema.Types.ObjectId],
-    ref: 'ModelMetaData',
+    ref: 'Profile',
     default: []
   },
   fps: {

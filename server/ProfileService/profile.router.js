@@ -3,10 +3,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 // const VideoMetaData = require('../Models/VideoMetaData.js')
-// const ChannelMetaData = require('../Models/ChannelMetaData.js')
-// const ModelMetaData = require('../Models/ModelMetaData.js')
-const User = require('../Models/User.js')
-const userAuth = require('./userAuth.js')
+const Profile = require('../Models/Profile.js')
+const ProfileAuth = require('./profileAuth.js')
 
 router.post('/register', async (req, res) => {
   try {
@@ -16,23 +14,24 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'fill all the fields' })
     }
 
-    const existingUser = await User.findOne({ email: email })
+    const existingProfile = await Profile.findOne({ email: email })
 
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' })
+    if (existingProfile) {
+      return res.status(400).json({ message: 'Profile already exists' })
     }
 
     const salt = await bcrypt.genSalt()
     const hashedpassword = await bcrypt.hash(password, salt)
 
-    const newUser = new User({
+    const newProfile = new Profile({
       name: name,
       email: email,
+      accountType: "user",
       password: password,
       hashedpassword: hashedpassword
     })
 
-    await newUser.save()
+    await newProfile.save()
 
     res.status(200).json({ message: 'Account Creation Success' })
   } catch (e) {
@@ -49,21 +48,29 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'fill all the fields' })
     }
 
-    const existingUser = await User.findOne({ email: email })
-    if (!existingUser) {
+    const existingProfile = await Profile.findOne({ email: email })
+    if (!existingProfile) {
       return res.status(401).json({ message: 'Invalid Email or Password' })
     }
 
-    const isPasswordValid = await bcrypt.compare(password, existingUser.hashedpassword)
+    if(! existingProfile['hashedpassword']) {
+      const salt = await bcrypt.genSalt()
+      const hashedpassword = await bcrypt.hash(existingProfile.password, salt)
+      existingProfile['hashedpassword'] = hashedpassword
+      await Profile.findOneAndUpdate({email},{"hashedpassword" : hashedpassword})
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, existingProfile.hashedpassword)
 
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid email or password' })
     }
 
     const userToken = jwt.sign({
-      id: existingUser._id,
-      name: existingUser.name,
-      email: existingUser.email
+      id: existingProfile._id,
+      name: existingProfile.name,
+      accountType: existingProfile.accountType,
+      email: existingProfile.email
     }, process.env.JWT_SECRET)
     return res.status(200)
       .cookie('UserToken', userToken, { httpOnly: true })
@@ -81,14 +88,15 @@ router.get('/logout', (req, res) => {
   }).send()
 })
 
-router.get('/verify', userAuth, (req, res) => {
-  const { id, name, email } = req.userInfo
+router.get('/verify', ProfileAuth, (req, res) => {
+  const { id, name, accountType, email } = req.userInfo
 
   return res.json({
     authorized: true,
     message: 'Success',
     id,
     name,
+    accountType,
     email
   }).status(200)
 })

@@ -11,7 +11,7 @@ function UserAuthContextProvider(props) {
   const [userEmail, setUserEmail] = useState(undefined)
 
   async function getUserLoggedIn() {
-    const loggedInRes = await axios.get(`${ApiBaseUrl}/user/verify`)
+    const loggedInRes = await axios.get(`${ApiBaseUrl}/profile/verify`)
     setUserLoggedIn(loggedInRes.data.authorized)
     setUserID(loggedInRes.data.id)
     setUserName(loggedInRes.data.name)

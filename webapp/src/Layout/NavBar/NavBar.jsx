@@ -15,7 +15,7 @@ export default function NavBar(props) {
     }
     
     const handleLogout = async () => {
-        await axios.get(`${ApiBaseUrl}/user/logout`);
+        await axios.get(`${ApiBaseUrl}/profile/logout`);
         await getUserLoggedIn();
         navigate('/')
     }

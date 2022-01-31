@@ -17,7 +17,7 @@ export default function SignUp() {
       email,
       password
     }
-    axios.post(`${ApiBaseUrl}/user/register`, registerData, {
+    axios.post(`${ApiBaseUrl}/profile/register`, registerData, {
       headers: {
         "Content-Type": "application/json",
       }
