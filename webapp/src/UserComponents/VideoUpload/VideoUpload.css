@@ -1,0 +1,30 @@
+.videouploadform {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.videouploadcontainer {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.videouploadinput {
+  padding: 15px;
+}
+
+.videouploadthumbnail {
+  max-width: 50%;
+  max-height: 50%;
+}
+
+.videouploadcontainercontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .videouploadformcontainer {
+
+} */

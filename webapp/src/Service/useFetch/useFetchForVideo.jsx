@@ -20,7 +20,7 @@ export default function useFetchForVideo(offset) {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {
-
+                // console.log(res)
                 setVideoList((prev) => {
                     return [...new Set([...prev, ...res.data.videoList])];
                 });

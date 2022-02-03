@@ -24,7 +24,7 @@ export default function SignUp() {
     })
       .then(async (res) => {
         alert(res.data.message);
-        navigate('/signin');
+        navigate('/profile/signin');
       })
       .catch((err) => {
         console.error(err);
@@ -50,7 +50,7 @@ export default function SignUp() {
           </div>
         </div>
       </form>
-      <p className="signIn-cta"><Link to="/signin">Already have an account? Sign In</Link></p>
+      <p className="signIn-cta"><Link to="/profile/signin">Already have an account? Sign In</Link></p>
     </div>
   )
 }

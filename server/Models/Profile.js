@@ -27,7 +27,7 @@ const ProfileSchema = new mongoose.Schema({
   },
   videoList: {
     type: [mongoose.Schema.Types.ObjectId],
-    ref: 'VideoMetaData',
+    ref: 'Video',
     default: []
   }
 })

@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const VideoMetaData = require('../Models/VideoMetaData.js')
+const Video = require('../Models/Video.js')
 const Profile = require('../Models/Profile.js')
 
 router.get('/video', async (req, res) => {
@@ -9,14 +9,14 @@ router.get('/video', async (req, res) => {
     if (!videoID) {
       return res.status(400).json({ message: 'Requires Video ID' })
     }
-    const videoData = await VideoMetaData.findById(req.query.id)
+    const videoData = await Video.findById(req.query.id)
       .populate({ path: 'channel', populate: { path: 'videoList', populate: { path: 'channel model' } } })
       .populate({ path: 'model', populate: { path: 'videoList', populate: { path: 'channel model' } } })
 
-    let moreChannelVideos = new Set()
-    let moreModelVideos = new Set()
+    const moreChannelVideos = new Set()
+    const moreModelVideos = new Set()
 
-    if (videoData['channel']) {
+    if (videoData.channel) {
       // videoData.channel.videoList.forEach(moreChannelVideos.add, moreChannelVideos)
       for (let i = 0; i < videoData.channel.videoList.length; i++) {
         if (videoData.channel.videoList[i]._id.toString() === videoID) {
@@ -36,7 +36,7 @@ router.get('/video', async (req, res) => {
         // videoData.model[i].videoList.forEach(moreModelVideos.add, moreModelVideos)
       }
     }
-    moreVideos = []
+    let moreVideos = []
     if (moreChannelVideos.size > moreModelVideos.size) {
       moreVideos = Array.from(moreChannelVideos)
     } else {
@@ -83,7 +83,7 @@ router.get('/list/video', async (req, res) => {
   try {
     const limit = req.query.limit
     const offset = req.query.offset
-    const videoList = await VideoMetaData.find().skip(offset)
+    const videoList = await Video.find().skip(offset)
       .limit(limit).populate('channel', 'name').populate('model')
 
     res.status(200).json({ videoList })
@@ -131,14 +131,18 @@ router.get('/search', async (req, res) => {
 
     const queryOptions = {
       $and: [{
-        originalfilename: {
+        title: {
           $regex: query,
           $options: 'i'
         }
       }]
     }
 
-    const resultVideoList = await VideoMetaData.find(queryOptions).populate('channel', 'name').populate('model')
+    // const queryOptions = {
+    //   tags: query
+    // }
+
+    const resultVideoList = await Video.find(queryOptions).populate('channel', 'name').populate('model')
     res.status(200).json({ resultVideoList })
   } catch (e) {
     console.error(e)

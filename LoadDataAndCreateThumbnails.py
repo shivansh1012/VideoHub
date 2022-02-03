@@ -15,7 +15,7 @@ __author__ = "Shivansh Pandey"
 __copyright__ = "MIT"
 __credits__ = ["shivansh1012"]
 __license__ = "GPL"
-__version__ = "2.0.1"
+__version__ = "1.11.0"
 __maintainer__ = "shivansh1012"
 __status__ = "Production"
 
@@ -26,18 +26,19 @@ class Automation:
         ABS_PATH = os.path.abspath(__file__)
         # get the chemin for this current directory
         BASE_DIR = os.path.dirname(ABS_PATH)
-        self.thumbnails_dir = os.path.join(BASE_DIR, r"server\public\thumbnails")
+        self.thumbnails_dir = "server/public/uploads/thumbnails"
+        self.base_thumbnails_dir = os.path.join(BASE_DIR, self.thumbnails_dir)
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]
-        self.videoMetaData = mydb["VideoMetaData"]
+        self.Video = mydb["Video"]
         self.Profile = mydb["Profile"]
 
-    def dropCollections(self, deleteVideoMetaData=1, ProfileData=1) -> bool:
+    def dropCollections(self, VideoData=1, ProfileData=1) -> bool:
         try:
-            if deleteVideoMetaData:
-                self.videoMetaData.drop()
-                print("videoMetaDatas Dropped")
+            if VideoData:
+                self.Video.drop()
+                print("Videos Dropped")
             if ProfileData:
                 self.Profile.drop()
                 print("Profiles Dropped")
@@ -48,7 +49,7 @@ class Automation:
 
     def deleteThumbnails(self):
         try:
-            shutil.rmtree(self.thumbnails_dir)
+            shutil.rmtree(self.base_thumbnails_dir)
             print("Thumbnails Deleted")
             return True
         except OSError as error:
@@ -59,7 +60,7 @@ class Automation:
     def createThumbnailsFolder(self):
         try:
             # create the folder "thumbnails"  at Ex : path/to/your/project/folder/data/outputs/thumbnails
-            os.makedirs(self.thumbnails_dir, exist_ok=True)
+            os.makedirs(self.base_thumbnails_dir, exist_ok=True)
             print("Thumbnails Folder Created")
             return True
         except OSError as error:
@@ -77,7 +78,7 @@ class Automation:
         profile["email"] = email + "@videohub.inf"
         profile["password"] = "login1234"
         profile["hashedpassword"] = ""
-        profile["profilepicURL"] = ""
+        profile["profilepicURL"] = "/defaults/defaultprofilepic.png"
         profile["videoList"] = []
 
         savedProfile = self.Profile.insert_one(profile)
@@ -89,7 +90,7 @@ class Automation:
         # fileExt = filename[-4:]
         cleanFileName = ""
         models = []
-        channel = ""
+        channel = None
         newFileName = noExtFileName.split("-")
         if len(newFileName) == 1:
             cleanFileName = newFileName[0].strip()
@@ -135,43 +136,55 @@ class Automation:
         frame = clip.get_frame(frame_at_second)
 
         if createThumbnail:
+            thumbnailfilename = cleanFileName+".jpg"
             new_image_filepath = os.path.join(
-                self.thumbnails_dir, f"{cleanFileName}.jpg"
+                self.base_thumbnails_dir, thumbnailfilename
             )
             new_image = Image.fromarray(frame)  # convert numpy array to image
             new_image.save(new_image_filepath)  # save the image
 
         clip.close()
 
-        return fps, nframes, duration, dimensions
+        return new_image_filepath.replace("\\", "/"), thumbnailfilename, fps, nframes, duration, dimensions
 
     def saveVideoMetaData(
         self,
-        newFileName,
-        originalFileName,
+        title,
+        videoFileName,
+        thumbnailfilename,
         videoDirPath,
         videoPath,
+        thumbnailpath,
         channel,
         tagList,
         modelList,
         fps,
         nframes,
         duration,
-        dimensions,
+        dimension,
     ):
-        video = {}
-        video["filename"] = newFileName
-        video["originalfilename"] = originalFileName
-        video["dir"] = videoDirPath
-        video["path"] = videoPath
-        video["channel"] = channel
-        video["tags"] = tagList
-        video["model"] = modelList
-        video["fps"] = fps
-        video["nframes"] = nframes
-        video["duration"] = duration
-        video["dimensions"] = dimensions
-        savedVideo = self.videoMetaData.insert_one(video)
+        videodata = {}
+        videodata["filename"] = videoFileName
+        videodata["dir"] = videoDirPath
+        videodata["path"] = videoPath
+        videodata["fps"] = str(fps)
+        videodata["nframes"] = str(nframes)
+        videodata["duration"] = str(duration)
+        videodata["dimension"] = str(dimension[0])+'x'+str(dimension[1])
+
+        thumbnaildata = {}
+        thumbnaildata["filename"] = thumbnailfilename
+        thumbnaildata["dir"] = "uploads/thumbnails"
+        thumbnaildata["path"] = "uploads/thumbnails/"+thumbnailfilename
+
+        newVideo = {}
+        newVideo["title"] = title
+        newVideo["video"] = videodata
+        newVideo["thumbnail"] = thumbnaildata
+        newVideo["channel"] = channel
+        newVideo["tags"] = tagList
+        newVideo["model"] = modelList
+        savedVideo = self.Video.insert_one(newVideo)
         return savedVideo.inserted_id
 
     def Automate(self, path: str, saveDataInDB: int = 1, createThumbnail: int = 1):
@@ -192,7 +205,7 @@ class Automation:
                     modelList,
                 ) = self.getVideoBasicData(dirpath, filename)
 
-                fps, nframes, duration, dimensions = self.getVideoProperties(
+                thumbnailpath, thumbnailfilename, fps, nframes, duration, dimension = self.getVideoProperties(
                     dirpath, filename, newFileName, createThumbnail
                 )
 
@@ -209,22 +222,25 @@ class Automation:
                     for model in modelList:
                         profileData = self.Profile.find_one({"name": model})
                         if profileData is None:
-                            modelListIDs.append(self.createProfile(model, "model"))
+                            modelListIDs.append(
+                                self.createProfile(model, "model"))
                         else:
                             modelListIDs.append(profileData["_id"])
 
                     videoID = self.saveVideoMetaData(
                         newFileName,
                         filename,
+                        thumbnailfilename,
                         videoDirPath,
                         videoPath,
+                        thumbnailpath,
                         channelID,
                         tagList,
                         modelListIDs,
                         fps,
                         nframes,
                         duration,
-                        dimensions,
+                        dimension,
                     )
 
                     self.Profile.update_one(

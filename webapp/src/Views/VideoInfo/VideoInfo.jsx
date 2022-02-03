@@ -32,6 +32,7 @@ export default function VideoInfo() {
   const getVideoMetaData = useCallback(async () => {
     await fetch(`${ApiBaseUrl}/meta/video?id=${id}`).then(response =>
       response.json()).then((json) => {
+        // console.log(json)
         setVideoData(json.videoData);
         setMoreVideos(json.moreVideos)
       })
@@ -56,9 +57,9 @@ export default function VideoInfo() {
         {
           loading ? <div className="simple-spinner"></div> :
             <div>
-              <h3>{videoData.filename}</h3>
+              <h3>{videoData.title}</h3>
               {
-                videoData.hasOwnProperty('channel') &&
+                (videoData.channel && videoData.channel!=null) &&
                 <h5>
                   <Link to={`/channel/${videoData.channel['_id']}`}>{videoData.channel.name}</Link>
                 </h5>
@@ -77,7 +78,7 @@ export default function VideoInfo() {
                   })
                 }
               </div>
-              <p>Duration: {fancyTimeFormat(videoData.duration)}</p>
+              <p>Duration: {fancyTimeFormat(videoData.video.duration)}</p>
               <div className="d-flex flex-wrap">
                 <p>Tags: </p>
                 {

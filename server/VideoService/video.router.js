@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const fs = require('fs')
 
-const VideoMetaData = require('../Models/VideoMetaData.js')
+const Video = require('../Models/Video.js')
 
 router.get('', async (req, res) => {
   // Ensure there is a range given for the video
@@ -15,14 +15,18 @@ router.get('', async (req, res) => {
     return res.status(400).json({ message: 'Requires Video ID' })
   }
 
-  const tempVideoData = await VideoMetaData.findById(req.query.id)
+  const tempVideoData = await Video.findById(req.query.id)
   if (!tempVideoData) {
     return res.status(400).json({ message: 'Invalid Video ID' })
   }
-  const path = tempVideoData.path.substr(1)
-
+  const path = tempVideoData.video.get('path')
+  let videoPath = ''
+  if (path.indexOf('Files') === -1)
+    videoPath = './public/uploads/videos/' + tempVideoData.video.get('filename')
+  else
+    videoPath = '.' + path
   // get video stats (about 61MB)
-  const videoPath = '..' + path
+  // console.log(videoPath)
   const videoSize = fs.statSync(videoPath).size
 
   // console.log(videoID)

@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import {
-  BrowserRouter as Router,
-  Routes as Switch,
+  BrowserRouter,
+  Routes,
   Route
 } from 'react-router-dom'
 
@@ -22,10 +22,16 @@ import AboutApp from './Views/AboutApp/AboutApp.jsx'
 import ModelList from './Views/ModelList/ModelList.jsx'
 import SignIn from './UserComponents/SignIn/SignIn.jsx'
 import SignUp from './UserComponents/SignUp/SignUp.jsx'
+import PageDoesNotExist from './Views/PageDoesNotExist/PageDoesNotExist.jsx'
 
 import UserAuthContext from './UserComponents/UserAuthContext.js'
 import UserVideoList from './UserComponents/UserVideoList/UserVideoList.jsx'
-import UserVideoGrid from './UserComponents/UserVideoGrid/UserVideoGrid'
+import UserVideoGrid from './UserComponents/UserVideoGrid/UserVideoGrid.jsx'
+import PictureUpload from './UserComponents/PictureUpload/PictureUpload.jsx'
+import VideoUpload from './UserComponents/VideoUpload/VideoUpload.jsx'
+import Profile from './UserComponents/Profile/Profile.jsx'
+
+// import UserRouter from './UserComponents/UserRouter.js'
 
 import axios from 'axios'
 axios.defaults.withCredentials = true
@@ -35,10 +41,12 @@ function App () {
 
   const { userLoggedIn } = useContext(UserAuthContext)
 
+  // const routing = useRoutes(UserRouter(userLoggedIn));
+
   return (
-    <Router>
+    <BrowserRouter>
       <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <Switch>
+      <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/video/list' element={<VideoList />} />
         <Route path='/model/list' element={<ModelList />} />
@@ -49,20 +57,31 @@ function App () {
         <Route path='/settings' element={<Settings />} />
         <Route path='/about' element={<AboutApp />} />
         <Route path='/search' element={<SearchPage searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />
-        {(userLoggedIn === false || userLoggedIn === undefined) && (
-          <>
-            <Route path='/signin' element={<SignIn />} />
-            <Route path='/signup' element={<SignUp />} />
-          </>
-        )}
-        {(userLoggedIn === true) && (
-            <>
-              <Route path='/profile/videolist' element={<UserVideoList />} />
-              <Route path='/profile/myvideos' element={<UserVideoGrid />} />
-            </>
-          )}
-      </Switch>
-    </Router>
+        <Route path='profile'>
+          {
+            (userLoggedIn === false || userLoggedIn === undefined) && (
+              <>
+                <Route path='signin' element={<SignIn />} />
+                <Route path='signup' element={<SignUp />} />
+              </>
+            )
+          }
+          {
+            (userLoggedIn === true) && (
+              <>
+                <Route path='' element={<Profile />} />
+                <Route path='myvideos' element={<UserVideoGrid />} />
+                <Route path='videolist' element={<UserVideoList />} />
+                <Route path='upload/picture' element={<PictureUpload />} />
+                <Route path='upload/video' element={<VideoUpload />} />
+              </>
+            )
+          }
+        </Route>
+        {/* <Route path="profile" element={<UserRouter />} /> */}
+        <Route path='*' element={<PageDoesNotExist />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

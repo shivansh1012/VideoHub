@@ -1,8 +1,7 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom'
-import { ApiBaseUrl } from '../../config.js';
+import { SourceBaseUrl, ApiBaseUrl } from '../../config.js';
 import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
-import { SourceBaseUrl } from '../../config.js';
 
 export default function ModelInfo() {
     const [modelData, setModelData] = useState([]);
@@ -24,7 +23,7 @@ export default function ModelInfo() {
             <div className="d-flex flex-row">
                 {
                     loading ? <div className="simple-spinner"></div> :
-                        <img src={`${SourceBaseUrl}/static/profilepics/${modelData.name}.jpg`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={modelData.name} />
+                        <img src={`${SourceBaseUrl}/static/uploads/profilepics/${modelData.name}.jpg`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={modelData.name} />
                 }
                 <div className="mx-4">
                     {

@@ -8,7 +8,6 @@ export default function SearchPage(props) {
     const [loading, setLoading] = useState(true);
 
     const getSearchResult = useCallback(async (e) => {
-        e.preventDefault()
         if(props.searchQuery==="") {
             setResultVideoList([])
             setLoading(false);
@@ -30,7 +29,7 @@ export default function SearchPage(props) {
             <div className="py-5">
                 <form className="input-group w-50" style={{ margin: "auto" }} onSubmit={(e) => getSearchResult(e)}>
                     <input type="text" className="form-control" placeholder="Search Video" value={props.searchQuery} onChange={(e) => props.setSearchQuery(e.target.value)} />
-                    <button type="button" className="btn bg-white border" onClick={() => getSearchResult()}>Search</button>
+                    <button type="submit" className="btn bg-white border" onClick={() => getSearchResult()}>Search</button>
                 </form>
             </div>
             <div>

@@ -54,7 +54,7 @@ export default function SignIn() {
           </div>
         </div>
       </form>
-      <p className="signUp-cta"><Link to="/signup">Create an account</Link></p>
+      <p className="signUp-cta"><Link to="/profile/signup">Create an account</Link></p>
     </div>
   )
 }

@@ -1,7 +1,7 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { ApiBaseUrl } from '../../config.js';
-import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
+import { SourceBaseUrl, ApiBaseUrl } from '../../config.js'
+import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx"
 
 export default function ChannelInfo() {
     const [channelData, setChannelData] = useState([]);
@@ -21,7 +21,10 @@ export default function ChannelInfo() {
     return (
         <div className="customcontainer py-3">
             <div className="d-flex flex-row">
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" style={{ width: "200px", height: "200px", "borderRadius": "20px" }} alt="..." />
+                {
+                    loading ? <div className="simple-spinner"></div> :
+                        <img src={`${SourceBaseUrl}/static/${channelData.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={channelData.name} />
+                }
                 <div className="mx-4">
                     {
                         loading ? <div className="simple-spinner"></div> :
