@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const Profile = require('../Models/Profile.js')
 
-async function userAuth(req, res, next) {
+async function userAuth (req, res, next) {
   try {
     const userToken = req.cookies.UserToken
 
@@ -9,7 +9,7 @@ async function userAuth(req, res, next) {
       return res.json({ authorized: false, message: 'Unauthorized' })
     }
 
-    const { _id } = userToken;
+    const { _id } = userToken
 
     if (await Profile.findById(_id)) {
       return res.json({ authorized: false, message: 'Unauthorized' })

@@ -27,8 +27,9 @@ class Automation:
         # get the chemin for this current directory
         BASE_DIR = os.path.dirname(ABS_PATH)
         self.thumbnails_dir = "server/public/uploads/thumbnails"
+        self.profilepic_dir = "server/public/uploads/profilepics"
         self.base_thumbnails_dir = os.path.join(BASE_DIR, self.thumbnails_dir)
-        self.base_profilepic_dir = os.path.join(BASE_DIR, "server/public/uploads/profilepics")
+        self.base_profilepic_dir = os.path.join(BASE_DIR, self.profilepic_dir)
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]
@@ -181,7 +182,7 @@ class Automation:
         videodata["fps"] = str(fps)
         videodata["nframes"] = str(nframes)
         videodata["duration"] = str(duration)
-        videodata["dimension"] = str(dimension[0]) + 'x' + str(dimension[1])
+        videodata["dimension"] = str(dimension[0]) + "x" + str(dimension[1])
 
         thumbnaildata = {}
         thumbnaildata["filename"] = thumbnailfilename
@@ -222,7 +223,7 @@ class Automation:
                     fps,
                     nframes,
                     duration,
-                    dimension
+                    dimension,
                 ) = self.getVideoProperties(
                     dirpath, filename, newFileName, createThumbnail
                 )

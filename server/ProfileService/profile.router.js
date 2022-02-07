@@ -191,8 +191,9 @@ router.post('/thumbnail', async (req, res) => {
   let thumbnailfilename = ''
 
   await ffmpeg.ffprobe(origpath, function (err, metadata) {
-    // console.dir(metadata) // all metadata
-    // console.dir(err)
+    if (err) {
+      return res.json({ success: false, err })
+    }
     videoDuration = metadata.format.duration
     nframes = metadata.streams[0].nb_frames
     fps = metadata.streams[0].avg_frame_rate
