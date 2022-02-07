@@ -23,7 +23,7 @@ export default function ModelInfo() {
             <div className="d-flex flex-row">
                 {
                     loading ? <div className="simple-spinner"></div> :
-                        <img src={`${SourceBaseUrl}/static/uploads/profilepics/${modelData.name}.jpg`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={modelData.name} />
+                        <img src={`${SourceBaseUrl}/static/${modelData.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={modelData.name} />
                 }
                 <div className="mx-4">
                     {

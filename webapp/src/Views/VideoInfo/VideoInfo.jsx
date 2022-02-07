@@ -32,7 +32,7 @@ export default function VideoInfo() {
   const getVideoMetaData = useCallback(async () => {
     await fetch(`${ApiBaseUrl}/meta/video?id=${id}`).then(response =>
       response.json()).then((json) => {
-        // console.log(json)
+        console.log(json)
         setVideoData(json.videoData);
         setMoreVideos(json.moreVideos)
       })
@@ -59,7 +59,7 @@ export default function VideoInfo() {
             <div>
               <h3>{videoData.title}</h3>
               {
-                (videoData.channel && videoData.channel!=null) &&
+                (videoData.channel && videoData.channel != null) &&
                 <h5>
                   <Link to={`/channel/${videoData.channel['_id']}`}>{videoData.channel.name}</Link>
                 </h5>

@@ -23,7 +23,7 @@ const ProfileSchema = new mongoose.Schema({
   },
   profilepicURL: {
     type: String,
-    default: ''
+    default: 'defaults/defaultprofilepic.png'
   },
   videoList: {
     type: [mongoose.Schema.Types.ObjectId],

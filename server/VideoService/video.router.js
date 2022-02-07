@@ -21,17 +21,14 @@ router.get('', async (req, res) => {
   }
   const path = tempVideoData.video.get('path')
   let videoPath = ''
-  if (path.indexOf('Files') === -1)
+  if (path.indexOf('Files') === -1) {
     videoPath = './public/uploads/videos/' + tempVideoData.video.get('filename')
-  else
+  }
+  else {
     videoPath = '.' + path
+  }
   // get video stats (about 61MB)
-  // console.log(videoPath)
   const videoSize = fs.statSync(videoPath).size
-
-  // console.log(videoID)
-  // console.log(tempVideoData)
-  // console.log(videoPath)
 
   // Parse Range
   // Example: 'bytes=32324-'

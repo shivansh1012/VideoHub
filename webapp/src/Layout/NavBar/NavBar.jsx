@@ -63,12 +63,26 @@ export default function NavBar(props) {
                             <li className="nav-item dropdown">
                                 <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown" style={{ cursor: "pointer" }}>Hello, {userName}</div>
                                 <div className="custom-dropdown-menu dropdown-menu">
-                                    <Link className="dropdown-item" to="/settings">Settings</Link>
-                                    <Link className="dropdown-item" to="/profile/myvideos">My Videos</Link>
-                                    <Link className="dropdown-item" to="/profile/videolist">My Video List</Link>
-                                    <Link className="dropdown-item" to="/profile/upload/video">Upload Video</Link>
-                                    <Link className="dropdown-item" to="/profile/upload/picture">Upload Picture</Link>
-                                    <Link className="dropdown-item" to="/about">About</Link>
+                                    <Link to="/profile">
+                                        <div className="dropdown-item">Profile</div>
+                                    </Link>
+                                    <Link to="/settings">
+                                        <div className="dropdown-item">Settings</div>
+                                    </Link>
+                                    <Link to="/profile/myvideos">
+                                        <div className="dropdown-item">My Videos</div>
+                                    </Link>
+                                    <Link to="/profile/videolist">
+                                        <div className="dropdown-item">My Video List</div>
+                                    </Link>
+                                    <Link to="/profile/upload/video">
+                                        <div className="dropdown-item">Upload Video</div>
+                                    </Link>
+                                    <Link to="/profile/upload/picture">
+                                        <div className="dropdown-item">Upload Picture</div>
+                                    </Link>
+                                    <Link to="/about">
+                                        <div className="dropdown-item">About</div></Link>
                                     <div className="dropdown-item" style={{ cursor: "pointer" }} onClick={handleLogout}>Logout</div>
                                 </div>
                             </li>

@@ -28,6 +28,7 @@ class Automation:
         BASE_DIR = os.path.dirname(ABS_PATH)
         self.thumbnails_dir = "server/public/uploads/thumbnails"
         self.base_thumbnails_dir = os.path.join(BASE_DIR, self.thumbnails_dir)
+        self.base_profilepic_dir = os.path.join(BASE_DIR, "server/public/uploads/profilepics")
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]
@@ -78,7 +79,10 @@ class Automation:
         profile["email"] = email + "@videohub.inf"
         profile["password"] = "login1234"
         profile["hashedpassword"] = ""
-        profile["profilepicURL"] = "/defaults/defaultprofilepic.png"
+        if os.path.exists(self.base_profilepic_dir + "/" + name + ".jpg"):
+            profile["profilepicURL"] = "uploads/profilepics/" + name + ".jpg"
+        else:
+            profile["profilepicURL"] = "defaults/defaultprofilepic2.jpg"
         profile["videoList"] = []
 
         savedProfile = self.Profile.insert_one(profile)
@@ -136,7 +140,7 @@ class Automation:
         frame = clip.get_frame(frame_at_second)
 
         if createThumbnail:
-            thumbnailfilename = cleanFileName+".jpg"
+            thumbnailfilename = cleanFileName + ".jpg"
             new_image_filepath = os.path.join(
                 self.base_thumbnails_dir, thumbnailfilename
             )
@@ -145,7 +149,14 @@ class Automation:
 
         clip.close()
 
-        return new_image_filepath.replace("\\", "/"), thumbnailfilename, fps, nframes, duration, dimensions
+        return (
+            new_image_filepath.replace("\\", "/"),
+            thumbnailfilename,
+            fps,
+            nframes,
+            duration,
+            dimensions,
+        )
 
     def saveVideoMetaData(
         self,
@@ -170,12 +181,12 @@ class Automation:
         videodata["fps"] = str(fps)
         videodata["nframes"] = str(nframes)
         videodata["duration"] = str(duration)
-        videodata["dimension"] = str(dimension[0])+'x'+str(dimension[1])
+        videodata["dimension"] = str(dimension[0]) + 'x' + str(dimension[1])
 
         thumbnaildata = {}
         thumbnaildata["filename"] = thumbnailfilename
         thumbnaildata["dir"] = "uploads/thumbnails"
-        thumbnaildata["path"] = "uploads/thumbnails/"+thumbnailfilename
+        thumbnaildata["path"] = "uploads/thumbnails/" + thumbnailfilename
 
         newVideo = {}
         newVideo["title"] = title
@@ -205,7 +216,14 @@ class Automation:
                     modelList,
                 ) = self.getVideoBasicData(dirpath, filename)
 
-                thumbnailpath, thumbnailfilename, fps, nframes, duration, dimension = self.getVideoProperties(
+                (
+                    thumbnailpath,
+                    thumbnailfilename,
+                    fps,
+                    nframes,
+                    duration,
+                    dimension
+                ) = self.getVideoProperties(
                     dirpath, filename, newFileName, createThumbnail
                 )
 
@@ -222,8 +240,7 @@ class Automation:
                     for model in modelList:
                         profileData = self.Profile.find_one({"name": model})
                         if profileData is None:
-                            modelListIDs.append(
-                                self.createProfile(model, "model"))
+                            modelListIDs.append(self.createProfile(model, "model"))
                         else:
                             modelListIDs.append(profileData["_id"])
 

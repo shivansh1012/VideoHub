@@ -10,8 +10,28 @@ router.get('/video', async (req, res) => {
       return res.status(400).json({ message: 'Requires Video ID' })
     }
     const videoData = await Video.findById(req.query.id)
-      .populate({ path: 'channel', populate: { path: 'videoList', populate: { path: 'channel model' } } })
-      .populate({ path: 'model', populate: { path: 'videoList', populate: { path: 'channel model' } } })
+      .populate({
+        path: 'channel',
+        select: 'name videoList',
+        populate: {
+          path: 'videoList',
+          populate: {
+            path: 'channel model',
+            select: 'name'
+          }
+        }
+      })
+      .populate({
+        path: 'model',
+        select: 'name videoList',
+        populate: {
+          path: 'videoList',
+          populate: {
+            path: 'channel model',
+            select: 'name'
+          }
+        }
+      })
 
     const moreChannelVideos = new Set()
     const moreModelVideos = new Set()
@@ -55,7 +75,7 @@ router.get('/model', async (req, res) => {
     if (!modelID) {
       return res.status(400).json({ message: 'Requires Model ID' })
     }
-    const modelData = await Profile.findById(modelID).populate('videoList')
+    const modelData = await Profile.findById(modelID).populate('videoList').select('-password -hashedpassword')
 
     res.status(200).json({ modelData })
   } catch (e) {
@@ -70,7 +90,7 @@ router.get('/channel', async (req, res) => {
     if (!channelID) {
       return res.status(400).json({ message: 'Requires Channel ID' })
     }
-    const channelData = await Profile.findById(channelID).populate('videoList')
+    const channelData = await Profile.findById(channelID).populate('videoList').select('-password -hashedpassword')
 
     res.status(200).json({ channelData })
   } catch (e) {
@@ -84,7 +104,7 @@ router.get('/list/video', async (req, res) => {
     const limit = req.query.limit
     const offset = req.query.offset
     const videoList = await Video.find().skip(offset)
-      .limit(limit).populate('channel', 'name').populate('model')
+      .limit(limit).populate('channel', 'name').populate('model', 'name')
 
     res.status(200).json({ videoList })
   } catch (e) {
@@ -98,7 +118,7 @@ router.get('/list/model', async (req, res) => {
     const limit = req.query.limit
     const offset = req.query.offset
     const modelList = await Profile.find({ accountType: 'model' }).skip(offset)
-      .limit(limit)
+      .limit(limit).select('name videoList')
 
     res.status(200).json({ modelList })
   } catch (e) {
@@ -112,7 +132,7 @@ router.get('/list/channel', async (req, res) => {
     const limit = req.query.limit
     const offset = req.query.offset
     const channelList = await Profile.find({ accountType: 'channel' }).skip(offset)
-      .limit(limit)
+      .limit(limit).select('name videoList')
 
     res.status(200).json({ channelList })
   } catch (e) {
@@ -142,7 +162,7 @@ router.get('/search', async (req, res) => {
     //   tags: query
     // }
 
-    const resultVideoList = await Video.find(queryOptions).populate('channel', 'name').populate('model')
+    const resultVideoList = await Video.find(queryOptions).populate('channel', 'name').populate('model', 'name')
     res.status(200).json({ resultVideoList })
   } catch (e) {
     console.error(e)
