@@ -6,7 +6,6 @@ inserted into the MongoDB and A thumbnail is generated for the same in "./thumbn
 
 import os
 import shutil
-import time
 
 import pymongo
 from moviepy.editor import VideoFileClip
@@ -239,7 +238,9 @@ class Automation:
                             modelListIDs.append(self.createProfile(model, "model"))
                         else:
                             modelListIDs.append(profileData["_id"])
-                    uploadDate = int(os.path.getctime(os.path.join(dirpath, filename))*1000)
+                    uploadDate = int(
+                        os.path.getctime(os.path.join(dirpath, filename))*1000
+                    )
                     videoID = self.saveVideoMetaData(
                         newFileName,
                         filename,
@@ -254,7 +255,7 @@ class Automation:
                         nframes,
                         duration,
                         dimension,
-                        uploadDate
+                        uploadDate,
                     )
 
                     self.Profile.update_one(

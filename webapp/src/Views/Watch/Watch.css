@@ -8,11 +8,9 @@
 .video {
   display: flex;
   justify-content: center;
-  /* max-height: 300px; */
 }
 
 .morevideo {
-  /* width: 25%; */
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -81,7 +79,3 @@
     max-width: 1320px;
   }
 }
-
-/* .videodetails {
-  
-} */

@@ -13,7 +13,7 @@ Python    - Automated Code to create thumbnails and index pre-existing videos me
 
 To index folder of videos LoadDataAndCreateThumbnail.py file is used. Install the requirements and run the python file. This will scan all the files in "./Files" directory.
 
-This will **Generate Thumbnails** and **Save file Data in MongoDB**. 
+This will **Generate Thumbnails** and **Save file Data in MongoDB**.  
 
 Some of the ways the files are read are
 * < FileName > - < Model/Cast > - < Channel/SeasonName >.< FileExtension >
