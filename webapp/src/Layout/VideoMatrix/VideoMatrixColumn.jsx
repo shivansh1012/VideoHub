@@ -53,13 +53,13 @@ export default function VideoMatrixColumn(props) {
             <div className="row">
                 {
                     props.videoList.map((video, i) => {
-                        // if (props.lastVideoElementRef && props.videoList.length === i + 1)
-                        //     return (
-                        //         <div className="col-12" key={video._id} ref={props.lastVideoElementRef}>
-                        //             {Cards(video)}
-                        //         </div>
-                        //     )
-                        // else
+                        if (props.lastVideoElementRef && props.videoList.length === i + 1)
+                            return (
+                                <div className="col-12" key={video._id} ref={props.lastVideoElementRef}>
+                                    {Cards(video)}
+                                </div>
+                            )
+                        else
                             return (
                                 <div className="col-12" key={video._id}>
                                     {Cards(video)}

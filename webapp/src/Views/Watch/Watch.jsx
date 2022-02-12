@@ -1,23 +1,26 @@
-import { useEffect, useCallback, useState, useContext } from 'react';
+import { useEffect, useCallback, useState, useContext, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ApiBaseUrl } from '../../config.js';
 import axios from 'axios';
+import useFetchForMoreVideos from '../../Service/useFetch/useFetchForMoreVideos.jsx';
 import VideoPlayer from "../../Layout/VideoPlayer/VideoPlayer.jsx"
 import VideoMatrixColumn from "../../Layout/VideoMatrix/VideoMatrixColumn.jsx"
 import UserAuthContext from '../../UserComponents/UserAuthContext.js';
 import "./Watch.css"
 
 export default function Watch() {
+    const { id } = useParams();
+    const [offset, setOffset] = useState(0);
     const [videoData, setVideoData] = useState([]);
-    const [moreVideos, setMoreVideos] = useState([]);
     const [infoLoading, setInfoLoading] = useState(true);
-    const [moreVideosLoading, setMoreVideosLoading] = useState(true);
     const [likeStatus, setLikeStatus] = useState(undefined);
     const [likeStatusLoading, setLikeStatusLoading] = useState(true);
-
-    const { id } = useParams();
+    // const [moreVideos, setMoreVideos] = useState([]);
+    // const [moreVideosLoading, setMoreVideosLoading] = useState(true);
+    const { moreVideosLoading, moreVideos, hasMore } = useFetchForMoreVideos(offset, id);
     const { userLoggedIn } = useContext(UserAuthContext)
-    let navigate = useNavigate()
+    const navigate = useNavigate()
+    const observer = useRef();
 
     const getVideoMetaData = useCallback(async () => {
         await fetch(`${ApiBaseUrl}/meta/video?id=${id}`).then(response =>
@@ -28,18 +31,32 @@ export default function Watch() {
         setInfoLoading(false);
     }, [id])
 
-    const getMoreVideos = useCallback(async () => {
-        await fetch(`${ApiBaseUrl}/meta/morevideo?id=${id}`).then(response =>
-            response.json()).then((json) => {
-                // console.log(json)
-                setMoreVideos(json.moreVideos)
-            })
-        setMoreVideosLoading(false);
-    }, [id])
+    // const getMoreVideos = useCallback(async () => {
+    //     await fetch(`${ApiBaseUrl}/meta/morevideo?id=${id}`).then(response =>
+    //         response.json()).then((json) => {
+    //             // console.log(json)
+    //             setMoreVideos(json.moreVideos)
+    //         })
+    //     setMoreVideosLoading(false);
+    // }, [id])
+
+    const lastVideoElementRef = useCallback(
+        (node) => {
+            if (moreVideosLoading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    setOffset((prev) => prev + 10);
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [moreVideosLoading, hasMore]
+    );
 
     const getLikedStatus = useCallback(async () => {
         await axios.get(`${ApiBaseUrl}/profile/likedstatus?videoid=${id}`).then(res => {
-            console.log(res.data.likedStatus)
+            // console.log(res.data.likedStatus)
             setLikeStatus(res.data.likedStatus)
         })
         setLikeStatusLoading(false);
@@ -195,10 +212,10 @@ export default function Watch() {
 
     useEffect(() => {
         getVideoMetaData()
-        getMoreVideos()
+        // getMoreVideos()
         getLikedStatus()
         window.scrollTo(0, 0)
-    }, [getVideoMetaData, getMoreVideos, getLikedStatus])
+    }, [getVideoMetaData, getLikedStatus])
 
     return (
         <div className="container">
@@ -222,13 +239,9 @@ export default function Watch() {
                 <div className="morevideo">
                     <h3 className="py-3">More Videos</h3>
                     <div>
-                        {
-                            moreVideosLoading ? <div className="simple-spinner"></div> :
-                                <>
-                                    <VideoMatrixColumn videoList={moreVideos} />
-                                </>
-                        }
+                        <VideoMatrixColumn videoList={moreVideos} lastVideoElementRef={lastVideoElementRef} />
                     </div>
+                    <div>{moreVideosLoading && <div className="spinner"></div>}</div>
                 </div>
             </div>
         </div>

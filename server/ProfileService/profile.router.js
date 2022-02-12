@@ -147,11 +147,12 @@ router.get('/likedstatus', ProfileAuth, async (req, res) => {
     const { id } = req.userInfo
     const videoid = req.query.videoid
     const userInfo = await Profile.findById(id)
-    let likedStatus = undefined
     if (userInfo.likedvideos.includes(mongoose.Types.ObjectId(videoid))) {
       likedStatus = true
     } else if (userInfo.dislikedvideos.includes(mongoose.Types.ObjectId(videoid))) {
       likedStatus = false
+    } else {
+      likedStatus = undefined
     }
     res.status(200).json({ likedStatus })
   } catch (e) {
@@ -163,8 +164,7 @@ router.get('/likedstatus', ProfileAuth, async (req, res) => {
 router.post('/managelike', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
-    const { videoid, action, lastStatus } = req.body
-    let likedStatus = undefined
+    const { videoid, action } = req.body
     if (action === 'like') {
       await Profile.findByIdAndUpdate(id, { $push: { likedvideos: videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { likedusers: id } })
@@ -189,6 +189,8 @@ router.post('/managelike', ProfileAuth, async (req, res) => {
       await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid }, $push: { likedvideos: videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id }, $push: { likedusers: id } })
       likedStatus = true
+    } else {
+      likedStatus = undefined
     }
     res.status(200).json({ likedStatus })
   } catch (e) {

@@ -16,7 +16,7 @@ router.get('/video', async (req, res) => {
       })
       .populate({
         path: 'model',
-        select: 'name',
+        select: 'name'
       })
 
     // const moreChannelVideos = new Set()
@@ -48,7 +48,7 @@ router.get('/video', async (req, res) => {
     // } else {
     //   moreVideos = Array.from(moreModelVideos)
     // }
-    res.status(200).json({ videoData, moreVideos:[] })
+    res.status(200).json({ videoData, moreVideos: [] })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -160,60 +160,25 @@ router.get('/search', async (req, res) => {
 router.get('/morevideo', async (req, res) => {
   try {
     const videoID = req.query.id
+    const limit = req.query.limit
+    const offset = req.query.offset
+    if (offset >= 40) {
+      return res.status(200).json({ moreVideos: [] })
+    }
     if (!videoID) {
       return res.status(400).json({ message: 'Requires Video ID' })
     }
     const videoData = await Video.findById(req.query.id)
+    const moreVideos = await Video.find({ tags: { $in: videoData.tags } }).skip(offset)
+      .limit(limit)
       .populate({
         path: 'channel',
-        select: 'name videoList',
-        populate: {
-          path: 'videoList',
-          populate: {
-            path: 'channel model',
-            select: 'name'
-          }
-        }
+        select: 'name'
       })
       .populate({
         path: 'model',
-        select: 'name videoList',
-        populate: {
-          path: 'videoList',
-          populate: {
-            path: 'channel model',
-            select: 'name'
-          }
-        }
+        select: 'name'
       })
-
-    const moreChannelVideos = new Set()
-    const moreModelVideos = new Set()
-
-    if (videoData.channel) {
-      for (let i = 0; i < videoData.channel.videoList.length; i++) {
-        if (videoData.channel.videoList[i]._id.toString() === videoID) {
-          continue
-        }
-        moreChannelVideos.add(videoData.channel.videoList[i])
-      }
-    }
-    if (videoData.model.length !== 0) {
-      for (let i = 0; i < videoData.model.length; i++) {
-        for (let j = 0; j < videoData.model[i].videoList.length; j++) {
-          if (videoData.model[i].videoList[j]._id.toString() === videoID) {
-            continue
-          }
-          moreModelVideos.add(videoData.model[i].videoList[j])
-        }
-      }
-    }
-    let moreVideos = []
-    if (moreChannelVideos.size > moreModelVideos.size) {
-      moreVideos = Array.from(moreChannelVideos)
-    } else {
-      moreVideos = Array.from(moreModelVideos)
-    }
     res.status(200).json({ moreVideos })
   } catch (e) {
     console.error(e)
