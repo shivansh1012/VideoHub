@@ -3,6 +3,7 @@ const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const multer = require('multer')
 const path = require('path')
+const mongoose = require('mongoose')
 
 const ffmpeg = require('fluent-ffmpeg')
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
@@ -135,6 +136,61 @@ router.get('/userinfo', ProfileAuth, async (req, res) => {
       .populate({ path: 'videoList', populate: { path: 'model channel', select: 'name' } })
       .select('-password -hashedpassword')
     res.status(200).json({ userInfo })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.get('/likedstatus', ProfileAuth, async (req, res) => {
+  try {
+    const { id } = req.userInfo
+    const videoid = req.query.videoid
+    const userInfo = await Profile.findById(id)
+    let likedStatus = undefined
+    if (userInfo.likedvideos.includes(mongoose.Types.ObjectId(videoid))) {
+      likedStatus = true
+    } else if (userInfo.dislikedvideos.includes(mongoose.Types.ObjectId(videoid))) {
+      likedStatus = false
+    }
+    res.status(200).json({ likedStatus })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.post('/managelike', ProfileAuth, async (req, res) => {
+  try {
+    const { id } = req.userInfo
+    const { videoid, action, lastStatus } = req.body
+    let likedStatus = undefined
+    if (action === 'like') {
+      await Profile.findByIdAndUpdate(id, { $push: { likedvideos: videoid } })
+      await Video.findByIdAndUpdate(videoid, { $push: { likedusers: id } })
+      likedStatus = true
+    } else if (action === 'dislike') {
+      await Profile.findByIdAndUpdate(id, { $push: { dislikedvideos: videoid } })
+      await Video.findByIdAndUpdate(videoid, { $push: { dislikedusers: id } })
+      likedStatus = false
+    } else if (action === 'unlike') {
+      await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid } })
+      await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id } })
+      likedStatus = undefined
+    } else if (action === 'undislike') {
+      await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid } })
+      await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id } })
+      likedStatus = undefined
+    } else if (action === 'liketodislike') {
+      await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid }, $push: { dislikedvideos: videoid } })
+      await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id }, $push: { dislikedusers: id } })
+      likedStatus = false
+    } else if (action === 'disliketolike') {
+      await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid }, $push: { likedvideos: videoid } })
+      await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id }, $push: { likedusers: id } })
+      likedStatus = true
+    }
+    res.status(200).json({ likedStatus })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })

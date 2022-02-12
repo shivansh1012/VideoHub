@@ -29,6 +29,16 @@ const ProfileSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Video',
     default: []
+  },
+  likedvideos: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Video',
+    default: []
+  },
+  dislikedvideos: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Video',
+    default: []
   }
 })
 

@@ -30,6 +30,16 @@ const VideoSchema = new mongoose.Schema({
   uploaddate: {
     type: Number,
     default: Date.now()
+  },
+  likedusers: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Profile',
+    default: []
+  },
+  dislikedusers: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Profile',
+    default: []
   }
 })
 

@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.profileName {
+  padding: 0 0 10px 0;
+}
+
 /* .videozone {
 } */
 
@@ -14,6 +18,23 @@
   text-align: center;
   display: flex;
   flex-direction: column;
+}
+
+.infoandlike {
+  display: flex;
+  justify-content: space-between;
+}
+
+.like-dislike {
+  margin-right: 10%;
+}
+
+.like-dislike button {
+  color: var(--font-color);
+}
+
+.like-dislike button:hover {
+  color: var(--font-color) !important;
 }
 
 @media (max-width: 992px) {

@@ -239,7 +239,7 @@ class Automation:
                         else:
                             modelListIDs.append(profileData["_id"])
                     uploadDate = int(
-                        os.path.getctime(os.path.join(dirpath, filename))*1000
+                        os.path.getctime(os.path.join(dirpath, filename)) * 1000
                     )
                     videoID = self.saveVideoMetaData(
                         newFileName,

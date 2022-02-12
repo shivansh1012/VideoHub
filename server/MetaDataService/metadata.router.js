@@ -12,57 +12,43 @@ router.get('/video', async (req, res) => {
     const videoData = await Video.findById(req.query.id)
       .populate({
         path: 'channel',
-        select: 'name videoList',
-        populate: {
-          path: 'videoList',
-          populate: {
-            path: 'channel model',
-            select: 'name'
-          }
-        }
+        select: 'name'
       })
       .populate({
         path: 'model',
-        select: 'name videoList',
-        populate: {
-          path: 'videoList',
-          populate: {
-            path: 'channel model',
-            select: 'name'
-          }
-        }
+        select: 'name',
       })
 
-    const moreChannelVideos = new Set()
-    const moreModelVideos = new Set()
+    // const moreChannelVideos = new Set()
+    // const moreModelVideos = new Set()
 
-    if (videoData.channel) {
-      // videoData.channel.videoList.forEach(moreChannelVideos.add, moreChannelVideos)
-      for (let i = 0; i < videoData.channel.videoList.length; i++) {
-        if (videoData.channel.videoList[i]._id.toString() === videoID) {
-          continue
-        }
-        moreChannelVideos.add(videoData.channel.videoList[i])
-      }
-    }
-    if (videoData.model.length !== 0) {
-      for (let i = 0; i < videoData.model.length; i++) {
-        for (let j = 0; j < videoData.model[i].videoList.length; j++) {
-          if (videoData.model[i].videoList[j]._id.toString() === videoID) {
-            continue
-          }
-          moreModelVideos.add(videoData.model[i].videoList[j])
-        }
-        // videoData.model[i].videoList.forEach(moreModelVideos.add, moreModelVideos)
-      }
-    }
-    let moreVideos = []
-    if (moreChannelVideos.size > moreModelVideos.size) {
-      moreVideos = Array.from(moreChannelVideos)
-    } else {
-      moreVideos = Array.from(moreModelVideos)
-    }
-    res.status(200).json({ videoData, moreVideos })
+    // if (videoData.channel) {
+    //   // videoData.channel.videoList.forEach(moreChannelVideos.add, moreChannelVideos)
+    //   for (let i = 0; i < videoData.channel.videoList.length; i++) {
+    //     if (videoData.channel.videoList[i]._id.toString() === videoID) {
+    //       continue
+    //     }
+    //     moreChannelVideos.add(videoData.channel.videoList[i])
+    //   }
+    // }
+    // if (videoData.model.length !== 0) {
+    //   for (let i = 0; i < videoData.model.length; i++) {
+    //     for (let j = 0; j < videoData.model[i].videoList.length; j++) {
+    //       if (videoData.model[i].videoList[j]._id.toString() === videoID) {
+    //         continue
+    //       }
+    //       moreModelVideos.add(videoData.model[i].videoList[j])
+    //     }
+    //     // videoData.model[i].videoList.forEach(moreModelVideos.add, moreModelVideos)
+    //   }
+    // }
+    // let moreVideos = []
+    // if (moreChannelVideos.size > moreModelVideos.size) {
+    //   moreVideos = Array.from(moreChannelVideos)
+    // } else {
+    //   moreVideos = Array.from(moreModelVideos)
+    // }
+    res.status(200).json({ videoData, moreVideos:[] })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -165,6 +151,70 @@ router.get('/search', async (req, res) => {
 
     const resultVideoList = await Video.find(queryOptions).populate('channel', 'name').populate('model', 'name')
     res.status(200).json({ resultVideoList })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.get('/morevideo', async (req, res) => {
+  try {
+    const videoID = req.query.id
+    if (!videoID) {
+      return res.status(400).json({ message: 'Requires Video ID' })
+    }
+    const videoData = await Video.findById(req.query.id)
+      .populate({
+        path: 'channel',
+        select: 'name videoList',
+        populate: {
+          path: 'videoList',
+          populate: {
+            path: 'channel model',
+            select: 'name'
+          }
+        }
+      })
+      .populate({
+        path: 'model',
+        select: 'name videoList',
+        populate: {
+          path: 'videoList',
+          populate: {
+            path: 'channel model',
+            select: 'name'
+          }
+        }
+      })
+
+    const moreChannelVideos = new Set()
+    const moreModelVideos = new Set()
+
+    if (videoData.channel) {
+      for (let i = 0; i < videoData.channel.videoList.length; i++) {
+        if (videoData.channel.videoList[i]._id.toString() === videoID) {
+          continue
+        }
+        moreChannelVideos.add(videoData.channel.videoList[i])
+      }
+    }
+    if (videoData.model.length !== 0) {
+      for (let i = 0; i < videoData.model.length; i++) {
+        for (let j = 0; j < videoData.model[i].videoList.length; j++) {
+          if (videoData.model[i].videoList[j]._id.toString() === videoID) {
+            continue
+          }
+          moreModelVideos.add(videoData.model[i].videoList[j])
+        }
+      }
+    }
+    let moreVideos = []
+    if (moreChannelVideos.size > moreModelVideos.size) {
+      moreVideos = Array.from(moreChannelVideos)
+    } else {
+      moreVideos = Array.from(moreModelVideos)
+    }
+    res.status(200).json({ moreVideos })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
