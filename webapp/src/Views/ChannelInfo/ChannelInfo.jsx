@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { SourceBaseUrl, ApiBaseUrl } from '../../config.js'
-import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx"
+import VideoMatrixGrid from "../../Layout/VideoMatrix/VideoMatrixGrid.jsx"
 
 export default function ChannelInfo() {
     const [channelData, setChannelData] = useState([]);
@@ -40,7 +40,7 @@ export default function ChannelInfo() {
                 {
                     loading ? <div className="simple-spinner"></div> :
                         <>
-                            <VideoMatrix videoList={channelData.videoList} />
+                            <VideoMatrixGrid videoList={channelData.videoList} />
                         </>
                 }
             </div>

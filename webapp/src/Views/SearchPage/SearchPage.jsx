@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import VideoMatrix from '../../Layout/VideoMatrix/VideoMatrix';
+import VideoMatrixGrid from '../../Layout/VideoMatrix/VideoMatrixGrid';
 import { ApiBaseUrl } from '../../config';
 import * as ReactBootstrap from "react-bootstrap";
 
@@ -35,7 +35,7 @@ export default function SearchPage(props) {
             <div>
                 {
                     loading ? <ReactBootstrap.Spinner animation="border" /> :
-                        <VideoMatrix videoList={resultVideoList} />
+                        <VideoMatrixGrid videoList={resultVideoList} />
                 }
             </div>
         </div>

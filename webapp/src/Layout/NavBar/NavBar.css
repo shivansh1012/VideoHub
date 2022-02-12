@@ -19,3 +19,14 @@
   background-color: var(--background-color) !important;
   text-align: center !important;
 }
+
+.logo {
+  width: 260px;
+  margin: 5px;
+  filter: contrast(160%);
+}
+
+.logospan {
+  background-color: rgb(255, 201, 14);
+  border-radius: 15px;
+}

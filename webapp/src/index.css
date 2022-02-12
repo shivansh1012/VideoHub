@@ -2,12 +2,14 @@
   --font-color: rgb(102, 102, 102);
   --background-color: #eee;
   --link-color: rgb(71, 76, 85);
+  --channel-color: rgb(111, 112, 112);
 }
 
 [data-theme="dark"] {
   --font-color: #eee;
   --background-color: rgb(124, 124, 124);
   --link-color: peachpuff;
+  --channel-color: rgb(190, 190, 190);
 }
 
 body {

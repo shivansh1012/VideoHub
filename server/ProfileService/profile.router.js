@@ -229,10 +229,11 @@ router.post('/thumbnail', async (req, res) => {
       return res.json({ success: false, err })
     })
     .screenshots({
-      // Will take screenshots at 20%, 40%, 60% and 80% of the video
       count: 1,
       folder: 'public/uploads/thumbnails',
       size: `${width}x${height}`,
+      // scale: `${320}x${120}`,
+      // size: `${320}x${120}`,
       filename: 'thumbnail-%b.png'
     })
 })

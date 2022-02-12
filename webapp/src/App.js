@@ -13,6 +13,7 @@ import NavBar from './Layout/NavBar/NavBar.jsx'
 import Home from './Views/Home/Home.jsx'
 import VideoList from './Views/VideoList/VideoList.jsx'
 import VideoInfo from './Views/VideoInfo/VideoInfo.jsx'
+import Watch from './Views/Watch/Watch'
 import Settings from './Views/Settings/Settings.jsx'
 import ModelInfo from './Views/ModelInfo/ModelInfo.jsx'
 import ChannelList from './Views/ChannelList/ChannelList.jsx'
@@ -51,7 +52,8 @@ function App () {
         <Route path='/video/list' element={<VideoList />} />
         <Route path='/model/list' element={<ModelList />} />
         <Route path='/channel/list' element={<ChannelList />} />
-        <Route path='/video/:id' element={<VideoInfo />} />
+        <Route path='/video/:id' element={<Watch />} />
+        <Route path='/watch/:id' element={<VideoInfo />} />
         <Route path='/model/:id' element={<ModelInfo />} />
         <Route path='/channel/:id' element={<ChannelInfo />} />
         <Route path='/settings' element={<Settings />} />

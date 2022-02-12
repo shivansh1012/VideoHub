@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ApiBaseUrl } from "../../config";
-import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix";
+import VideoMatrixGrid from "../../Layout/VideoMatrix/VideoMatrixGrid";
 
 export default function UserVideoGrid() {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +29,7 @@ export default function UserVideoGrid() {
     <div>
       <h3 className="py-3" style={{ textAlign: "center" }}>My Videos</h3>
       <div className="animate-bottom">
-        <VideoMatrix videoList={userVideoList} />
+        <VideoMatrixGrid videoList={userVideoList} />
       </div>
       <div>{isLoading && !error && <div className="spinner"></div>}</div>
       <div>{error && "Error..."}</div>

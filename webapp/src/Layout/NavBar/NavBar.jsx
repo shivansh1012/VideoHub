@@ -23,7 +23,10 @@ export default function NavBar(props) {
     return (
         <nav className="navbar navbar-custom sticky-top navbar-expand-lg">
             <div className="container">
-                <Link className="navbar-link my-3" style={{ "fontSize": "40px" }} to="/">VideoHub</Link>
+                {/* <Link className="navbar-link my-3" to="/">
+                    <img className="logo" src={`${SourceBaseUrl}/static/defaults/VideoHubTV3.png`} alt="VideoHub" />
+                </Link> */}
+                <Link className="navbar-link my-3" style={{ "fontSize": "50px" }} to="/">Video<span className="logospan">Hub</span></Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     More
                 </button>

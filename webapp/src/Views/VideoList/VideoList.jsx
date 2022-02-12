@@ -5,7 +5,8 @@ import "./VideoList.style.css"
 
 export default function VideoList() {
     const [offset, setOffset] = useState(0);
-    const { isLoading, error, videoList, hasMore } = useFetchForVideo(offset);
+    const [sort, setSort] = useState("_id")
+    const { isLoading, error, videoList, hasMore, setVideoList } = useFetchForVideo(offset, sort);
 
     const observer = useRef();
     const lastVideoElementRef = useCallback(
@@ -33,18 +34,42 @@ export default function VideoList() {
                 <td>{video.model.map((model, i) => {
                     return <p key={i} style={{ margin: "0" }}>{model.name}</p>
                 })}</td>
+                <td>{(new Date(video.uploaddate).toDateString())}</td>
+                <td>{(new Date(video.uploaddate).toLocaleTimeString())}</td>
                 <td><Link to={`/video/${video._id}`}>View</Link></td>
             </>
         )
     }
+
+    const handleSort = (e) => {
+        console.log(e.target.value)
+        setOffset(0)
+        setSort(e.target.value)
+        setVideoList([])
+    }
+
     return (
         <div className="customcontainer" style={{ overflowX: "auto" }}>
+            <div className="pagetitle">
+                <p>Video List</p>
+            </div>
+            <div className="sortselect">
+                <select className="form-select w-50"
+                    value={sort}
+                    onChange={handleSort}>
+                    <option value="_id">NoSort</option>
+                    <option value="uploaddate">Desc Upload Time</option>
+                    <option value="-uploaddate">Recently Uploaded</option>
+                </select>
+            </div>
             <table>
                 <colgroup>
                     <col style={{ width: "5%" }} />
                     <col style={{ width: "10%" }} />
-                    <col style={{ width: "55%" }} />
+                    <col style={{ width: "35%" }} />
+                    <col style={{ width: "10%" }} />
                     <col style={{ width: "20%" }} />
+                    <col style={{ width: "10%" }} />
                     <col style={{ width: "10%" }} />
                 </colgroup>
                 <thead>
@@ -53,6 +78,8 @@ export default function VideoList() {
                         <th>Channel</th>
                         <th>FileName</th>
                         <th>Model</th>
+                        <th>Date</th>
+                        <th>Time</th>
                         <th>Action</th>
                     </tr>
                 </thead>

@@ -26,6 +26,10 @@ const VideoSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Profile',
     default: []
+  },
+  uploaddate: {
+    type: Number,
+    default: Date.now()
   }
 })
 

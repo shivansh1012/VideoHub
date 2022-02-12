@@ -1,0 +1,17 @@
+.pagetitle {
+    font-size: 40px;
+    padding: 10px;
+    text-align: center;
+}
+
+.pagetitle p {
+    margin: 0;
+}
+
+.sortselect {
+    width: auto;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}

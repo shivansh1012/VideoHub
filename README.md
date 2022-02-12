@@ -1,26 +1,27 @@
 # VideoHub
-VideoHub - watch videos, get recommendations and search any videos.  
+VideoHub - watch videos, get recommendations, search videos and share videos (upload) in the community.  
 
 ## Tech Used
 ExpressJS - Server  
 ReactJS   - Frontend  
 MongoDB   - Database  
-Python    - Automated Code to create thumbnails and add data to database of videos in a folder  
+Python    - Automated Code to create thumbnails and index pre-existing videos meta data into database  
 
 ## Getting Started
 
-### File Formats
+### File Formats for Automation
 
-The Files names should to be store in any of this formats
+To index folder of videos LoadDataAndCreateThumbnail.py file is used. Install the requirements and run the python file. This will scan all the files in "./Files" directory.
+
+This will **Generate Thumbnails** and **Save file Data in MongoDB**. 
+
+Some of the ways the files are read are
 * < FileName > - < Model/Cast > - < Channel/SeasonName >.< FileExtension >
 * < FileName > - < Channel/SeasonName >.< FileExtension >
 * < FileName > - < Model/Cast >.< FileExtension >
 * < FileName >.< FileExtension >
 
-To **Generate Thumbnails** and **Store file Data in MongoDB** run the LoadDataAndCreateThumbnails.py file. This will scan all the files in "./Files" directory.
-
-
-### Installing Required Dependencies
+### Installing Required Dependencies for Application
 
 * After cloning the repository run command
   ```bash
@@ -31,16 +32,15 @@ in webapp and server folders.
 
 ### Executing program
 
-* To start client, Go into .\webapp\ and execute
+* To start client, Go into .\webapp\ directory and execute
   ```bash
   npm run client
   ```
-* To start server, Go  in .\server\ and execute
+* To start server, Go  in .\server\ directory and execute
   ```bash
   npm start
   ```
-* Or Run the Launch.bat file directly to start the app.
-* !The Client and Server has to run together for it to work.
+* Or Run the Launch.bat file directly to start the application (Both).
 
 ## Views
 

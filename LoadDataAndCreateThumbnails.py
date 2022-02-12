@@ -6,6 +6,7 @@ inserted into the MongoDB and A thumbnail is generated for the same in "./thumbn
 
 import os
 import shutil
+import time
 
 import pymongo
 from moviepy.editor import VideoFileClip
@@ -32,7 +33,7 @@ class Automation:
         self.base_profilepic_dir = os.path.join(BASE_DIR, self.profilepic_dir)
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-        mydb = myclient["VideoHub"]
+        mydb = myclient["VideoHub9"]
         self.Video = mydb["Video"]
         self.Profile = mydb["Profile"]
 
@@ -118,15 +119,7 @@ class Automation:
         return cleanFileName, dirpath, path, channel, list(set(tag)), models
 
     def getVideoProperties(self, dirpath, filename, cleanFileName, createThumbnail):
-        # noExtFileName = filename[0:-4]
-
-        # newFileName = noExtFileName
-        # if(noExtFileName[0]=="["):
-        #     newFileName = noExtFileName.split("]")[1].strip()
-
-        VIDEOFILENAME = filename
-        # get the path to our sample video
-        source_path = os.path.join(dirpath, VIDEOFILENAME)
+        source_path = os.path.join(dirpath, filename)
 
         clip = VideoFileClip(source_path)
 
@@ -174,6 +167,7 @@ class Automation:
         nframes,
         duration,
         dimension,
+        uploadDate,
     ):
         videodata = {}
         videodata["filename"] = videoFileName
@@ -196,6 +190,7 @@ class Automation:
         newVideo["channel"] = channel
         newVideo["tags"] = tagList
         newVideo["model"] = modelList
+        newVideo["uploaddate"] = uploadDate
         savedVideo = self.Video.insert_one(newVideo)
         return savedVideo.inserted_id
 
@@ -244,7 +239,7 @@ class Automation:
                             modelListIDs.append(self.createProfile(model, "model"))
                         else:
                             modelListIDs.append(profileData["_id"])
-
+                    uploadDate = int(os.path.getctime(os.path.join(dirpath, filename))*1000)
                     videoID = self.saveVideoMetaData(
                         newFileName,
                         filename,
@@ -259,6 +254,7 @@ class Automation:
                         nframes,
                         duration,
                         dimension,
+                        uploadDate
                     )
 
                     self.Profile.update_one(

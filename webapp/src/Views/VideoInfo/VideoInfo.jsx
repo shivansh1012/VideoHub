@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState } from 'react';
 import { useParams, Link } from 'react-router-dom'
 import VideoPlayer from "../../Layout/VideoPlayer/VideoPlayer.jsx"
 import { ApiBaseUrl } from '../../config.js';
-import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
+import VideoMatrixGrid from "../../Layout/VideoMatrix/VideoMatrixGrid.jsx";
 
 export default function VideoInfo() {
   const [videoData, setVideoData] = useState([]);
@@ -96,7 +96,7 @@ export default function VideoInfo() {
         {
           loading ? <div className="simple-spinner"></div> :
             <>
-              <VideoMatrix videoList={moreVideos} />
+              <VideoMatrixGrid videoList={moreVideos} />
             </>
         }
       </div>

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { SourceBaseUrl } from "../../config.js";
-import "./VideoMatrix.css"
+import "./VideoMatrixGrid.css"
 
-export default function VideoMatrix(props) {
+export default function VideoMatrixGrid(props) {
     function fancyTimeFormat(duration) {
         // Hours, minutes and seconds
         var hrs = ~~(duration / 3600);
@@ -43,10 +43,10 @@ export default function VideoMatrix(props) {
                 </div>
 
                 <div className="card-body">
-                    <h5 className="card-title" title={channelOrModel}>{channelOrModel}</h5>
-                    <p className="card-text videocardtext" title={video.title}>
+                    <p className="card-text videocardtitle" title={video.title}>
                         <Link to={`/video/${video._id}`}>{video.title}</Link>
                     </p>
+                    <p className="card-title videocardchannel" title={channelOrModel}>{channelOrModel}</p>
                 </div>
             </div>
         )
@@ -58,13 +58,13 @@ export default function VideoMatrix(props) {
                     props.videoList.map((video, i) => {
                         if (props.lastVideoElementRef && props.videoList.length === i + 1)
                             return (
-                                <div className="col-12 col-md-6 col-lg-3" key={video._id} ref={props.lastVideoElementRef}>
+                                <div className="col-12 col-sm-6 col-md-6 col-lg-3" key={video._id} ref={props.lastVideoElementRef}>
                                     {Cards(video)}
                                 </div>
                             )
                         else
                             return (
-                                <div className="col-12 col-md-6 col-lg-3" key={video._id}>
+                                <div className="col-12 col-sm-6 col-md-6 col-lg-3" key={video._id}>
                                     {Cards(video)}
                                 </div>
                             )

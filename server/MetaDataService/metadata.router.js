@@ -103,7 +103,8 @@ router.get('/list/video', async (req, res) => {
   try {
     const limit = req.query.limit
     const offset = req.query.offset
-    const videoList = await Video.find().skip(offset)
+    const sort = req.query.sort
+    const videoList = await Video.find().sort(sort).skip(offset)
       .limit(limit).populate('channel', 'name').populate('model', 'name')
 
     res.status(200).json({ videoList })

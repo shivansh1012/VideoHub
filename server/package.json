@@ -1,7 +1,7 @@
 {
   "name": "videohubserver",
-  "version": "3.2.0",
-  "description": "VideoHub watch videos, get recommendations related to videos and search any videos.",
+  "version": "3.4.0",
+  "description": "watch videos, get recommendations, search videos and share videos (upload) in the community.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

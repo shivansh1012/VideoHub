@@ -27,7 +27,7 @@ router.get('', async (req, res) => {
   } else {
     videoPath = '.' + path
   }
-  
+
   // get video stats (about 61MB)
   const videoSize = fs.statSync(videoPath).size
 
