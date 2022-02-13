@@ -168,7 +168,7 @@ router.post('/updateplaylist', ProfileAuth, async (req, res) => {
       updatedstate = true
       // } else if (action === 'remove') {
     } else {
-      await Profile.findByIdAndUpdate(id, { $pull: {  [`playlist.${playlistname}.videoList`]: videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { [`playlist.${playlistname}.videoList`]: videoid } })
       updatedstate = false
     }
     // } else {

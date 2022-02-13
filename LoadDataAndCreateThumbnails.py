@@ -71,18 +71,6 @@ class Automation:
             return False
 
     def createProfile(self, name, accountType) -> str:
-        likedVideos = {}
-        likedVideos["name"] = "likedvideos"
-        likedVideos["videoList"] = list()
-
-        dislikedVideos = {}
-        dislikedVideos["name"] = "dislikedvideos"
-        dislikedVideos["videoList"] = list()
-
-        watchlater = {}
-        watchlater["name"] = "watchlater"
-        watchlater["videoList"] = list()
-
         profile = {}
         email = name.split(" ")
         email = "".join(email)
@@ -92,10 +80,20 @@ class Automation:
         profile["email"] = email + "@videohub.inf"
         profile["password"] = "login1234"
         profile["hashedpassword"] = ""
-        profile["playlist"] = {}
-        profile["playlist"]["likedvideos"] = likedVideos
-        profile["playlist"]["dislikedvideos"] = dislikedVideos
-        profile["playlist"]["watchlater"] = watchlater
+        profile["playlist"] = {
+            "likedvideos": {
+                "name": "likedvideos",
+                "videoList": []
+            },
+            "dislikedvideos": {
+                "name": "dislikedvideos",
+                "videoList": []
+            },
+            "watchlater": {
+                "name": "watchlater",
+                "videoList": []
+            }
+        }
 
         if os.path.exists(self.base_profilepic_dir + "/" + name + ".jpg"):
             profile["profilepicURL"] = "uploads/profilepics/" + name + ".jpg"
