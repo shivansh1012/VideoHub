@@ -163,13 +163,12 @@ router.post('/updateplaylist', ProfileAuth, async (req, res) => {
     const { id } = req.userInfo
     const { videoid, action, playlistname } = req.body
     let updatedstate
-    const pname = `playlist.${playlistname}.videoList`
     if (action === 'add') {
-      await Profile.findByIdAndUpdate(id, { $push: { pname: videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { [`playlist.${playlistname}.videoList`]: videoid } })
       updatedstate = true
       // } else if (action === 'remove') {
     } else {
-      await Profile.findByIdAndUpdate(id, { $pull: { pname: videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: {  [`playlist.${playlistname}.videoList`]: videoid } })
       updatedstate = false
     }
     // } else {

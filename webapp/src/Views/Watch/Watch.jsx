@@ -38,7 +38,7 @@ export default function Watch() {
         [moreVideosLoading, hasMore]
     );
 
-    const likedVideo = async () => {
+    const handleLike = async (actionType) => {
         if (!userLoggedIn) {
             navigate('/profile/signin')
         }
@@ -47,12 +47,22 @@ export default function Watch() {
             action: "nothing",
             lastStatus: likeStatus
         }
-        if (likeStatus === undefined) {
-            payload.action = "like"
-        } else if (likeStatus === false) {
-            payload.action = "disliketolike"
-        } else {
-            payload.action = "unlike"
+        if (actionType === 'like') {
+            if (likeStatus === undefined) {
+                payload.action = "like"
+            } else if (likeStatus === false) {
+                payload.action = "disliketolike"
+            } else {
+                payload.action = "unlike"
+            }
+        } else if (actionType === 'dislike') {
+            if (likeStatus === undefined) {
+                payload.action = "dislike"
+            } else if (likeStatus === true) {
+                payload.action = "liketodislike"
+            } else {
+                payload.action = "undislike"
+            }
         }
         setLikeStatusLoading(true)
         await axios.post(`${ApiBaseUrl}/profile/managelike`, payload).then(res => {
@@ -61,31 +71,7 @@ export default function Watch() {
         })
         setLikeStatusLoading(false);
     }
-
-    const dislikedVideo = async () => {
-        if (!userLoggedIn) {
-            navigate('/profile/signin')
-        }
-        const payload = {
-            videoid: id,
-            action: "nothing",
-            lastStatus: likeStatus
-        }
-        if (likeStatus === undefined) {
-            payload.action = "dislike"
-        } else if (likeStatus === true) {
-            payload.action = "liketodislike"
-        } else {
-            payload.action = "undislike"
-        }
-        setLikeStatusLoading(true)
-        await axios.post(`${ApiBaseUrl}/profile/managelike`, payload).then(res => {
-            console.log(res.data.likedStatus)
-            setLikeStatus(res.data.likedStatus)
-        })
-        setLikeStatusLoading(false);
-    }
-
+    
     const handlePlaylistRequest = async (e, callfrom) => {
         if (!userLoggedIn) {
             navigate('/profile/signin')
@@ -168,7 +154,7 @@ export default function Watch() {
                             {
                                 likeStatusLoading ? <div className="simple-spinner"></div> :
                                     <>
-                                        <button className="btn shadow-none" onClick={likedVideo}>
+                                        <button className="btn shadow-none" onClick={() => handleLike('like')}>
                                             {
                                                 likeStatus &&
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
@@ -183,7 +169,7 @@ export default function Watch() {
                                             }
                                             Like
                                         </button>
-                                        <button className="btn shadow-none" onClick={dislikedVideo}>
+                                        <button className="btn shadow-none" onClick={() => handleLike('dislike')}>
                                             {
                                                 (likeStatus === undefined || likeStatus === true) &&
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-hand-thumbs-down" viewBox="0 0 16 16">

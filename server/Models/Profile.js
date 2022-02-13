@@ -41,16 +41,16 @@ const ProfileSchema = new mongoose.Schema({
       }
     }),
     default: {
-      'likedvideos': {
-        'name': 'likedvideos',
+      likedvideos: {
+        name: 'likedvideos',
         videoList: []
       },
-      'dislikedvideos': {
-        'name': 'dislikedvideos',
+      dislikedvideos: {
+        name: 'dislikedvideos',
         videoList: []
       },
-      'watchlater': {
-        'name': 'watchlater',
+      watchlater: {
+        name: 'watchlater',
         videoList: []
       }
     }

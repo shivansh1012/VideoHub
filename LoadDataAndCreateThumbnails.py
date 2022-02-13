@@ -73,15 +73,15 @@ class Automation:
     def createProfile(self, name, accountType) -> str:
         likedVideos = {}
         likedVideos["name"] = "likedvideos"
-        likedVideos["videoList"] = []
+        likedVideos["videoList"] = list()
 
         dislikedVideos = {}
         dislikedVideos["name"] = "dislikedvideos"
-        dislikedVideos["videoList"] = []
+        dislikedVideos["videoList"] = list()
 
         watchlater = {}
         watchlater["name"] = "watchlater"
-        watchlater["videoList"] = []
+        watchlater["videoList"] = list()
 
         profile = {}
         email = name.split(" ")
@@ -96,7 +96,7 @@ class Automation:
         profile["playlist"]["likedvideos"] = likedVideos
         profile["playlist"]["dislikedvideos"] = dislikedVideos
         profile["playlist"]["watchlater"] = watchlater
-        
+
         if os.path.exists(self.base_profilepic_dir + "/" + name + ".jpg"):
             profile["profilepicURL"] = "uploads/profilepics/" + name + ".jpg"
         else:
