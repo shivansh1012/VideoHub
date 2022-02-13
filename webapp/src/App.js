@@ -32,8 +32,6 @@ import PictureUpload from './UserComponents/PictureUpload/PictureUpload.jsx'
 import VideoUpload from './UserComponents/VideoUpload/VideoUpload.jsx'
 import Profile from './UserComponents/Profile/Profile.jsx'
 
-// import UserRouter from './UserComponents/UserRouter.js'
-
 import axios from 'axios'
 axios.defaults.withCredentials = true
 
@@ -41,8 +39,6 @@ function App () {
   const [searchQuery, setSearchQuery] = useState('')
 
   const { userLoggedIn } = useContext(UserAuthContext)
-
-  // const routing = useRoutes(UserRouter(userLoggedIn));
 
   return (
     <BrowserRouter>
@@ -80,7 +76,6 @@ function App () {
             )
           }
         </Route>
-        {/* <Route path="profile" element={<UserRouter />} /> */}
         <Route path='*' element={<PageDoesNotExist />} />
       </Routes>
     </BrowserRouter>

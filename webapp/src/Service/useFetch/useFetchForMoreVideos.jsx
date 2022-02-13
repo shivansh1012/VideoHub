@@ -19,7 +19,6 @@ export default function useFetchForMoreVideos(offset, id) {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {
-                console.log(res)
                 setMoreVideos((prev) => {
                     return [...new Set([...prev, ...res.data.moreVideos])];
                 });
@@ -34,5 +33,5 @@ export default function useFetchForMoreVideos(offset, id) {
         return () => cancel();
     }, [offset, id]);
 
-    return { moreVideosLoading, error, moreVideos, hasMore };
+    return { moreVideosLoading, error, moreVideos, hasMore, setMoreVideos };
 }

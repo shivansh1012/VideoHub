@@ -11,11 +11,9 @@
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.1",
     "react-dom": "^17.0.2",
-    "react-dropzone": "^11.5.3",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-select": "^5.2.2",
-    "use-local-storage": "^2.2.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

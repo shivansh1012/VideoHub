@@ -40,14 +40,6 @@ const profilepicStorage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, `${Date.now()}_${file.originalname}`)
   }
-  // fileFilter: (req, file, cb) => {
-  //   const ext = path.extname(file.originalname)
-  //   if (ext !== '.png' ) {
-  //     // return cb(res.status(400).end('only jpg, png, mp4 is allowed'), false)
-  //     return cb(null, false)
-  //   }
-  //   cb(null, true)
-  // }
 })
 
 const uploadVideo = multer({ storage: videoStorage }).single('uploadedFile')
@@ -142,19 +134,48 @@ router.get('/userinfo', ProfileAuth, async (req, res) => {
   }
 })
 
-router.get('/likedstatus', ProfileAuth, async (req, res) => {
+router.get('/userstatus', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
     const videoid = req.query.videoid
     const userInfo = await Profile.findById(id)
-    if (userInfo.likedvideos.includes(mongoose.Types.ObjectId(videoid))) {
+    let likedStatus
+    let watchlaterStatus = false
+    if (userInfo.playlist.get('likedvideos').videoList.includes(mongoose.Types.ObjectId(videoid))) {
       likedStatus = true
-    } else if (userInfo.dislikedvideos.includes(mongoose.Types.ObjectId(videoid))) {
+    } else if (userInfo.playlist.get('dislikedvideos').videoList.includes(mongoose.Types.ObjectId(videoid))) {
       likedStatus = false
-    } else {
-      likedStatus = undefined
     }
-    res.status(200).json({ likedStatus })
+
+    if (userInfo.playlist.get('watchlater').videoList.includes(mongoose.Types.ObjectId(videoid))) {
+      watchlaterStatus = true
+    }
+
+    res.status(200).json({ likedStatus, watchlaterStatus })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.post('/updateplaylist', ProfileAuth, async (req, res) => {
+  try {
+    const { id } = req.userInfo
+    const { videoid, action, playlistname } = req.body
+    let updatedstate
+    const pname = `playlist.${playlistname}.videoList`
+    if (action === 'add') {
+      await Profile.findByIdAndUpdate(id, { $push: { pname: videoid } })
+      updatedstate = true
+      // } else if (action === 'remove') {
+    } else {
+      await Profile.findByIdAndUpdate(id, { $pull: { pname: videoid } })
+      updatedstate = false
+    }
+    // } else {
+    //   await Profile.findByIdAndUpdate(id, { playlist: { name: playlistname, {}} })
+    //   updatedstate = true
+    res.status(200).json({ updatedstate })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -165,32 +186,40 @@ router.post('/managelike', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
     const { videoid, action } = req.body
+    // await Profile.findByIdAndUpdate(id, {'playlist.newplaylist1': { name: 'newPlaylist', videoList: [] } })
+    // await Profile.findByIdAndUpdate(id, { $push: { 'playlist.likedvideos.videoList': '6200e0f2fd8a8970ce3c19d9' } })
+    // await Profile.findByIdAndUpdate(id, { 'playlist': { name: 'playlist5', $push: { 'videoList': '6200e0f2fd8a8970ce3c19d9' } } })
+    let likedStatus
     if (action === 'like') {
-      await Profile.findByIdAndUpdate(id, { $push: { likedvideos: videoid } })
+      // await Profile.findByIdAndUpdate(id, { $push: { likedvideos: videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { 'playlist.likedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { likedusers: id } })
       likedStatus = true
     } else if (action === 'dislike') {
-      await Profile.findByIdAndUpdate(id, { $push: { dislikedvideos: videoid } })
+      // await Profile.findByIdAndUpdate(id, { $push: { dislikedvideos: videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { 'playlist.dislikedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { dislikedusers: id } })
       likedStatus = false
     } else if (action === 'unlike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid } })
+      // await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.likedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id } })
       likedStatus = undefined
     } else if (action === 'undislike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid } })
+      // await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.dislikedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id } })
       likedStatus = undefined
     } else if (action === 'liketodislike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid }, $push: { dislikedvideos: videoid } })
+      // await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid }, $push: { dislikedvideos: videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.likedvideos.videoList': videoid }, $push: { 'playlist.dislikedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id }, $push: { dislikedusers: id } })
       likedStatus = false
     } else if (action === 'disliketolike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid }, $push: { likedvideos: videoid } })
+      // await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid }, $push: { likedvideos: videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.dislikedvideos.videoList': videoid }, $push: { 'playlist.likedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id }, $push: { likedusers: id } })
       likedStatus = true
-    } else {
-      likedStatus = undefined
     }
     res.status(200).json({ likedStatus })
   } catch (e) {
@@ -202,9 +231,6 @@ router.post('/managelike', ProfileAuth, async (req, res) => {
 router.get('/myvideos', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
-    // const limit = req.query.limit
-    // const offset = req.query.offset
-    // const videoList = await Profile.findById(id).skip(offset).limit(limit)
     const videoList = (await Profile.findById(id).populate({ path: 'videoList', populate: { path: 'model channel', select: 'name' } })).videoList
     res.status(200).json({ videoList })
   } catch (e) {
@@ -290,8 +316,6 @@ router.post('/thumbnail', async (req, res) => {
       count: 1,
       folder: 'public/uploads/thumbnails',
       size: `${width}x${height}`,
-      // scale: `${320}x${120}`,
-      // size: `${320}x${120}`,
       filename: 'thumbnail-%b.png'
     })
 })

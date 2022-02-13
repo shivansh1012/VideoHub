@@ -30,15 +30,30 @@ const ProfileSchema = new mongoose.Schema({
     ref: 'Video',
     default: []
   },
-  likedvideos: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Video',
-    default: []
-  },
-  dislikedvideos: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Video',
-    default: []
+  playlist: {
+    type: Map,
+    of: new mongoose.Schema({
+      name: String,
+      videoList: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Video',
+        default: []
+      }
+    }),
+    default: {
+      'likedvideos': {
+        'name': 'likedvideos',
+        videoList: []
+      },
+      'dislikedvideos': {
+        'name': 'dislikedvideos',
+        videoList: []
+      },
+      'watchlater': {
+        'name': 'watchlater',
+        videoList: []
+      }
+    }
   }
 })
 

@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const mongoose = require('mongoose')
 
 const Video = require('../Models/Video.js')
 const Profile = require('../Models/Profile.js')
@@ -18,36 +19,6 @@ router.get('/video', async (req, res) => {
         path: 'model',
         select: 'name'
       })
-
-    // const moreChannelVideos = new Set()
-    // const moreModelVideos = new Set()
-
-    // if (videoData.channel) {
-    //   // videoData.channel.videoList.forEach(moreChannelVideos.add, moreChannelVideos)
-    //   for (let i = 0; i < videoData.channel.videoList.length; i++) {
-    //     if (videoData.channel.videoList[i]._id.toString() === videoID) {
-    //       continue
-    //     }
-    //     moreChannelVideos.add(videoData.channel.videoList[i])
-    //   }
-    // }
-    // if (videoData.model.length !== 0) {
-    //   for (let i = 0; i < videoData.model.length; i++) {
-    //     for (let j = 0; j < videoData.model[i].videoList.length; j++) {
-    //       if (videoData.model[i].videoList[j]._id.toString() === videoID) {
-    //         continue
-    //       }
-    //       moreModelVideos.add(videoData.model[i].videoList[j])
-    //     }
-    //     // videoData.model[i].videoList.forEach(moreModelVideos.add, moreModelVideos)
-    //   }
-    // }
-    // let moreVideos = []
-    // if (moreChannelVideos.size > moreModelVideos.size) {
-    //   moreVideos = Array.from(moreChannelVideos)
-    // } else {
-    //   moreVideos = Array.from(moreModelVideos)
-    // }
     res.status(200).json({ videoData, moreVideos: [] })
   } catch (e) {
     console.error(e)
@@ -100,28 +71,15 @@ router.get('/list/video', async (req, res) => {
   }
 })
 
-router.get('/list/model', async (req, res) => {
+router.get('/list/profiles', async (req, res) => {
   try {
     const limit = req.query.limit
     const offset = req.query.offset
-    const modelList = await Profile.find({ accountType: 'model' }).skip(offset)
+    const accountType = req.query.accountType
+    const profileList = await Profile.find({ accountType: accountType }).skip(offset)
       .limit(limit).select('name videoList')
 
-    res.status(200).json({ modelList })
-  } catch (e) {
-    console.error(e)
-    res.status(500).json({ message: 'Internal Server Error' })
-  }
-})
-
-router.get('/list/channel', async (req, res) => {
-  try {
-    const limit = req.query.limit
-    const offset = req.query.offset
-    const channelList = await Profile.find({ accountType: 'channel' }).skip(offset)
-      .limit(limit).select('name videoList')
-
-    res.status(200).json({ channelList })
+    res.status(200).json({ profileList })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -145,10 +103,6 @@ router.get('/search', async (req, res) => {
       }]
     }
 
-    // const queryOptions = {
-    //   tags: query
-    // }
-
     const resultVideoList = await Video.find(queryOptions).populate('channel', 'name').populate('model', 'name')
     res.status(200).json({ resultVideoList })
   } catch (e) {
@@ -169,7 +123,7 @@ router.get('/morevideo', async (req, res) => {
       return res.status(400).json({ message: 'Requires Video ID' })
     }
     const videoData = await Video.findById(req.query.id)
-    const moreVideos = await Video.find({ tags: { $in: videoData.tags } }).skip(offset)
+    const moreVideos = await Video.find({ tags: { $in: videoData.tags }, _id: { $ne: mongoose.Types.ObjectId(videoID) } }).skip(offset)
       .limit(limit)
       .populate({
         path: 'channel',

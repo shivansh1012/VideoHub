@@ -32,7 +32,7 @@ class Automation:
         self.base_profilepic_dir = os.path.join(BASE_DIR, self.profilepic_dir)
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-        mydb = myclient["VideoHub9"]
+        mydb = myclient["VideoHub"]
         self.Video = mydb["Video"]
         self.Profile = mydb["Profile"]
 
@@ -71,6 +71,18 @@ class Automation:
             return False
 
     def createProfile(self, name, accountType) -> str:
+        likedVideos = {}
+        likedVideos["name"] = "likedvideos"
+        likedVideos["videoList"] = []
+
+        dislikedVideos = {}
+        dislikedVideos["name"] = "dislikedvideos"
+        dislikedVideos["videoList"] = []
+
+        watchlater = {}
+        watchlater["name"] = "watchlater"
+        watchlater["videoList"] = []
+
         profile = {}
         email = name.split(" ")
         email = "".join(email)
@@ -80,6 +92,11 @@ class Automation:
         profile["email"] = email + "@videohub.inf"
         profile["password"] = "login1234"
         profile["hashedpassword"] = ""
+        profile["playlist"] = {}
+        profile["playlist"]["likedvideos"] = likedVideos
+        profile["playlist"]["dislikedvideos"] = dislikedVideos
+        profile["playlist"]["watchlater"] = watchlater
+        
         if os.path.exists(self.base_profilepic_dir + "/" + name + ".jpg"):
             profile["profilepicURL"] = "uploads/profilepics/" + name + ".jpg"
         else:

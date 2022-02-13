@@ -16,7 +16,7 @@ const storedTheme = localStorage.getItem('theme')
 const prefersDark = window.matchMedia &&
     window.matchMedia('(prefers-color-scheme: dark)').matches
 
-const defaultDark = storedTheme === 'dark' || (storedTheme === null && prefersDark)
+let defaultDark = storedTheme === 'dark' || (storedTheme === null && prefersDark)
 
 if (defaultDark) {
     setDark()
@@ -25,8 +25,10 @@ if (defaultDark) {
 const toggleTheme: ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.checked) {
         setDark()
+        defaultDark=true
     } else {
         setLight()
+        defaultDark=false
     }
 }
 

@@ -18,14 +18,14 @@ const VideoSchema = new mongoose.Schema({
     ref: 'Profile',
     default: null
   },
-  tags: {
-    type: Array,
-    default: [String]
-  },
   model: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Profile',
     default: []
+  },
+  tags: {
+    type: Array,
+    default: [String]
   },
   uploaddate: {
     type: Number,
