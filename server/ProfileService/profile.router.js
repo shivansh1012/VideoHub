@@ -185,37 +185,28 @@ router.post('/managelike', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
     const { videoid, action } = req.body
-    // await Profile.findByIdAndUpdate(id, {'playlist.newplaylist1': { name: 'newPlaylist', videoList: [] } })
-    // await Profile.findByIdAndUpdate(id, { $push: { 'playlist.likedvideos.videoList': '6200e0f2fd8a8970ce3c19d9' } })
-    // await Profile.findByIdAndUpdate(id, { 'playlist': { name: 'playlist5', $push: { 'videoList': '6200e0f2fd8a8970ce3c19d9' } } })
     let likedStatus
     if (action === 'like') {
-      // await Profile.findByIdAndUpdate(id, { $push: { likedvideos: videoid } })
       await Profile.findByIdAndUpdate(id, { $push: { 'playlist.likedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { likedusers: id } })
       likedStatus = true
     } else if (action === 'dislike') {
-      // await Profile.findByIdAndUpdate(id, { $push: { dislikedvideos: videoid } })
       await Profile.findByIdAndUpdate(id, { $push: { 'playlist.dislikedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { dislikedusers: id } })
       likedStatus = false
     } else if (action === 'unlike') {
-      // await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid } })
       await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.likedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id } })
       likedStatus = undefined
     } else if (action === 'undislike') {
-      // await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid } })
       await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.dislikedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id } })
       likedStatus = undefined
     } else if (action === 'liketodislike') {
-      // await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid }, $push: { dislikedvideos: videoid } })
       await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.likedvideos.videoList': videoid }, $push: { 'playlist.dislikedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id }, $push: { dislikedusers: id } })
       likedStatus = false
     } else if (action === 'disliketolike') {
-      // await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid }, $push: { likedvideos: videoid } })
       await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.dislikedvideos.videoList': videoid }, $push: { 'playlist.likedvideos.videoList': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id }, $push: { likedusers: id } })
       likedStatus = true
@@ -252,7 +243,6 @@ router.post('/upload/profilepic', ProfileAuth, async (req, res) => {
 })
 
 router.post('/upload/video', (req, res) => {
-  // res.status(200).json({ message: 'Upload Success' })
   uploadVideo(req, res, err => {
     if (err) {
       return res.json({ success: false, err })

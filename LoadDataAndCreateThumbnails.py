@@ -81,18 +81,9 @@ class Automation:
         profile["password"] = "login1234"
         profile["hashedpassword"] = ""
         profile["playlist"] = {
-            "likedvideos": {
-                "name": "likedvideos",
-                "videoList": []
-            },
-            "dislikedvideos": {
-                "name": "dislikedvideos",
-                "videoList": []
-            },
-            "watchlater": {
-                "name": "watchlater",
-                "videoList": []
-            }
+            "likedvideos": {"name": "likedvideos", "videoList": []},
+            "dislikedvideos": {"name": "dislikedvideos", "videoList": []},
+            "watchlater": {"name": "watchlater", "videoList": []},
         }
 
         if os.path.exists(self.base_profilepic_dir + "/" + name + ".jpg"):
