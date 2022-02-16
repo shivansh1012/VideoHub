@@ -1,0 +1,35 @@
+.imageSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.videouploadsection {
+  text-align: center;
+}
+
+.playlistsection {
+  text-align: center; 
+}
+
+@media (max-width: 992px) {
+  .imageSection {
+    text-align: center;
+    flex-direction: column !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .imageSection {
+    flex-direction: row !important;
+  }
+}
+
+.textcentered {
+  color: black;
+  font-size: large;
+  position: absolute;
+  top: 50%;
+  /* left: 50%; */
+  transform: translate(-50%, -50%);
+  transform: rotate(-45deg);
+}

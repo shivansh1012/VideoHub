@@ -1,0 +1,11 @@
+div.settingsform > div {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.profilepicuploadform {
+  display: flex;
+  flex-direction: row;
+}

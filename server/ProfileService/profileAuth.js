@@ -9,10 +9,13 @@ async function userAuth (req, res, next) {
       return res.json({ authorized: false, message: 'Unauthorized' })
     }
 
-    const { _id } = userToken
+    const { id } = jwt.verify(userToken, process.env.JWT_SECRET)
 
-    if (await Profile.findById(_id)) {
-      return res.json({ authorized: false, message: 'Unauthorized' })
+    if ((await Profile.findById(id)) === null) {
+      return res.cookie('UserToken', '', {
+        httpOnly: true,
+        expires: new Date(0)
+      }).json({ authorized: false, message: 'Unauthorized' })
     }
 
     req.userInfo = jwt.verify(userToken, process.env.JWT_SECRET)

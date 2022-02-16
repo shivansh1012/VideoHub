@@ -11,6 +11,7 @@ const ffprobePath = require('@ffprobe-installer/ffprobe').path
 
 const Video = require('../Models/Video.js')
 const Profile = require('../Models/Profile.js')
+const Playlist = require('../Models/Playlist.js')
 const ProfileAuth = require('./profileAuth.js')
 
 ffmpeg.setFfmpegPath(ffmpegPath)
@@ -88,11 +89,10 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'fill all the fields' })
     }
 
-    const existingProfile = await Profile.findOne({ email: email })
+    const existingProfile = await Profile.findOne({ email: email }).select('+password +hashedpassword')
     if (!existingProfile) {
       return res.status(401).json({ message: 'Invalid Email or Password' })
     }
-
     if (!existingProfile.hashedpassword) {
       const salt = await bcrypt.genSalt()
       const hashedpassword = await bcrypt.hash(existingProfile.password, salt)
@@ -125,8 +125,8 @@ router.get('/userinfo', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
     const userInfo = await Profile.findById(id)
-      .populate({ path: 'videoList', populate: { path: 'model channel', select: 'name' } })
-      .select('-password -hashedpassword')
+      .populate({ path: 'videoList likedvideos dislikedvideos watchlater', populate: { path: 'model channel', select: 'name' } })
+      .populate({ path: 'playlist', select: 'name byUser playlistpicURL', populate: { path: 'byUser', select: 'name' } })
     res.status(200).json({ userInfo })
   } catch (e) {
     console.error(e)
@@ -138,20 +138,33 @@ router.get('/userstatus', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
     const videoid = req.query.videoid
-    const userInfo = await Profile.findById(id)
+    const userInfo = await Profile.findById(id).populate({ path: 'playlist', select: 'name videoList' })
     let likedStatus
     let watchlaterStatus = false
-    if (userInfo.playlist.get('likedvideos').videoList.includes(mongoose.Types.ObjectId(videoid))) {
+    if (userInfo.likedvideos.includes(mongoose.Types.ObjectId(videoid))) {
       likedStatus = true
-    } else if (userInfo.playlist.get('dislikedvideos').videoList.includes(mongoose.Types.ObjectId(videoid))) {
+    } else if (userInfo.dislikedvideos.includes(mongoose.Types.ObjectId(videoid))) {
       likedStatus = false
     }
 
-    if (userInfo.playlist.get('watchlater').videoList.includes(mongoose.Types.ObjectId(videoid))) {
+    if (userInfo.watchlater.includes(mongoose.Types.ObjectId(videoid))) {
       watchlaterStatus = true
     }
-
-    res.status(200).json({ likedStatus, watchlaterStatus })
+    const playlist = []
+    for (let i = 0; i < userInfo.playlist.length; i++) {
+      const tempPlaylist = {
+        _id: userInfo.playlist[i]._id,
+        name: userInfo.playlist[i].name,
+        contains: false
+      }
+      if (userInfo.playlist[i].videoList.includes(mongoose.Types.ObjectId(videoid))) {
+        tempPlaylist['contains'] = true
+      } else {
+        tempPlaylist['contains'] = false
+      }
+      playlist.push(tempPlaylist)
+    }
+    res.status(200).json({ likedStatus, watchlaterStatus, playlist })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -161,20 +174,36 @@ router.get('/userstatus', ProfileAuth, async (req, res) => {
 router.post('/updateplaylist', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
-    const { videoid, action, playlistname } = req.body
-    let updatedstate
+    const { videoid, action, playlistid, newplaylistname } = req.body
     if (action === 'add') {
-      await Profile.findByIdAndUpdate(id, { $push: { [`playlist.${playlistname}.videoList`]: videoid } })
-      updatedstate = true
-      // } else if (action === 'remove') {
+      await Playlist.findByIdAndUpdate(playlistid, { $push: { 'videoList': videoid } })
+    } else if (action === 'remove') {
+      await Playlist.findByIdAndUpdate(playlistid, { $pull: { 'videoList': videoid } })
     } else {
-      await Profile.findByIdAndUpdate(id, { $pull: { [`playlist.${playlistname}.videoList`]: videoid } })
-      updatedstate = false
+      const newPlaylist = new Playlist({
+        name: newplaylistname,
+        byUser: id,
+        videoList: [videoid]
+      })
+      const savedPlaylist = await newPlaylist.save()
+      await Profile.findByIdAndUpdate(id, { $push: { playlist: savedPlaylist._id } })
     }
-    // } else {
-    //   await Profile.findByIdAndUpdate(id, { playlist: { name: playlistname, {}} })
-    //   updatedstate = true
-    res.status(200).json({ updatedstate })
+    const updatedplaylist = []
+    const userInfo = await Profile.findById(id).populate({ path: 'playlist', select: 'name videoList' })
+    for (let i = 0; i < userInfo.playlist.length; i++) {
+      const tempPlaylist = {
+        _id: userInfo.playlist[i]._id,
+        name: userInfo.playlist[i].name,
+        contains: false
+      }
+      if (userInfo.playlist[i].videoList.includes(mongoose.Types.ObjectId(videoid))) {
+        tempPlaylist['contains'] = true
+      } else {
+        tempPlaylist['contains'] = false
+      }
+      updatedplaylist.push(tempPlaylist)
+    }
+    res.status(200).json({ updatedplaylist })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -187,31 +216,50 @@ router.post('/managelike', ProfileAuth, async (req, res) => {
     const { videoid, action } = req.body
     let likedStatus
     if (action === 'like') {
-      await Profile.findByIdAndUpdate(id, { $push: { 'playlist.likedvideos.videoList': videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { likedvideos: videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { likedusers: id } })
       likedStatus = true
     } else if (action === 'dislike') {
-      await Profile.findByIdAndUpdate(id, { $push: { 'playlist.dislikedvideos.videoList': videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { dislikedvideos: videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { dislikedusers: id } })
       likedStatus = false
     } else if (action === 'unlike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.likedvideos.videoList': videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id } })
       likedStatus = undefined
     } else if (action === 'undislike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.dislikedvideos.videoList': videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id } })
       likedStatus = undefined
     } else if (action === 'liketodislike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.likedvideos.videoList': videoid }, $push: { 'playlist.dislikedvideos.videoList': videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid }, $push: { dislikedvideos: videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id }, $push: { dislikedusers: id } })
       likedStatus = false
     } else if (action === 'disliketolike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { 'playlist.dislikedvideos.videoList': videoid }, $push: { 'playlist.likedvideos.videoList': videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid }, $push: { likedvideos: videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id }, $push: { likedusers: id } })
       likedStatus = true
     }
     res.status(200).json({ likedStatus })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.post('/managewatchlater', ProfileAuth, async (req, res) => {
+  try {
+    const { id } = req.userInfo
+    const { videoid, action } = req.body
+    let updatedstate
+    if (action === 'add') {
+      await Profile.findByIdAndUpdate(id, { $push: { watchlater: videoid } })
+      updatedstate = true
+    } else {
+      await Profile.findByIdAndUpdate(id, { $pull: { watchlater: videoid } })
+      updatedstate = false
+    }
+    res.status(200).json({ updatedstate })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })

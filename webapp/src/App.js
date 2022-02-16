@@ -31,6 +31,7 @@ import UserVideoGrid from './UserComponents/UserVideoGrid/UserVideoGrid.jsx'
 import PictureUpload from './UserComponents/PictureUpload/PictureUpload.jsx'
 import VideoUpload from './UserComponents/VideoUpload/VideoUpload.jsx'
 import Profile from './UserComponents/Profile/Profile.jsx'
+import ProfileSettings from './UserComponents/ProfileSettings/ProfileSettings'
 
 import axios from 'axios'
 axios.defaults.withCredentials = true
@@ -68,6 +69,7 @@ function App () {
             (userLoggedIn === true) && (
               <>
                 <Route path='' element={<Profile />} />
+                <Route path='settings' element={<ProfileSettings />} />
                 <Route path='myvideos' element={<UserVideoGrid />} />
                 <Route path='videolist' element={<UserVideoList />} />
                 <Route path='upload/picture' element={<PictureUpload />} />

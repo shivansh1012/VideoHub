@@ -14,6 +14,7 @@ export default function Watch() {
     const [videoData, setVideoData] = useState([]);
     const [likeStatus, setLikeStatus] = useState(undefined);
     const [watchlater, setWatchLater] = useState(undefined);
+    const [playlist, setPlaylist] = useState([]);
 
     const [infoLoading, setInfoLoading] = useState(true);
     const [likeStatusLoading, setLikeStatusLoading] = useState(true);
@@ -66,34 +67,53 @@ export default function Watch() {
         }
         setLikeStatusLoading(true)
         await axios.post(`${ApiBaseUrl}/profile/managelike`, payload).then(res => {
-            console.log(res.data.likedStatus)
             setLikeStatus(res.data.likedStatus)
         })
         setLikeStatusLoading(false);
     }
-    
-    const handlePlaylistRequest = async (e, callfrom) => {
+
+    const handleWatchLater = async () => {
         if (!userLoggedIn) {
             navigate('/profile/signin')
         }
         const payload = {
             videoid: id,
-            action: "nothing",
-            playlistname: ""
+            action: "nothing"
         }
-        if (callfrom === 'watchlater') {
-            payload.playlistname = 'watchlater'
-            if (watchlater === undefined || watchlater === false) {
-                payload.action = "add"
-            } else {
+        if (watchlater === undefined || watchlater === false) {
+            payload.action = "add"
+        } else {
+            payload.action = "remove"
+        }
+        setPlaylistLoading(true)
+        await axios.post(`${ApiBaseUrl}/profile/managewatchlater`, payload).then(res => {
+            setWatchLater(res.data.updatedstate)
+        })
+        setPlaylistLoading(false);
+    }
+
+    const handlePlaylistRequest = async (actionType, playlistid, laststatus) => {
+        if (!userLoggedIn) {
+            navigate('/profile/signin')
+        }
+        const payload = {
+            videoid: id,
+            action: actionType,
+            playlistid,
+            newplaylistname: ""
+        }
+        if (actionType === "createandadd") {
+            payload.newplaylistname = prompt("Enter playlistname")
+        } else {
+            if(laststatus===true) {
                 payload.action = "remove"
+            } else {
+                payload.action = "add"
             }
         }
         setPlaylistLoading(true)
         await axios.post(`${ApiBaseUrl}/profile/updateplaylist`, payload).then(res => {
-            if (callfrom === 'watchlater') {
-                setWatchLater(res.data.updatedstate)
-            }
+            setPlaylist(res.data.updatedplaylist)
         })
         setPlaylistLoading(false);
     }
@@ -190,22 +210,66 @@ export default function Watch() {
                         <div>
                             {
                                 playlistLoading ? <div className="simple-spinner"></div> :
-                                    <button className="btn shadow-none" onClick={(e) => handlePlaylistRequest(e, "watchlater")}>
+                                    <>
+                                        <button className="btn shadow-none" onClick={handleWatchLater}>
+                                            {
+                                                (watchlater === undefined || watchlater === false) &&
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                                </svg>
+                                            }
+                                            {
+                                                watchlater === true &&
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
+                                                </svg>
+                                            }
+                                            Watch Later
+                                        </button>
                                         {
-                                            (watchlater === undefined || watchlater === false) &&
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
-                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                                            </svg>
+                                            playlist.map((playlist, index) => {
+                                                return (
+                                                    <div className="form-check" key={playlist._id}>
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="checkbox"
+                                                            name={playlist.name}
+                                                            value={playlist._id}
+                                                            checked={playlist.contains}
+                                                            onChange={() => handlePlaylistRequest("update", playlist._id, playlist.contains)}
+                                                            id="flexCheckChecked"
+                                                        />
+                                                        <label className="form-check-label" htmlFor="flexCheckChecked">
+                                                            {playlist.name}
+                                                        </label>
+                                                    </div>
+                                                )
+                                                // if (playlist.contains) {
+                                                //     return (
+                                                //         <div className="form-check">
+                                                //             <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked />
+                                                //             <label className="form-check-label" htmlFor="flexCheckChecked">
+                                                //                 {playlist.name}
+                                                //             </label>
+                                                //         </div>
+                                                //     )
+                                                // } else {
+                                                //     return (
+                                                //         <div className="form-check">
+                                                //             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                                                //             <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                //                 {playlist.name}
+                                                //             </label>
+                                                //         </div>
+                                                //     )
+                                                // }
+                                            })
                                         }
-                                        {
-                                            watchlater === true &&
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
-                                            </svg>
-                                        }
-                                        Watch Later
-                                    </button>
+                                        <button className="btn shadow-none" onClick={() => handlePlaylistRequest("createandadd")}>
+                                            Create playlist
+                                        </button>
+                                    </>
                             }
                         </div>
                     </div>
@@ -224,9 +288,9 @@ export default function Watch() {
 
     const getUserStatus = useCallback(async () => {
         await axios.get(`${ApiBaseUrl}/profile/userstatus?videoid=${id}`).then(res => {
-            // console.log(res.data.likedStatus)
             setLikeStatus(res.data.likedStatus)
             setWatchLater(res.data.watchlaterStatus)
+            setPlaylist(res.data.playlist)
         })
         setLikeStatusLoading(false);
         setPlaylistLoading(false);

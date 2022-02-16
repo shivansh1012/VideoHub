@@ -34,9 +34,10 @@ class Automation:
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]
         self.Video = mydb["Video"]
+        self.Playlist = mydb["Playlist"]
         self.Profile = mydb["Profile"]
 
-    def dropCollections(self, VideoData=1, ProfileData=1) -> bool:
+    def dropCollections(self, VideoData=1, ProfileData=1, PlaylistData=1) -> bool:
         try:
             if VideoData:
                 self.Video.drop()
@@ -44,6 +45,9 @@ class Automation:
             if ProfileData:
                 self.Profile.drop()
                 print("Profiles Dropped")
+            if PlaylistData:
+                self.Playlist.drop()
+                print("Playlists Dropped")
             return True
         except Exception:
             print("Couldnt drop the Collection")
@@ -80,11 +84,10 @@ class Automation:
         profile["email"] = email + "@videohub.inf"
         profile["password"] = "login1234"
         profile["hashedpassword"] = ""
-        profile["playlist"] = {
-            "likedvideos": {"name": "likedvideos", "videoList": []},
-            "dislikedvideos": {"name": "dislikedvideos", "videoList": []},
-            "watchlater": {"name": "watchlater", "videoList": []},
-        }
+        profile["likedvideos"] = []
+        profile["dislikedvideos"] = []
+        profile["watchlater"] = []
+        profile["playlist"] = []
 
         if os.path.exists(self.base_profilepic_dir + "/" + name + ".jpg"):
             profile["profilepicURL"] = "uploads/profilepics/" + name + ".jpg"
@@ -93,6 +96,7 @@ class Automation:
         profile["videoList"] = []
 
         savedProfile = self.Profile.insert_one(profile)
+
         return savedProfile.inserted_id
 
     def getVideoBasicData(self, dirpath, filename):

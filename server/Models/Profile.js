@@ -15,11 +15,13 @@ const ProfileSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    select: false
   },
   hashedpassword: {
     type: String,
-    required: true
+    required: true,
+    select: false
   },
   profilepicURL: {
     type: String,
@@ -30,30 +32,25 @@ const ProfileSchema = new mongoose.Schema({
     ref: 'Video',
     default: []
   },
+  likedvideos: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Video',
+    default: []
+  },
+  dislikedvideos: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Video',
+    default: []
+  },
+  watchlater: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Video',
+    default: []
+  },
   playlist: {
-    type: Map,
-    of: new mongoose.Schema({
-      name: String,
-      videoList: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Video',
-        default: []
-      }
-    }),
-    default: {
-      likedvideos: {
-        name: 'likedvideos',
-        videoList: []
-      },
-      dislikedvideos: {
-        name: 'dislikedvideos',
-        videoList: []
-      },
-      watchlater: {
-        name: 'watchlater',
-        videoList: []
-      }
-    }
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Playlist',
+    default: []
   }
 })
 
