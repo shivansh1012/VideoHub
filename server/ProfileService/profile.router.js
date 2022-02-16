@@ -121,6 +121,36 @@ router.post('/login', async (req, res) => {
   }
 })
 
+router.post('/updatepassword', ProfileAuth,async (req, res) => {
+  try {
+    const { id } = req.userInfo
+    const { currentPassword, newPassword } = req.body
+
+    if (!currentPassword || !newPassword) {
+      return res.status(401).json({ message: 'fill all the fields' })
+    }
+
+    const existingProfile = await Profile.findById(id).select('+password +hashedpassword')
+
+    const isPasswordValid = await bcrypt.compare(currentPassword, existingProfile.hashedpassword)
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid Password' })
+    }
+
+    const salt = await bcrypt.genSalt()
+    const newhashedpassword = await bcrypt.hash(newPassword, salt)
+
+    await Profile.findByIdAndUpdate(id, { password: newPassword, hashedpassword: newhashedpassword })
+
+    return res.status(200)
+      .json({ message: 'Password Changed' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
 router.get('/userinfo', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
@@ -158,9 +188,9 @@ router.get('/userstatus', ProfileAuth, async (req, res) => {
         contains: false
       }
       if (userInfo.playlist[i].videoList.includes(mongoose.Types.ObjectId(videoid))) {
-        tempPlaylist['contains'] = true
+        tempPlaylist.contains = true
       } else {
-        tempPlaylist['contains'] = false
+        tempPlaylist.contains = false
       }
       playlist.push(tempPlaylist)
     }
@@ -176,9 +206,9 @@ router.post('/updateplaylist', ProfileAuth, async (req, res) => {
     const { id } = req.userInfo
     const { videoid, action, playlistid, newplaylistname } = req.body
     if (action === 'add') {
-      await Playlist.findByIdAndUpdate(playlistid, { $push: { 'videoList': videoid } })
+      await Playlist.findByIdAndUpdate(playlistid, { $push: { videoList: videoid } })
     } else if (action === 'remove') {
-      await Playlist.findByIdAndUpdate(playlistid, { $pull: { 'videoList': videoid } })
+      await Playlist.findByIdAndUpdate(playlistid, { $pull: { videoList: videoid } })
     } else {
       const newPlaylist = new Playlist({
         name: newplaylistname,
@@ -189,19 +219,19 @@ router.post('/updateplaylist', ProfileAuth, async (req, res) => {
       await Profile.findByIdAndUpdate(id, { $push: { playlist: savedPlaylist._id } })
     }
     const updatedplaylist = []
-    const userInfo = await Profile.findById(id).populate({ path: 'playlist', select: 'name videoList' })
-    for (let i = 0; i < userInfo.playlist.length; i++) {
-      const tempPlaylist = {
-        _id: userInfo.playlist[i]._id,
-        name: userInfo.playlist[i].name,
+    const userplaylist = (await Profile.findById(id).populate({ path: 'playlist', select: 'name videoList' })).playlist
+    for (let i = 0; i < userplaylist.length; i++) {
+      const updatedTempPlaylist = {
+        _id: userplaylist[i]._id,
+        name: userplaylist[i].name,
         contains: false
       }
-      if (userInfo.playlist[i].videoList.includes(mongoose.Types.ObjectId(videoid))) {
-        tempPlaylist['contains'] = true
+      if (userplaylist[i].videoList.includes(mongoose.Types.ObjectId(videoid))) {
+        updatedTempPlaylist.contains = true
       } else {
-        tempPlaylist['contains'] = false
+        updatedTempPlaylist.contains = false
       }
-      updatedplaylist.push(tempPlaylist)
+      updatedplaylist.push(updatedTempPlaylist)
     }
     res.status(200).json({ updatedplaylist })
   } catch (e) {

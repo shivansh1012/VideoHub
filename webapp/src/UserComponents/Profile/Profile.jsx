@@ -46,7 +46,12 @@ export default function Profile() {
           <h3>Video Uploads</h3>
           {
             isLoading ? <div className="simple-spinner"></div> :
-              <VideoMatrixGrid videoList={userInfo.videoList} />
+              <>
+                {
+                  userInfo.dislikedvideos.length ? <VideoMatrixGrid videoList={userInfo.videoList} /> :
+                    <p>No Uploads</p>
+                }
+              </>
           }
         </div>
         <div className="videouploadsection py-3">
@@ -89,25 +94,14 @@ export default function Profile() {
           <h3>Playlist Sections</h3>
           {
             isLoading ? <div className="simple-spinner"></div> :
-            <>
+              <>
                 {
                   userInfo.playlist.length ? <PlaylistMatrixGrid playlist={userInfo.playlist} /> :
                     <p>No Playlists</p>
                 }
               </>
-              
+
           }
-          {/* <div className="col-12 col-sm-6 col-md-6 col-lg-3" key={1234}>
-            <div className="card videocard">
-              <div className="videocardthumbnail">
-                <div className="videocardthumbnailimgoverlay">
-                  <img src={`${SourceBaseUrl}/static/defaults/playlistdefaultpic.png`}
-                    className="videocardthumbnailimg" alt="create new playlist" />
-                  <div className="textcentered">Create a new Playlist</div>
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>

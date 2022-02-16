@@ -25,7 +25,7 @@ const requestLogger = (req, res, next) => {
   next()
 }
 
-// app.use(requestLogger)
+app.use(requestLogger)
 
 // Links
 app.use('/meta', require('./MetaDataService/metadata.router.js'))
