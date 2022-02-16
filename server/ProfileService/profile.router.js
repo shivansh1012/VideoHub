@@ -121,7 +121,7 @@ router.post('/login', async (req, res) => {
   }
 })
 
-router.post('/updatepassword', ProfileAuth,async (req, res) => {
+router.post('/updatepassword', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
     const { currentPassword, newPassword } = req.body
