@@ -1,0 +1,60 @@
+.videocard {
+  border: 0 !important;
+  background-color: transparent !important;
+}
+
+.videocardthumbnail {
+  width: unset !important;
+  position: relative;
+}
+
+.videocardthumbnailimgoverlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 576px) {
+  .videocardthumbnailimgoverlay {
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .videocardthumbnailimgoverlay {
+    max-height: 300px;
+  }
+}
+
+.videocardthumbnailimg {
+  max-width: 100%;
+  max-height: inherit;
+  border-radius: 20px !important;
+  display: block;
+}
+
+.videocardthumbnaildurationoverlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 4px;
+  background-color: dimgrey;
+  color: white;
+  border-radius: 3px;
+  padding-inline: 3px;
+}
+
+.videocardtitle {
+  font-size: large;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.videocardchannel {
+  color: var(--channel-color);
+  font-size: medium;
+}

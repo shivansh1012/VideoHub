@@ -1,10 +1,6 @@
 UselessStuff
 Files
-thumbnails
-thumbnailfriends
-profilepics
-fileRenamer.py
-filenameoutput.txt
+uploads
 
 # dependencies
 node_modules

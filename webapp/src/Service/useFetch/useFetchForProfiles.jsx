@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ApiBaseUrl } from "../../config";
 
-export default function useFetchForModel(offset) {
+export default function useFetchForProfiles(offset, accountType) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [modelList, setModelList] = useState([]);
+    const [profileList, setProfileList] = useState([]);
     const [hasMore, setHasMore] = useState(false);
 
     useEffect(() => {
@@ -16,15 +16,15 @@ export default function useFetchForModel(offset) {
         setError(false);
 
         axios
-            .get(`${ApiBaseUrl}/meta/list/model?limit=20&offset=${offset}`, {
+            .get(`${ApiBaseUrl}/meta/list/profiles?limit=20&offset=${offset}&accountType=${accountType}`, {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {
 
-                setModelList((prev) => {
-                    return [...new Set([...prev, ...res.data.modelList])];
+                setProfileList((prev) => {
+                    return [...new Set([...prev, ...res.data.profileList])];
                 });
-                setHasMore(res.data.modelList.length > 0);
+                setHasMore(res.data.profileList.length > 0);
                 setIsLoading(false);
             })
             .catch((err) => {
@@ -33,7 +33,7 @@ export default function useFetchForModel(offset) {
             });
 
         return () => cancel();
-    }, [offset]);
+    }, [offset, accountType]);
 
-    return { isLoading, error, modelList, hasMore };
+    return { isLoading, error, profileList, hasMore };
 }

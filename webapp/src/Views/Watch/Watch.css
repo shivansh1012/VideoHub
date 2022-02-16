@@ -1,0 +1,99 @@
+.watch {
+  display: flex;
+}
+
+.profileName {
+  padding: 0 0 10px 0;
+}
+
+.video {
+  display: flex;
+  justify-content: center;
+}
+
+.morevideo {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.infoandlike {
+  display: flex;
+  justify-content: space-between;
+}
+
+.like-dislike {
+  margin-right: 10%;
+}
+
+.like-dislike button {
+  color: var(--font-color);
+}
+
+.like-dislike button:hover {
+  color: var(--font-color) !important;
+}
+
+@media (max-width: 992px) {
+  .videozone {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .morevideo {
+    width: 100%;
+  }
+
+  .watch {
+    flex-direction: column !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .videozone {
+    width: 75%;
+  }
+
+  .morevideo {
+    width: 25%;
+  }
+
+  .watch {
+    flex-direction: row !important;
+  }
+}
+
+.videoInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 576px) {
+  .videoplayer {
+    max-width: 500px;
+  }
+}
+
+@media (min-width: 768px) {
+  .videoplayer {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .videoplayer {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .videoplayer {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .videoplayer {
+    max-width: 1320px;
+  }
+}

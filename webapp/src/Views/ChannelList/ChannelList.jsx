@@ -1,10 +1,10 @@
 import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import useFetchForChannel from "../../Service/useFetch/useFetchForChannel.jsx"
+import useFetchForProfiles from "../../Service/useFetch/useFetchForProfiles.jsx"
 
-export default function ModelList() {
+export default function ChannelList() {
     const [offset, setOffset] = useState(0);
-    const { isLoading, error, channelList, hasMore } = useFetchForChannel(offset);
+    const { isLoading, error, profileList, hasMore } = useFetchForProfiles(offset, 'channel');
 
     const observer = useRef();
 
@@ -52,8 +52,8 @@ export default function ModelList() {
                 </thead>
                 <tbody>
                 {
-                        channelList.map((channel, index) => {
-                            if (channelList.length === index + 1) {
+                        profileList.map((channel, index) => {
+                            if (profileList.length === index + 1) {
                                 return (
                                     <tr key={channel._id} ref={lastChannelElementRef}>
                                         {returnRow(channel, index)}

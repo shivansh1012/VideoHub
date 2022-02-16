@@ -1,0 +1,27 @@
+.videocardcolumn {
+  border: 0 !important;
+  background-color: transparent !important;
+  display: flex;
+}
+
+.videocardthumbnailcolumn {
+  width: unset !important;
+  position: relative;
+}
+
+@media (min-width: 992px) {
+  .videocardcolumn {
+    flex-direction: column !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .videocardcolumn {
+    flex-direction: row !important;
+    padding: 10px;
+  }
+
+  .videocardtitlecolumn {
+    width: 100%;
+  }
+}

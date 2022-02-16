@@ -15,7 +15,7 @@ __author__ = "Shivansh Pandey"
 __copyright__ = "MIT"
 __credits__ = ["shivansh1012"]
 __license__ = "GPL"
-__version__ = "1.0.1"
+__version__ = "1.11.0"
 __maintainer__ = "shivansh1012"
 __status__ = "Production"
 
@@ -26,27 +26,28 @@ class Automation:
         ABS_PATH = os.path.abspath(__file__)
         # get the chemin for this current directory
         BASE_DIR = os.path.dirname(ABS_PATH)
-        self.thumbnails_dir = os.path.join(BASE_DIR, r"server\public\thumbnails")
+        self.thumbnails_dir = "server/public/uploads/thumbnails"
+        self.profilepic_dir = "server/public/uploads/profilepics"
+        self.base_thumbnails_dir = os.path.join(BASE_DIR, self.thumbnails_dir)
+        self.base_profilepic_dir = os.path.join(BASE_DIR, self.profilepic_dir)
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["VideoHub"]
-        self.videoMetaData = mydb["VideoMetaData"]
-        self.modelMetaData = mydb["ModelMetaData"]
-        self.channelMetaData = mydb["ChannelMetaData"]
+        self.Video = mydb["Video"]
+        self.Playlist = mydb["Playlist"]
+        self.Profile = mydb["Profile"]
 
-    def dropCollections(
-        self, deleteVideoMetaData=1, deleteModelMetaData=1, deleteChannelMetaData=1
-    ) -> bool:
+    def dropCollections(self, VideoData=1, ProfileData=1, PlaylistData=1) -> bool:
         try:
-            if deleteVideoMetaData:
-                self.videoMetaData.drop()
-                print("videoMetaData Collection Dropped")
-            if deleteModelMetaData:
-                self.modelMetaData.drop()
-                print("modelMetaData Collection Dropped")
-            if deleteChannelMetaData:
-                self.channelMetaData.drop()
-                print("channelMetaData Collection Dropped")
+            if VideoData:
+                self.Video.drop()
+                print("Videos Dropped")
+            if ProfileData:
+                self.Profile.drop()
+                print("Profiles Dropped")
+            if PlaylistData:
+                self.Playlist.drop()
+                print("Playlists Dropped")
             return True
         except Exception:
             print("Couldnt drop the Collection")
@@ -54,7 +55,7 @@ class Automation:
 
     def deleteThumbnails(self):
         try:
-            shutil.rmtree(self.thumbnails_dir)
+            shutil.rmtree(self.base_thumbnails_dir)
             print("Thumbnails Deleted")
             return True
         except OSError as error:
@@ -65,7 +66,7 @@ class Automation:
     def createThumbnailsFolder(self):
         try:
             # create the folder "thumbnails"  at Ex : path/to/your/project/folder/data/outputs/thumbnails
-            os.makedirs(self.thumbnails_dir, exist_ok=True)
+            os.makedirs(self.base_thumbnails_dir, exist_ok=True)
             print("Thumbnails Folder Created")
             return True
         except OSError as error:
@@ -73,21 +74,30 @@ class Automation:
             print("Thumbnails Folder Creation Failed")
             return False
 
-    def createModel(self, name) -> str:
-        model = {}
-        model["name"] = name
-        model["videoList"] = []
+    def createProfile(self, name, accountType) -> str:
+        profile = {}
+        email = name.split(" ")
+        email = "".join(email)
+        email = email.lower()
+        profile["name"] = name
+        profile["accountType"] = accountType
+        profile["email"] = email + "@videohub.inf"
+        profile["password"] = "login1234"
+        profile["hashedpassword"] = ""
+        profile["likedvideos"] = []
+        profile["dislikedvideos"] = []
+        profile["watchlater"] = []
+        profile["playlist"] = []
 
-        saveModel = self.modelMetaData.insert_one(model)
-        return saveModel.inserted_id
+        if os.path.exists(self.base_profilepic_dir + "/" + name + ".jpg"):
+            profile["profilepicURL"] = "uploads/profilepics/" + name + ".jpg"
+        else:
+            profile["profilepicURL"] = "defaults/defaultprofilepic2.jpg"
+        profile["videoList"] = []
 
-    def createChannel(self, name) -> str:
-        channel = {}
-        channel["name"] = name
-        channel["videoList"] = []
+        savedProfile = self.Profile.insert_one(profile)
 
-        saveChannel = self.channelMetaData.insert_one(channel)
-        return saveChannel.inserted_id
+        return savedProfile.inserted_id
 
     def getVideoBasicData(self, dirpath, filename):
         dirpath = dirpath.replace("\\", "/")
@@ -95,7 +105,7 @@ class Automation:
         # fileExt = filename[-4:]
         cleanFileName = ""
         models = []
-        channel = "Unknown"
+        channel = None
         newFileName = noExtFileName.split("-")
         if len(newFileName) == 1:
             cleanFileName = newFileName[0].strip()
@@ -103,7 +113,6 @@ class Automation:
             cleanFileName = newFileName[0].strip()
             for m in newFileName[1].split(","):
                 models.append(m.strip())
-            channel = models[0]
         else:
             cleanFileName = newFileName[0].strip()
             for m in newFileName[1].split(","):
@@ -119,15 +128,7 @@ class Automation:
         return cleanFileName, dirpath, path, channel, list(set(tag)), models
 
     def getVideoProperties(self, dirpath, filename, cleanFileName, createThumbnail):
-        # noExtFileName = filename[0:-4]
-
-        # newFileName = noExtFileName
-        # if(noExtFileName[0]=="["):
-        #     newFileName = noExtFileName.split("]")[1].strip()
-
-        VIDEOFILENAME = filename
-        # get the path to our sample video
-        source_path = os.path.join(dirpath, VIDEOFILENAME)
+        source_path = os.path.join(dirpath, filename)
 
         clip = VideoFileClip(source_path)
 
@@ -142,43 +143,64 @@ class Automation:
         frame = clip.get_frame(frame_at_second)
 
         if createThumbnail:
+            thumbnailfilename = cleanFileName + ".jpg"
             new_image_filepath = os.path.join(
-                self.thumbnails_dir, f"{cleanFileName}.jpg"
+                self.base_thumbnails_dir, thumbnailfilename
             )
             new_image = Image.fromarray(frame)  # convert numpy array to image
             new_image.save(new_image_filepath)  # save the image
 
         clip.close()
 
-        return fps, nframes, duration, dimensions
+        return (
+            new_image_filepath.replace("\\", "/"),
+            thumbnailfilename,
+            fps,
+            nframes,
+            duration,
+            dimensions,
+        )
 
     def saveVideoMetaData(
         self,
-        newFileName,
-        originalFileName,
+        title,
+        videoFileName,
+        thumbnailfilename,
         videoDirPath,
         videoPath,
+        thumbnailpath,
         channel,
         tagList,
         modelList,
         fps,
         nframes,
         duration,
-        dimensions,
+        dimension,
+        uploadDate,
     ):
-        video = {}
-        video["filename"] = newFileName
-        video["originalfilename"] = originalFileName
-        video["dir"] = videoDirPath
-        video["path"] = videoPath
-        video["channel"] = channel
-        video["tags"] = tagList
-        video["model"] = modelList
-        video["fps"] = fps
-        video["nframes"] = nframes
-        video["duration"] = duration
-        video["dimensions"] = dimensions
-        savedVideo = self.videoMetaData.insert_one(video)
+        videodata = {}
+        videodata["filename"] = videoFileName
+        videodata["dir"] = videoDirPath
+        videodata["path"] = videoPath
+        videodata["fps"] = str(fps)
+        videodata["nframes"] = str(nframes)
+        videodata["duration"] = str(duration)
+        videodata["dimension"] = str(dimension[0]) + "x" + str(dimension[1])
+
+        thumbnaildata = {}
+        thumbnaildata["filename"] = thumbnailfilename
+        thumbnaildata["dir"] = "uploads/thumbnails"
+        thumbnaildata["path"] = "uploads/thumbnails/" + thumbnailfilename
+
+        newVideo = {}
+        newVideo["title"] = title
+        newVideo["video"] = videodata
+        newVideo["thumbnail"] = thumbnaildata
+        newVideo["channel"] = channel
+        newVideo["tags"] = tagList
+        newVideo["model"] = modelList
+        newVideo["uploaddate"] = uploadDate
+        savedVideo = self.Video.insert_one(newVideo)
         return savedVideo.inserted_id
 
     def Automate(self, path: str, saveDataInDB: int = 1, createThumbnail: int = 1):
@@ -199,45 +221,59 @@ class Automation:
                     modelList,
                 ) = self.getVideoBasicData(dirpath, filename)
 
-                fps, nframes, duration, dimensions = self.getVideoProperties(
+                (
+                    thumbnailpath,
+                    thumbnailfilename,
+                    fps,
+                    nframes,
+                    duration,
+                    dimension,
+                ) = self.getVideoProperties(
                     dirpath, filename, newFileName, createThumbnail
                 )
 
                 if saveDataInDB:
-                    if dirpath.find("Groups"):
-                        channelData = self.channelMetaData.find_one({"name": channel})
-                        if channelData is None:
-                            channelID = self.createChannel(channel)
+                    if channel:
+                        profileData = self.Profile.find_one({"name": channel})
+                        if profileData is None:
+                            channelID = self.createProfile(channel, "channel")
                         else:
-                            channelID = channelData["_id"]
-                        modelListIDs = []
-                        for model in modelList:
-                            modelData = self.modelMetaData.find_one({"name": model})
-                            if modelData is None:
-                                modelListIDs.append(self.createModel(model))
-                            else:
-                                modelListIDs.append(modelData["_id"])
-
+                            channelID = profileData["_id"]
+                    else:
+                        channelID = ""
+                    modelListIDs = []
+                    for model in modelList:
+                        profileData = self.Profile.find_one({"name": model})
+                        if profileData is None:
+                            modelListIDs.append(self.createProfile(model, "model"))
+                        else:
+                            modelListIDs.append(profileData["_id"])
+                    uploadDate = int(
+                        os.path.getctime(os.path.join(dirpath, filename)) * 1000
+                    )
                     videoID = self.saveVideoMetaData(
                         newFileName,
                         filename,
+                        thumbnailfilename,
                         videoDirPath,
                         videoPath,
+                        thumbnailpath,
                         channelID,
                         tagList,
                         modelListIDs,
                         fps,
                         nframes,
                         duration,
-                        dimensions,
+                        dimension,
+                        uploadDate,
                     )
 
-                    self.channelMetaData.update_one(
+                    self.Profile.update_one(
                         {"_id": channelID}, {"$push": {"videoList": videoID}}
                     )
 
                     for modelID in modelListIDs:
-                        self.modelMetaData.update_one(
+                        self.Profile.update_one(
                             {"_id": modelID}, {"$push": {"videoList": videoID}}
                         )
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ApiBaseUrl } from "../../config";
 
-export default function useFetchForVideo(offset) {
+export default function useFetchForVideo(offset, sort) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
     const [videoList, setVideoList] = useState([]);
@@ -14,13 +14,12 @@ export default function useFetchForVideo(offset) {
 
         setIsLoading(true);
         setError(false);
-
         axios
-            .get(`${ApiBaseUrl}/meta/list/video?limit=20&offset=${offset}`, {
+            .get(`${ApiBaseUrl}/meta/list/video?limit=20&offset=${offset}&sort=${sort}`, {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {
-
+                // console.log(res)
                 setVideoList((prev) => {
                     return [...new Set([...prev, ...res.data.videoList])];
                 });
@@ -33,7 +32,7 @@ export default function useFetchForVideo(offset) {
             });
 
         return () => cancel();
-    }, [offset]);
+    }, [offset, sort]);
 
-    return { isLoading, error, videoList, hasMore };
+    return { isLoading, error, videoList, hasMore, setVideoList };
 }

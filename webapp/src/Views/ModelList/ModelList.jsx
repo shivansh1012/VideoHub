@@ -1,10 +1,10 @@
 import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import useFetchForModel from "../../Service/useFetch/useFetchForModel.jsx"
+import useFetchForProfiles from "../../Service/useFetch/useFetchForProfiles.jsx"
 
 export default function ModelList() {
     const [offset, setOffset] = useState(0);
-    const { isLoading, error, modelList, hasMore } = useFetchForModel(offset);
+    const { isLoading, error, profileList, hasMore } = useFetchForProfiles(offset, 'model');
 
     const observer = useRef();
 
@@ -52,8 +52,8 @@ export default function ModelList() {
                 </thead>
                 <tbody>
                     {
-                        modelList.map((model, index) => {
-                            if (modelList.length === index + 1) {
+                        profileList.map((model, index) => {
+                            if (profileList.length === index + 1) {
                                 return (
                                     <tr key={model._id} ref={lastModelElementRef}>
                                         {returnRow(model, index)}

@@ -1,0 +1,9 @@
+div.settingsform > div {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.settingsbutton {
+  color: var(--font-color) !important;
+}

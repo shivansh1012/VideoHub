@@ -1,10 +1,12 @@
 import { useState, useRef, useCallback } from "react";
 import useFetchForVideo from "../../Service/useFetch/useFetchForVideo.jsx";
-import VideoMatrix from "../../Layout/VideoMatrix/VideoMatrix.jsx";
+import VideoMatrixGrid from "../../Layout/VideoMatrix/VideoMatrixGrid.jsx";
+import "./Home.css"
 
 export default function Home() {
     const [offset, setOffset] = useState(0);
-    const { isLoading, error, videoList, hasMore } = useFetchForVideo(offset);
+    const [sort, setSort] = useState("_id")
+    const { isLoading, error, videoList, hasMore, setVideoList } = useFetchForVideo(offset, sort);
 
     const observer = useRef();
     const lastVideoElementRef = useCallback(
@@ -21,36 +23,30 @@ export default function Home() {
         [isLoading, hasMore]
     );
 
-    // const getVideoList = async () => {
-    //     await fetch(`${ApiBaseUrl}/meta/list/video?limit=15&offset=${offset}`).then(response =>
-    //         response.json()).then((json) => {
-    //             // const newVideoListSet=[];
-    //             // console.log(json)
-    //             setVideoList((oldVideoList) => [...oldVideoList, ...json.videoList]);
-    //             offset += 15;
-    //         })
-    // }
-
-    // const handleScroll = (e) => {
-    //     if (
-    //         window.innerHeight + e.target.documentElement.scrollTop + 1 >=
-    //         e.target.documentElement.scrollHeight
-    //     ) {
-    //         getVideoList()
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     getVideoList();
-    //     window.addEventListener("scroll", handleScroll)
-    // }, [])
+    const handleSort = (e) => {
+        setOffset(0)
+        setSort(e.target.value)
+        setVideoList([])
+    }
 
     return (
-        <div className="py-3">
-            <div className="animate-bottom">
-                <VideoMatrix videoList={videoList} lastVideoElementRef={lastVideoElementRef} />
+        <div className="container">
+            <div className="pagetitle">
+                <p>Top Videos</p>
             </div>
-            <div>{isLoading && ! error && <div className="spinner"></div>}</div>
+            <div className="sortselect">
+                <select className="form-select w-50"
+                    value={sort}
+                    onChange={handleSort}>
+                    <option value="_id">NoSort</option>
+                    <option value="uploaddate">Desc Upload Time</option>
+                    <option value="-uploaddate">Recently Uploaded</option>
+                </select>
+            </div>
+            <div className="animate-bottom">
+                <VideoMatrixGrid videoList={videoList} lastVideoElementRef={lastVideoElementRef} />
+            </div>
+            <div>{isLoading && !error && <div className="spinner"></div>}</div>
             <div>{error && "Error..."}</div>
         </div>
     )

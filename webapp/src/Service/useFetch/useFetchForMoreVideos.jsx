@@ -2,30 +2,28 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ApiBaseUrl } from "../../config";
 
-export default function useFetchForChannel(offset) {
-    const [isLoading, setIsLoading] = useState(true);
+export default function useFetchForMoreVideos(offset, id) {
+    const [moreVideosLoading, setMoreVideosLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [channelList, setChannelList] = useState([]);
+    const [moreVideos, setMoreVideos] = useState([]);
     const [hasMore, setHasMore] = useState(false);
 
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         let cancel;
 
-        setIsLoading(true);
+        setMoreVideosLoading(true);
         setError(false);
-
         axios
-            .get(`${ApiBaseUrl}/meta/list/channel?limit=20&offset=${offset}`, {
+            .get(`${ApiBaseUrl}/meta/morevideo?id=${id}&limit=10&offset=${offset}`, {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {
-
-                setChannelList((prev) => {
-                    return [...new Set([...prev, ...res.data.channelList])];
+                setMoreVideos((prev) => {
+                    return [...new Set([...prev, ...res.data.moreVideos])];
                 });
-                setHasMore(res.data.channelList.length > 0);
-                setIsLoading(false);
+                setHasMore(res.data.moreVideos.length > 0);
+                setMoreVideosLoading(false);
             })
             .catch((err) => {
                 if (axios.isCancel(err)) return;
@@ -33,7 +31,7 @@ export default function useFetchForChannel(offset) {
             });
 
         return () => cancel();
-    }, [offset]);
+    }, [offset, id]);
 
-    return { isLoading, error, channelList, hasMore };
+    return { moreVideosLoading, error, moreVideos, hasMore, setMoreVideos };
 }
