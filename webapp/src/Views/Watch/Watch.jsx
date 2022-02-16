@@ -105,7 +105,7 @@ export default function Watch() {
         if (actionType === "createandadd") {
             payload.newplaylistname = prompt("Enter playlistname")
         } else {
-            if(laststatus===true) {
+            if (laststatus === true) {
                 payload.action = "remove"
             } else {
                 payload.action = "add"
@@ -245,25 +245,6 @@ export default function Watch() {
                                                         </label>
                                                     </div>
                                                 )
-                                                // if (playlist.contains) {
-                                                //     return (
-                                                //         <div className="form-check">
-                                                //             <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked />
-                                                //             <label className="form-check-label" htmlFor="flexCheckChecked">
-                                                //                 {playlist.name}
-                                                //             </label>
-                                                //         </div>
-                                                //     )
-                                                // } else {
-                                                //     return (
-                                                //         <div className="form-check">
-                                                //             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                                //             <label className="form-check-label" htmlFor="flexCheckDefault">
-                                                //                 {playlist.name}
-                                                //             </label>
-                                                //         </div>
-                                                //     )
-                                                // }
                                             })
                                         }
                                         <button className="btn shadow-none" onClick={() => handlePlaylistRequest("createandadd")}>
@@ -288,9 +269,12 @@ export default function Watch() {
 
     const getUserStatus = useCallback(async () => {
         await axios.get(`${ApiBaseUrl}/profile/userstatus?videoid=${id}`).then(res => {
-            setLikeStatus(res.data.likedStatus)
-            setWatchLater(res.data.watchlaterStatus)
-            setPlaylist(res.data.playlist)
+            console.log(res.data)
+            if (res.data.authorized === undefined || res.data.authorized) {
+                setLikeStatus(res.data.likedStatus)
+                setWatchLater(res.data.watchlaterStatus)
+                setPlaylist(res.data.playlist)
+            }
         })
         setLikeStatusLoading(false);
         setPlaylistLoading(false);
