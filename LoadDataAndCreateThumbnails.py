@@ -221,6 +221,9 @@ class Automation:
                     modelList,
                 ) = self.getVideoBasicData(dirpath, filename)
 
+                if self.Video.find_one({"title": newFileName}):
+                    continue
+
                 (
                     thumbnailpath,
                     thumbnailfilename,
@@ -293,11 +296,12 @@ while True:
 
     auto = Automation()
     if choice == 1:
+        videoFilePath = input("Enter Video Dir Path")
         commands = list(map(int, input().split()))
         if commands == []:
-            auto.Automate(r".\Files")
+            auto.Automate(videoFilePath)
         else:
-            auto.Automate(r".\Files", commands[0], commands[1])
+            auto.Automate(videoFilePath, commands[0], commands[1])
     elif choice == 2:
         commands = list(map(int, input().split()))
         if commands == []:

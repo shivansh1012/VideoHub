@@ -406,8 +406,8 @@ router.post('/newvideo', ProfileAuth, async (req, res) => {
       title,
       video: {
         filename: videofileName,
-        dir: '',
-        path: '',
+        dir: 'public/uploads/videos/',
+        path: 'public/uploads/videos/' + videofileName,
         fps,
         nframes,
         duration,
