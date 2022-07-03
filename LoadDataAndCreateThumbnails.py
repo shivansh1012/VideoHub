@@ -5,6 +5,7 @@ The VideoFiles in folder "./Files" are scanned and the details of video files ar
 inserted into the MongoDB and A thumbnail is generated for the same in "./thumbnails" Folder"""
 
 import os
+import random
 import shutil
 
 import pymongo
@@ -136,9 +137,9 @@ class Automation:
         nframes = clip.reader.nframes  # return number of frame in the video
         duration = clip.duration  # return duration of the video in second
         dimensions = clip.size
-        # max_duration = int(clip.duration) + 1
+        max_duration = int(clip.duration)
         # here is the time where you want to take the thumbnail at second, it should be smaller than max_duration
-        frame_at_second = 28
+        frame_at_second = random.randint(0, max_duration)
         # Gets a numpy array representing the RGB picture of the clip at time frame_at_second
         frame = clip.get_frame(frame_at_second)
 
@@ -207,84 +208,90 @@ class Automation:
         if createThumbnail:
             self.createThumbnailsFolder()
         fileCount = 0
+        escapeCount = 0
         for dirpath, dirs, files in os.walk(path):
             for filename in files:
-                if filename[-4:] not in [".mp4", ".mkv"]:
-                    continue
+                try:
+                    if filename[-4:] not in [".mp4", ".mkv", "mov"]:
+                        continue
 
-                (
-                    newFileName,
-                    videoDirPath,
-                    videoPath,
-                    channel,
-                    tagList,
-                    modelList,
-                ) = self.getVideoBasicData(dirpath, filename)
-
-                if self.Video.find_one({"title": newFileName}):
-                    continue
-
-                (
-                    thumbnailpath,
-                    thumbnailfilename,
-                    fps,
-                    nframes,
-                    duration,
-                    dimension,
-                ) = self.getVideoProperties(
-                    dirpath, filename, newFileName, createThumbnail
-                )
-
-                if saveDataInDB:
-                    if channel:
-                        profileData = self.Profile.find_one({"name": channel})
-                        if profileData is None:
-                            channelID = self.createProfile(channel, "channel")
-                        else:
-                            channelID = profileData["_id"]
-                    else:
-                        channelID = ""
-                    modelListIDs = []
-                    for model in modelList:
-                        profileData = self.Profile.find_one({"name": model})
-                        if profileData is None:
-                            modelListIDs.append(self.createProfile(model, "model"))
-                        else:
-                            modelListIDs.append(profileData["_id"])
-                    uploadDate = int(
-                        os.path.getctime(os.path.join(dirpath, filename)) * 1000
-                    )
-                    videoID = self.saveVideoMetaData(
+                    (
                         newFileName,
-                        filename,
-                        thumbnailfilename,
                         videoDirPath,
                         videoPath,
-                        thumbnailpath,
-                        channelID,
+                        channel,
                         tagList,
-                        modelListIDs,
+                        modelList,
+                    ) = self.getVideoBasicData(dirpath, filename)
+
+                    if self.Video.find_one({"title": newFileName}):
+                        continue
+
+                    (
+                        thumbnailpath,
+                        thumbnailfilename,
                         fps,
                         nframes,
                         duration,
                         dimension,
-                        uploadDate,
+                    ) = self.getVideoProperties(
+                        dirpath, filename, newFileName, createThumbnail
                     )
 
-                    self.Profile.update_one(
-                        {"_id": channelID}, {"$push": {"videoList": videoID}}
-                    )
-
-                    for modelID in modelListIDs:
-                        self.Profile.update_one(
-                            {"_id": modelID}, {"$push": {"videoList": videoID}}
+                    if saveDataInDB:
+                        if channel:
+                            profileData = self.Profile.find_one({"name": channel})
+                            if profileData is None:
+                                channelID = self.createProfile(channel, "channel")
+                            else:
+                                channelID = profileData["_id"]
+                        else:
+                            channelID = ""
+                        modelListIDs = []
+                        for model in modelList:
+                            profileData = self.Profile.find_one({"name": model})
+                            if profileData is None:
+                                modelListIDs.append(self.createProfile(model, "model"))
+                            else:
+                                modelListIDs.append(profileData["_id"])
+                        uploadDate = int(
+                            os.path.getctime(os.path.join(dirpath, filename)) * 1000
+                        )
+                        videoID = self.saveVideoMetaData(
+                            newFileName,
+                            filename,
+                            thumbnailfilename,
+                            videoDirPath,
+                            videoPath,
+                            thumbnailpath,
+                            channelID,
+                            tagList,
+                            modelListIDs,
+                            fps,
+                            nframes,
+                            duration,
+                            dimension,
+                            uploadDate,
                         )
 
-                fileCount += 1
+                        self.Profile.update_one(
+                            {"_id": channelID}, {"$push": {"videoList": videoID}}
+                        )
 
-                print(
-                    f"File Number:{fileCount}\n    {newFileName}\n    {modelList}\n    {channel}\n"
-                )
+                        for modelID in modelListIDs:
+                            self.Profile.update_one(
+                                {"_id": modelID}, {"$push": {"videoList": videoID}}
+                            )
+
+                    fileCount += 1
+
+                    print(
+                        f"File Number:{fileCount}\n    {newFileName}\n    {modelList}\n    {channel}\n"
+                    )
+                except:
+                    escapeCount+=1
+                    print(escapeCount, f"Escaped {filename}")
+                    continue
 
 
 while True:

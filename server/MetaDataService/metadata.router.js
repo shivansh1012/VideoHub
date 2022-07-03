@@ -19,7 +19,7 @@ router.get('/video', async (req, res) => {
         path: 'model',
         select: 'name'
       })
-    res.status(200).json({ videoData, moreVideos: [] })
+    res.status(200).json({ videoData })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -32,7 +32,12 @@ router.get('/model', async (req, res) => {
     if (!modelID) {
       return res.status(400).json({ message: 'Requires Model ID' })
     }
-    const modelData = await Profile.findById(modelID).populate('videoList').select('-password -hashedpassword')
+    const modelData = await Profile.findById(modelID)
+      .select('name videoList profilepicURL')
+      .populate({
+        path: 'videoList',
+        select: 'title thumbnail video model'
+      })
 
     res.status(200).json({ modelData })
   } catch (e) {
@@ -47,7 +52,12 @@ router.get('/channel', async (req, res) => {
     if (!channelID) {
       return res.status(400).json({ message: 'Requires Channel ID' })
     }
-    const channelData = await Profile.findById(channelID).populate('videoList').select('-password -hashedpassword')
+    const channelData = await Profile.findById(channelID)
+    .select('name videoList profilepicURL')
+    .populate({
+      path: 'videoList',
+      select: 'title thumbnail video model'
+    })
 
     res.status(200).json({ channelData })
   } catch (e) {

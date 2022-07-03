@@ -7,19 +7,25 @@ import "./VideoUpload.css"
 
 export default function VideoUpload() {
   let navigate = useNavigate()
-  const [title, setTitle] = useState("")
-  const [videofileName, setVideoFileName] = useState("")
-  const [thumbnailfileName, setThumbnailFileName] = useState("")
-  const [videodir, setVideoDir] = useState("")
-  const [videopath, setVideoPath] = useState("")
-  const [thumbnaildir, setThumbnailDir] = useState("")
-  const [thumbnailpath, setThumbnailPath] = useState("")
-  const [channel, setChannel] = useState("")
-  const [model, setModel] = useState([])
-  const [fps, setFps] = useState("")
-  const [nframes, setNframes] = useState("")
-  const [duration, setDuration] = useState("")
-  const [dimension, setDimension] = useState([])
+  const [videoData, setVideoData] = useState({
+    title: "",
+    thumbnail: {
+      name: "",
+      dir: "",
+      path: ""
+    },
+    video: {
+      name: "",
+      dir: "",
+      path: "",
+      fps: 0.0,
+      nframs: 0.0,
+      duration: 0.0,
+      dimension: ""
+    },
+    channel: "",
+    model: []
+  })
 
   const [modelList, setModelList] = useState([])
   const [isLoading, setIsLoading] = useState("")
@@ -29,34 +35,27 @@ export default function VideoUpload() {
     setIsLoading(true)
     let form = document.getElementById('videouploadform');
     let formData = new FormData(form);
-    await axios.post(`${ApiBaseUrl}/profile/upload/video`, formData)
+    await axios.post(`${ApiBaseUrl}/upload/video/file`, formData)
       .then(res => {
         if (res.data.success) {
-          setVideoDir('')
-          setChannel('')
-          setModel('')
-          setVideoFileName(res.data.fileName)
-          const payload = {
-            filePath: res.data.filePath,
-            fileName: res.data.fileName
-          }
-          axios.post(`${ApiBaseUrl}/profile/thumbnail`, payload)
-            .then(res => {
-              if (res.data.success) {
-                console.log(res)
-                setDuration(res.data.videoDuration)
-                setThumbnailDir(res.data.thumbnaildir)
-                setThumbnailPath(res.data.thumbnailpath)
-                setThumbnailFileName(res.data.thumbnailfilename)
-                setNframes(res.data.nframes)
-                setDimension(res.data.dimension)
-                setFps(res.data.fps)
-                setVideoPath(res.data.videopath)
-              } else {
-                alert('Failed to make the thumbnails');
-              }
-              setIsLoading(false)
-            })
+          setVideoData({
+            ...videoData,
+            thumbnail: {
+              name: res.data.thumbnailfilename,
+              dir: res.data.thumbnaildir,
+              path: res.data.thumbnailpath
+            },
+            video: {
+              name: res.data.videofilename,
+              dir: "",
+              path: "",
+              fps: res.data.fps,
+              nframs: res.data.nframes,
+              duration: res.data.videoDuration,
+              dimension: res.data.dimension
+            }
+          })
+          setIsLoading(false)
         } else {
           alert('failed to save the video in server')
         }
@@ -65,23 +64,7 @@ export default function VideoUpload() {
 
   const saveVideo = async (e) => {
     e.preventDefault()
-    const payload = {
-      title,
-      videofileName,
-      thumbnailfileName,
-      videodir,
-      videopath,
-      thumbnaildir,
-      thumbnailpath,
-      channel,
-      model,
-      fps,
-      nframes,
-      duration,
-      dimension
-    }
-
-    await axios.post(`${ApiBaseUrl}/profile/newvideo`, payload)
+    await axios.post(`${ApiBaseUrl}/upload/video/save`, videoData)
       .then((res) => {
         alert("Success")
         navigate('/')
@@ -90,10 +73,10 @@ export default function VideoUpload() {
 
   useEffect(() => {
     async function fetchData() {
-      await axios.get(`${ApiBaseUrl}/meta/list/model`).then((res) => {
+      await axios.get(`${ApiBaseUrl}/meta/list/profiles?limit=20&offset=0&accountType=model`).then((res) => {
         let options = []
-        for (let i = 0; i < res.data.modelList.length; i++) {
-          options.push({ value: res.data.modelList[i]._id, label: res.data.modelList[i].name })
+        for (let i = 0; i < res.data.profileList.length; i++) {
+          options.push({ value: res.data.profileList[i]._id, label: res.data.profileList[i].name })
         }
         setModelList(options)
       })
@@ -106,7 +89,7 @@ export default function VideoUpload() {
       <form className="videouploadform" id="videouploadform" encType="multipart/form-data" onSubmit={saveVideo}>
         <div className="uploadcontainer p-5">
           <div className="thumbnail py-3">
-            <img src={`${SourceBaseUrl}/static/${thumbnailpath}`} alt="haha" />
+            <img src={`${SourceBaseUrl}/static/${videoData.thumbnail.path}`} alt="haha" />
           </div>
           <div className="video py-3">
             {isLoading && <div className="simple-spinner"></div>}
@@ -118,18 +101,18 @@ export default function VideoUpload() {
         <div className="formcontainer p-5">
           <div className="py-3">
             <label>Title</label>
-            <input type="text" className="form-control" placeholder="Title" value={title}
-              onChange={(e) => setTitle(e.target.value)} />
+            <input type="text" className="form-control" placeholder="Title" value={videoData.title}
+              onChange={(e) => setVideoData({ ...videoData, title: e.target.value })} />
           </div>
           <div className="py-3">
             <label>ImageURL</label>
             <input type="text" disabled className="form-control" placeholder="ImageURL"
-              value={thumbnailpath} />
+              value={videoData.thumbnail.path} />
           </div>
           <div className="py-3">
             <label>VideoURL</label>
             <input type="text" disabled className="form-control" placeholder="VideoURL"
-              value={videopath} />
+              value={videoData.video.path} />
           </div>
           <div className="py-3">
             <label>Models</label>
@@ -139,6 +122,10 @@ export default function VideoUpload() {
               options={modelList}
               className="basic-multi-select modelselect"
               classNamePrefix="select"
+              onChange={(newValue, actionMeta) => {
+                console.log(newValue)
+                setVideoData({ ...videoData, model: newValue })
+              }}
             />
           </div>
 
