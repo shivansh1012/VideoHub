@@ -32,6 +32,11 @@ const ProfileSchema = new mongoose.Schema({
     ref: 'Video',
     default: []
   },
+  photoList: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Photo',
+    default: []
+  },
   likedvideos: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Video',

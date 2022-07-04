@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 
 const Video = require('../Models/Video.js')
 const Profile = require('../Models/Profile.js')
+const Photo = require('../Models/Photo.js')
 
 router.get('/video', async (req, res) => {
   try {
@@ -20,6 +21,24 @@ router.get('/video', async (req, res) => {
         select: 'name'
       })
     res.status(200).json({ videoData })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.get('/photo', async (req, res) => {
+  try {
+    const photoID = req.query.id
+    if (!photoID) {
+      return res.status(400).json({ message: 'Requires Video ID' })
+    }
+    const photoData = await Photo.findById(req.query.id)
+      .populate({
+        path: 'model',
+        select: 'name'
+      })
+    res.status(200).json({ photoData })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })

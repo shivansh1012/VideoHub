@@ -1,22 +1,29 @@
 const mongoose = require('mongoose')
 
-const VideoSchema = new mongoose.Schema({
+const PhotoSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true
   },
-  video: {
-    type: Map,
-    of: String
+  filename: {
+    type: String,
+    required: true
   },
-  thumbnail: {
-    type: Map,
-    of: String
+  dir: {
+    type: String,
+    required: true
   },
-  channel: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Profile',
-    default: null
+  path: {
+    type: String,
+    required: true
+  },
+  fileformat: {
+    type: String,
+    required: true
+  },
+  dimension: {
+    type: String,
+    required: true
   },
   model: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -43,6 +50,6 @@ const VideoSchema = new mongoose.Schema({
   }
 })
 
-const Video = mongoose.model('Video', VideoSchema, 'Video')
+const Photo = mongoose.model('Photo', PhotoSchema, 'Photo')
 
-module.exports = Video
+module.exports = Photo

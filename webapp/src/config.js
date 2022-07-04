@@ -6,7 +6,7 @@
 
 // console.log(ip);
 
-const ip="192.168.1.4"
+const ip="192.168.1.3"
 
 export const LocalServerUrl = 'http://localhost:5000'
 export const LanServerUrl = `http://${ip}:5000`

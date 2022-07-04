@@ -2,15 +2,17 @@ const router = require('express').Router()
 const fs = require('fs')
 
 const Video = require('../Models/Video.js')
+const Photo = require('../Models/Photo.js')
 
-router.get('', async (req, res) => {
+router.get('/video', async (req, res) => {
   // Ensure there is a range given for the video
   const range = req.headers.range
+  const videoID = req.query.id
+
   if (!range) {
     return res.status(400).json({ message: 'Requires Range header' })
   }
 
-  const videoID = req.query.id
   if (!videoID) {
     return res.status(400).json({ message: 'Requires Video ID' })
   }
@@ -19,10 +21,8 @@ router.get('', async (req, res) => {
   if (!tempVideoData) {
     return res.status(400).json({ message: 'Invalid Video ID' })
   }
-  const path = tempVideoData.video.get('path')
-  let videoPath = ''
+  let videoPath = tempVideoData.video.get("path")
 
-  videoPath = tempVideoData.video.get("path")
   // get video stats (about 61MB)
   const videoSize = fs.statSync(videoPath).size
 
@@ -49,6 +49,22 @@ router.get('', async (req, res) => {
 
   // Stream the video chunk to the client
   videoStream.pipe(res)
+})
+
+router.get('/photo', async (req, res) => {
+  try {
+    const photoID = req.query.id
+    if (!photoID) {
+      return res.status(400).json({ message: 'Requires Video ID' })
+    }
+
+    const photoData = await Photo.findById(req.query.id)
+
+    res.sendFile(photoData.path)
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
 })
 
 module.exports = router
