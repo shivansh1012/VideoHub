@@ -37,6 +37,7 @@ export default function VideoUpload() {
     let formData = new FormData(form);
     await axios.post(`${ApiBaseUrl}/upload/video/file`, formData)
       .then(res => {
+        console.log(res)
         if (res.data.success) {
           setVideoData({
             ...videoData,
@@ -57,7 +58,7 @@ export default function VideoUpload() {
           })
           setIsLoading(false)
         } else {
-          alert('failed to save the video in server')
+          alert('failed to save the video in server : ' + res.data.message + " : " + res.data.err)
         }
       })
   }

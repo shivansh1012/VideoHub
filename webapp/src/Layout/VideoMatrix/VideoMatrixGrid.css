@@ -1,6 +1,13 @@
 .videocard {
   border: 0 !important;
   background-color: transparent !important;
+  align-items: center;
+}
+
+.outercardarea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .videocardthumbnail {

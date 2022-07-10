@@ -1,15 +1,7 @@
-// let os = window.require( 'os' )
-
-// const networkInterfaces = os.networkInterfaces();
-// console.log(networkInterfaces)
-// const ip = networkInterfaces['Wi-Fi'][1]['address']
-
-// console.log(ip);
-
-const ip="192.168.1.3"
+const ipaddr="192.168.1.4"
 
 export const LocalServerUrl = 'http://localhost:5000'
-export const LanServerUrl = `http://${ip}:5000`
+export const LanServerUrl = `http://${ipaddr}:5000`
 export const TetheredServerUrl = 'http://192.168.43.250:5000'
 export const GlobalServerUrl = 'http://_._._._:5000'
 

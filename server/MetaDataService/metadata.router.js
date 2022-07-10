@@ -100,12 +100,27 @@ router.get('/list/video', async (req, res) => {
   }
 })
 
+router.get('/list/photo', async (req, res) => {
+  try {
+    const limit = req.query.limit
+    const offset = req.query.offset
+    const sort = req.query.sort
+    const photoList = await Photo.find().sort(sort).skip(offset)
+      .limit(limit).populate('model', 'name')
+
+    res.status(200).json({ photoList })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
 router.get('/list/profiles', async (req, res) => {
   try {
     const limit = req.query.limit
     const offset = req.query.offset
     const accountType = req.query.accountType
-    const profileList = await Profile.find({ accountType: accountType }).skip(offset)
+    const profileList = await Profile.find({ accountType: { "$regex": accountType, "$options": "i" } }).skip(offset)
       .limit(limit).select('name videoList')
 
     res.status(200).json({ profileList })

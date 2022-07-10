@@ -163,6 +163,7 @@ class PreStoredFilesAutomate:
         videoDirPath,
         videoPath,
         thumbnailpath,
+        filetype,
         channel,
         tagList,
         modelList,
@@ -176,6 +177,7 @@ class PreStoredFilesAutomate:
         videodata["filename"] = videoFileName
         videodata["dir"] = videoDirPath
         videodata["path"] = videoPath
+        videodata["filetype"] = filetype
         videodata["fps"] = str(fps)
         videodata["nframes"] = str(nframes)
         videodata["duration"] = str(duration)
@@ -197,7 +199,7 @@ class PreStoredFilesAutomate:
         savedVideo = self.Video.insert_one(newVideo)
         return savedVideo.inserted_id
 
-    def feedVideoData(self, dirpath, filename):
+    def feedVideoData(self, dirpath, filename, fileext):
         try:
             (
                 newFileName,
@@ -247,6 +249,7 @@ class PreStoredFilesAutomate:
                 videoDirPath,
                 videoPath,
                 thumbnailpath,
+                fileext,
                 channelID,
                 tagList,
                 modelListIDs,
@@ -353,7 +356,7 @@ class PreStoredFilesAutomate:
                 # filename_noext = "".join(filename.split(".")[0:-1])
                 ext = filename.split(".")[-1]
                 if ext in ["mp4", "mkv", "mov"] and docChoice in [1, 3]:
-                    self.feedVideoData(dirpath=dirpath, filename=filename)
+                    self.feedVideoData(dirpath=dirpath, filename=filename,fileext=ext)
                 elif ext in ["jpg", "png", "jpeg"] and docChoice in [1, 2]:
                     self.feedPhotoData(dirpath=dirpath, filename=filename,ext=ext)
 

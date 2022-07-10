@@ -23,23 +23,28 @@ const videoStorage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     cb(null, `${Date.now()}_${file.originalname}`)
-  },
-  fileFilter: (req, file, cb) => {
-    const ext = path.extname(file.originalname)
-    if (ext !== '.mp4') {
-      // return cb(res.status(400).end('only jpg, png, mp4 is allowed'), false)
-      return cb(null, false)
-    }
-    cb(null, true)
   }
 })
 
-const uploadVideo = multer({ storage: videoStorage }).single('uploadedFile')
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.split("/")[1] === "mp4") {
+    cb(null, true);
+  } else {
+    cb("Not a Valid video File!!", false);
+  }
+};
+
+const uploadVideo = multer({ 
+  storage: videoStorage,
+  fileFilter: multerFilter
+}).single('uploadedFile')
 
 router.post('/file', (req, res) => {
-  uploadVideo(req, res, err => {
-    if (err) {
-      return res.json({ success: false, err })
+  uploadVideo(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.json({ success: false, message: "A Multer error occurred when uploading.", err }).status(400)
+    } else if (err) {
+      return res.json({ success: false, message: "An unknown error occurred when uploading.", err }).status(400)
     }
     const origpath = res.req.file.path.replace(/\\/g, '/')
     let thumbnailfilePath = ''
@@ -114,6 +119,7 @@ router.post('/save', ProfileAuth, async (req, res) => {
         filename: req.body.video.name,
         dir: 'public/uploads/videos/',
         path: 'public/uploads/videos/' + req.body.video.name,
+        filetype: path.extname(req.body.video.name).substring(1),
         fps: req.body.video.fps,
         nframes: req.body.video.nframes,
         duration: req.body.video.duration,

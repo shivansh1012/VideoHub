@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ApiBaseUrl } from "../../config";
 
-export default function useFetchForProfiles(offset, accountType) {
+export default function useFetchForPhoto(offset, sort) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [profileList, setProfileList] = useState([]);
+    const [photoList, setPhotoList] = useState([]);
     const [hasMore, setHasMore] = useState(false);
 
     useEffect(() => {
@@ -14,17 +14,16 @@ export default function useFetchForProfiles(offset, accountType) {
 
         setIsLoading(true);
         setError(false);
-
         axios
-            .get(`${ApiBaseUrl}/meta/list/profiles?limit=20&offset=${offset}&accountType=${accountType}`, {
+            .get(`${ApiBaseUrl}/meta/list/photo?limit=20&offset=${offset}&sort=${sort}`, {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {
-
-                setProfileList((prev) => {
-                    return [...new Set([...prev, ...res.data.profileList])];
+                // console.log(res)
+                setPhotoList((prev) => {
+                    return [...new Set([...prev, ...res.data.photoList])];
                 });
-                setHasMore(res.data.profileList.length > 0);
+                setHasMore(res.data.photoList.length > 0);
                 setIsLoading(false);
             })
             .catch((err) => {
@@ -33,7 +32,7 @@ export default function useFetchForProfiles(offset, accountType) {
             });
 
         return () => cancel();
-    }, [offset, accountType]);
+    }, [offset, sort]);
 
-    return { isLoading, error, profileList, hasMore, setProfileList };
+    return { isLoading, error, photoList, hasMore, setPhotoList };
 }
