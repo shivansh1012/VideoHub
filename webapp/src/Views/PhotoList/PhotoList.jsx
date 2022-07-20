@@ -2,7 +2,6 @@ import { useState, useRef, useCallback } from "react";
 import PhotoMatrix from "../../Layout/PhotoMatrix/Matrix/PhotoMatrix.jsx";
 import PhotoTable from "../../Layout/PhotoMatrix/Table/PhotoTable.jsx";
 import useFetchForPhoto from "../../Service/useFetch/useFetchForPhoto.jsx"
-import "./PhotoList.css"
 
 export default function PhotoList() {
     const [offset, setOffset] = useState(0);
@@ -76,8 +75,14 @@ export default function PhotoList() {
                     </span>
                 </div>
             </div>
-            <PhotoMatrix lastPhotoElementRef={lastPhotoElementRef} photoList={photoList} isLoading={isLoading} error={error} />
-            {/* <PhotoTable lastPhotoElementRef={lastPhotoElementRef} photoList={photoList} isLoading={isLoading} error={error}/> */}
+            {
+                view === true &&
+                <PhotoMatrix lastPhotoElementRef={lastPhotoElementRef} photoList={photoList} isLoading={isLoading} error={error} />
+            }
+            {
+                view === false &&
+                <PhotoTable lastPhotoElementRef={lastPhotoElementRef} photoList={photoList} isLoading={isLoading} error={error} />
+            }
             <div>{isLoading && !error && <div className="spinner"></div>}</div>
             <div>{error && "Error..."}</div>
         </div>

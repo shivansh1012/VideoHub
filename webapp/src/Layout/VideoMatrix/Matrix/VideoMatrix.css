@@ -1,5 +1,4 @@
 .video-matrix {
-  /* max-width: 1200px; */
   margin: 0 auto;
   display: grid;
   gap: 1rem;
@@ -8,9 +7,6 @@
 
 .video-card {
   background-color: transparent !important;
-  /* color: white; */
-  /* padding: 1rem;
-  height: 4rem; */
   width: inherit;
   height: 250px;
   display: grid;

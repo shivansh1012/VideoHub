@@ -1,4 +1,4 @@
-const ipaddr="192.168.1.4"
+const ipaddr = '192.168.1.4'
 
 export const LocalServerUrl = 'http://localhost:5000'
 export const LanServerUrl = `http://${ipaddr}:5000`

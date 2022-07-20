@@ -108,7 +108,7 @@ router.get('/list/profiles', async (req, res) => {
     const limit = req.query.limit
     const offset = req.query.offset
     const account = req.query.account
-    const profileList = await Profile.find({ account: { "$regex": account, "$options": "i" } }).skip(offset)
+    const profileList = await Profile.find({ account: { $regex: account, $options: 'i' } }).skip(offset)
       .limit(limit).select('name video photo')
 
     res.status(200).json({ profileList })

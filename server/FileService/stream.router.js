@@ -21,7 +21,7 @@ router.get('/video', async (req, res) => {
   if (!tempVideoData) {
     return res.status(400).json({ message: 'Invalid Video ID' })
   }
-  let videoPath = tempVideoData.video.get("path")
+  const videoPath = tempVideoData.video.get('path')
 
   // get video stats (about 61MB)
   const videoSize = fs.statSync(videoPath).size

@@ -8,7 +8,6 @@ inserted into the MongoDB and A thumbnail is generated for the same in "./thumbn
 import os
 import random
 import shutil
-import sys
 
 import pymongo
 from moviepy.editor import VideoFileClip
@@ -140,7 +139,7 @@ class Photo:
 class MongoDBConnection:
     def __init__(self) -> None:
         client = pymongo.MongoClient("mongodb://localhost:27017/")
-        database = client["VideoHub4"]
+        database = client["VideoHub"]
         self.VideoCol = database["Video"]
         self.PhotoCol = database["Photo"]
         self.PlaylistCol = database["Playlist"]

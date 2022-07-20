@@ -16,7 +16,7 @@ const VideoSchema = new mongoose.Schema({
   uploader: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Profile',
-    default: ""
+    default: ''
   },
   features: {
     type: [mongoose.Schema.Types.ObjectId],

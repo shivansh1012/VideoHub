@@ -17,7 +17,6 @@ export default function VideoMatrixGrid(props) {
     }
 
     const Cards = (video) => {
-        console.log(video)
         let uploader = "Unknown"
         if (video["uploader"] && video.uploader != null) {
             uploader = video.uploader.name
