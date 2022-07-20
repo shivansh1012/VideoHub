@@ -109,9 +109,10 @@ router.post('/file', (req, res) => {
 router.post('/save', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
-    modelList = [id]
+    uploader = [id]
+    features = []
     for(let i=0; i< req.body.model.length; i++) {
-      modelList.push(req.body.model[i].value)
+      features.push(req.body.model[i].value)
     }
     const newVideo = new Video({
       title: req.body.title,
@@ -123,7 +124,7 @@ router.post('/save', ProfileAuth, async (req, res) => {
         fps: req.body.video.fps,
         nframes: req.body.video.nframes,
         duration: req.body.video.duration,
-        dimension: req.body.video.dimension[0] + 'x' + req.body.video.dimension[1]
+        dimension: [req.body.video.dimension[0], req.body.video.dimension[1]]
       },
       thumbnail: {
         filename: req.body.thumbnail.name,
@@ -131,12 +132,17 @@ router.post('/save', ProfileAuth, async (req, res) => {
         path: req.body.thumbnail.path
       },
       tags: req.body.title.split(' '),
-      model: modelList
+      uploader: uploader,
+      features: features
     })
 
     const newSavedVideo = await newVideo.save()
 
-    await Profile.findByIdAndUpdate(id, { $push: { videoList: newSavedVideo._id } })
+    await Profile.findByIdAndUpdate(id, { $push: { "video.uploads": newSavedVideo._id } })
+    
+    for(let i=0; i< req.body.model.length; i++) {
+      await Profile.findByIdAndUpdate(req.body.model[i].value, { $push: { "video.features": newSavedVideo._id } })
+    }
 
     res.status(200).json({ message: 'Video Saved' })
   } catch (error) {

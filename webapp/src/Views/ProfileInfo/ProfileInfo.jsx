@@ -3,16 +3,16 @@ import { useParams } from 'react-router-dom'
 import { SourceBaseUrl, ApiBaseUrl } from '../../config.js';
 import VideoMatrixGrid from "../../Layout/VideoMatrix/VideoMatrixGrid.jsx";
 
-export default function ModelInfo() {
-    const [modelData, setModelData] = useState([]);
+export default function ProfileInfo() {
+    const [profileData, setProfileData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const { id } = useParams();
 
     const getVideoMetaData = useCallback(async () => {
-        await fetch(`${ApiBaseUrl}/meta/model?id=${id}`).then(response =>
+        await fetch(`${ApiBaseUrl}/meta/profile?id=${id}`).then(response =>
             response.json()).then((json) => {
-                setModelData(json.modelData);
+                setProfileData(json.profileData);
             })
         setLoading(false);
     }, [id])
@@ -23,24 +23,33 @@ export default function ModelInfo() {
             <div className="d-flex flex-row">
                 {
                     loading ? <div className="simple-spinner"></div> :
-                        <img src={`${SourceBaseUrl}/static/${modelData.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={modelData.name} />
+                        <img src={`${SourceBaseUrl}/static/${profileData.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={profileData.name} />
                 }
                 <div className="mx-4">
                     {
                         loading ? <div className="simple-spinner"></div> :
                             <>
-                                <h3>{modelData.name}</h3>
-                                <h5>Total Videos: {modelData.videoList.length}</h5>
+                                <h3>{profileData.name}</h3>
+                                <h5>Total Videos: {profileData.video.uploads.length}</h5>
                             </>
                     }
                 </div>
             </div>
             <div>
-                <h3 className="py-3">More Videos</h3>
+                <h3 className="py-3">More Videos:</h3>
                 {
                     loading ? <div className="simple-spinner"></div> :
                         <>
-                            <VideoMatrixGrid videoList={modelData.videoList} />
+                            <VideoMatrixGrid videoList={profileData.video.uploads} />
+                        </>
+                }
+            </div>
+            <div>
+                <h3 className="py-3">Featuring:</h3>
+                {
+                    loading ? <div className="simple-spinner"></div> :
+                        <>
+                            <VideoMatrixGrid videoList={profileData.video.features} />
                         </>
                 }
             </div>

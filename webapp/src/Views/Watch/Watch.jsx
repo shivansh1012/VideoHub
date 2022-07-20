@@ -119,39 +119,34 @@ export default function Watch() {
     }
 
     const getVideoInfo = () => {
-        let channelOrModel = ""
+        let uploader = "Unknown"
         let link = ""
-        if (videoData.channel && videoData.channel != null) {
-            channelOrModel = videoData.channel.name
-            link = `/channel/${videoData.channel._id}`
-        } else if (videoData.model.length !== 0) {
-            channelOrModel = videoData.model['0'].name
-            link = `/model/${videoData.model['0']._id}`
-        } else {
-            channelOrModel = ""
-            link = ""
+
+        if (videoData.uploader != null) {
+            uploader = videoData.uploader.name
+            link = `/profile/${videoData.uploader._id}`
         }
         return (
             <>
                 <h2 className="py-2">{videoData.title}</h2>
                 {
-                    (channelOrModel) &&
+                    (uploader) &&
                     <h4 className="profileName">
-                        <Link to={link}>{channelOrModel}</Link>
+                        <Link to={link}>{uploader}</Link>
                     </h4>
                 }
                 <div className="infoandlike">
                     <div className="addinfo">
                         {
-                            (videoData.model.length !== 0) &&
+                            (videoData.features.length !== 0) &&
                             <div className="d-flex flex-wrap">
-                                <p>Models: </p>
+                                <p>Featuring: </p>
                                 {
-                                    videoData.model.map((model, index) => {
+                                    videoData.features.map((feature, index) => {
                                         return (
                                             <p key={index}
                                                 style={{ flex: "wrap", paddingInline: "3px", marginInline: "2px", border: "1px", borderRadius: "10px", backgroundColor: "pink" }}>
-                                                <Link to={`/model/${model['_id']}`}>{model.name}</Link>
+                                                <Link to={`/profile/${feature['_id']}`}>{feature.name}</Link>
                                                 <br />
                                             </p>
                                         )

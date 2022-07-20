@@ -24,19 +24,19 @@ export default function VideoList() {
     );
 
     const returnRow = (video, index) => {
-        let channelName = ""
-        if (video['channel'] && video.channel !== null) channelName = video.channel.name
+        let uploader = "Unknown"
+        if (video['uploader'] && video.uploader !== null) uploader = video.uploader.name
         return (
             <>
                 <td>{index + 1}</td>
-                <td>{channelName}</td>
+                <td>{uploader}</td>
                 <td>{video.title}</td>
-                <td>{video.model.map((model, i) => {
-                    return <p key={i} style={{ margin: "0" }}>{model.name}</p>
+                <td>{video.features.map((features, i) => {
+                    return <p key={i} style={{ margin: "0" }}>{features.name}</p>
                 })}</td>
                 <td>{(new Date(video.uploaddate).toDateString())}</td>
                 <td>{(new Date(video.uploaddate).toLocaleTimeString())}</td>
-                <td>{video.video.filetype}</td>
+                <td>{video.video.ext}</td>
                 <td><Link to={`/video/${video._id}`}>View</Link></td>
             </>
         )
@@ -77,9 +77,9 @@ export default function VideoList() {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Channel</th>
+                        <th>Uploaded By</th>
                         <th>FileName</th>
-                        <th>Model</th>
+                        <th>Featuring</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Type</th>

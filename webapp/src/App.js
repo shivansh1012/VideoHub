@@ -16,8 +16,7 @@ import VideoInfo from './Views/VideoInfo/VideoInfo.jsx'
 import Watch from './Views/Watch/Watch.jsx'
 import View from './Views/View/View.jsx'
 import Settings from './Views/Settings/Settings.jsx'
-import ModelInfo from './Views/ModelInfo/ModelInfo.jsx'
-import ChannelInfo from './Views/ChannelInfo/ChannelInfo.jsx'
+import ProfileInfo from './Views/ProfileInfo/ProfileInfo.jsx'
 import SearchPage from './Views/SearchPage/SearchPage.jsx'
 import AboutApp from './Views/AboutApp/AboutApp.jsx'
 import ProfileList from './Views/ProfileList/ProfileList.jsx'
@@ -53,8 +52,7 @@ function App () {
         <Route path='/video/:id' element={<Watch />} />
         <Route path='/photo/:id' element={<View />} />
         <Route path='/watch/:id' element={<VideoInfo />} />
-        <Route path='/model/:id' element={<ModelInfo />} />
-        <Route path='/channel/:id' element={<ChannelInfo />} />
+        <Route path='/profile/:id' element={<ProfileInfo />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/about' element={<AboutApp />} />
         <Route path='/search' element={<SearchPage searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />

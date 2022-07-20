@@ -17,13 +17,10 @@ export default function VideoMatrixGrid(props) {
     }
 
     const Cards = (video) => {
-        let channelOrModel = ""
-        if (video.channel && video.channel != null) {
-            channelOrModel = video.channel.name
-        } else if (video.model.length !== 0) {
-            channelOrModel = video.model['0'].name
-        } else {
-            channelOrModel = ""
+        console.log(video)
+        let uploader = "Unknown"
+        if (video["uploader"] && video.uploader != null) {
+            uploader = video.uploader.name
         }
         return (
             <div className="card videocard">
@@ -41,7 +38,7 @@ export default function VideoMatrixGrid(props) {
                     <p className="card-text videocardtitle" title={video.title}>
                         <Link to={`/video/${video._id}`}>{video.title}</Link>
                     </p>
-                    <p className="card-title videocardchannel" title={channelOrModel}>{channelOrModel}</p>
+                    <p className="card-title videocardchannel" title={uploader}>{uploader}</p>
                 </div>
             </div>
         )

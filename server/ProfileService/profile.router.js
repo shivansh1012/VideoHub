@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
     const newProfile = new Profile({
       name: name,
       email: email,
-      accountType: 'user',
+      account: 'user',
       password: password,
       hashedpassword: hashedpassword
     })
@@ -70,7 +70,7 @@ router.post('/login', async (req, res) => {
     const userToken = jwt.sign({
       id: existingProfile._id,
       name: existingProfile.name,
-      accountType: existingProfile.accountType,
+      account: existingProfile.account,
       email: existingProfile.email
     }, process.env.JWT_SECRET)
     return res.status(200)
@@ -260,7 +260,7 @@ router.post('/managewatchlater', ProfileAuth, async (req, res) => {
 router.get('/myvideos', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
-    const videoList = (await Profile.findById(id).populate({ path: 'videoList', populate: { path: 'model channel', select: 'name' } })).videoList
+    const videoList = (await Profile.findById(id).populate({ path: 'video', populate: { path: 'model channel', select: 'name' } })).videoList
     res.status(200).json({ videoList })
   } catch (e) {
     console.error(e)
@@ -276,14 +276,14 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/verify', ProfileAuth, (req, res) => {
-  const { id, name, accountType, email } = req.userInfo
+  const { id, name, account, email } = req.userInfo
 
   return res.json({
     authorized: true,
     message: 'Success',
     id,
     name,
-    accountType,
+    account,
     email
   }).status(200)
 })

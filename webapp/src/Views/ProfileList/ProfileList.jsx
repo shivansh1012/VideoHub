@@ -34,8 +34,9 @@ export default function ProfileList() {
             <>
                 <td>{index + 1}</td>
                 <td>{channel.name}</td>
-                <td>{channel.videoList.length}</td>
-                <td><Link to={`/model/${channel._id}`}>View</Link></td>
+                <td>{channel.photo.uploads.length}/{channel.photo.features.length}</td>
+                <td>{channel.video.uploads.length}/{channel.video.features.length}</td>
+                <td><Link to={`/profile/${channel._id}`}>View</Link></td>
             </>
         )
     }
@@ -59,7 +60,8 @@ export default function ProfileList() {
             <table>
                 <colgroup>
                     <col style={{ width: "10%" }} />
-                    <col style={{ width: "70%" }} />
+                    <col style={{ width: "60%" }} />
+                    <col style={{ width: "10%" }} />
                     <col style={{ width: "10%" }} />
                     <col style={{ width: "10%" }} />
                 </colgroup>
@@ -67,6 +69,7 @@ export default function ProfileList() {
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>Total Photos</th>
                         <th>Total Videos</th>
                         <th>Action</th>
                     </tr>

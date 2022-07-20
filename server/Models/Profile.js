@@ -1,11 +1,14 @@
 const mongoose = require('mongoose')
 
+const Video = require('./Video.js')
+const Photo = require('./Photo.js')
+
 const ProfileSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
   },
-  accountType: {
+  account: {
     type: String,
     default: 'user'
   },
@@ -27,35 +30,61 @@ const ProfileSchema = new mongoose.Schema({
     type: String,
     default: 'defaults/defaultprofilepic.png'
   },
-  videoList: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Video',
-    default: []
-  },
-  photoList: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Photo',
-    default: []
-  },
-  likedvideos: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Video',
-    default: []
-  },
-  dislikedvideos: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Video',
-    default: []
-  },
-  watchlater: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Video',
-    default: []
-  },
   playlist: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Playlist',
     default: []
+  },
+  // video: {
+  //   type: Map,
+  //   of: [{type:mongoose.Schema.Types.ObjectId, ref: Video}],
+  //   default: {
+  //     "uploads" : [],
+  //     "features" : [],
+  //     "likes": [],
+  //     "dislikes": [],
+  //     "watchlater": []
+  //   }
+  // },
+  video: {
+    "uploads": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
+      default: [],
+    },
+    "features": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
+      default: []
+    },
+    "watchlater": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
+      default: []
+    },
+    "likes": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
+      default: []
+    },
+    "dislikes": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
+      default: []
+    },
+  },
+  photo: {
+    "uploads": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Photo }],
+      default: []
+    },
+    "features": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Photo }],
+      default: []
+    },
+    "likes": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Photo }],
+      default: []
+    },
+    "dislikes": {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Photo }],
+      default: []
+    },
   }
 })
 

@@ -17,22 +17,27 @@ const PhotoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  fileformat: {
+  ext: {
     type: String,
     required: true
   },
   dimension: {
-    type: String,
+    type: [Number],
     required: true
   },
-  model: {
+  uploader: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Profile',
+    default: ""
+  },
+  features: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Profile',
     default: []
   },
   tags: {
     type: Array,
-    default: [String]
+    default: []
   },
   uploaddate: {
     type: Number,

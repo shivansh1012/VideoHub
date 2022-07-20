@@ -23,12 +23,15 @@ export default function PhotoList() {
     );
 
     const returnRow = (photo, index) => {
+        let uploader = "Unknown"
+        if (photo['uploader'] && photo.uploader !== null) uploader = photo.uploader.name
         return (
             <>
                 <td>{index + 1}</td>
+                <td>{uploader}</td>
                 <td>{photo.title}</td>
-                <td>{photo.model.map((model, i) => {
-                    return <p key={i} style={{ margin: "0" }}>{model.name}</p>
+                <td>{photo.features.map((features, i) => {
+                    return <p key={i} style={{ margin: "0" }}>{features.name}</p>
                 })}</td>
                 <td>{(new Date(photo.uploaddate).toDateString())}</td>
                 <td>{(new Date(photo.uploaddate).toLocaleTimeString())}</td>
@@ -61,7 +64,8 @@ export default function PhotoList() {
             <table>
                 <colgroup>
                     <col style={{ width: "5%" }} />
-                    <col style={{ width: "45%" }} />
+                    <col style={{ width: "10%" }} />
+                    <col style={{ width: "35%" }} />
                     <col style={{ width: "10%" }} />
                     <col style={{ width: "20%" }} />
                     <col style={{ width: "10%" }} />
@@ -70,8 +74,9 @@ export default function PhotoList() {
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Uploaded By</th>
                         <th>FileName</th>
-                        <th>Model</th>
+                        <th>Featuring</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Action</th>

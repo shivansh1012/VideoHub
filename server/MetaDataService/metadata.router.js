@@ -13,11 +13,11 @@ router.get('/video', async (req, res) => {
     }
     const videoData = await Video.findById(req.query.id)
       .populate({
-        path: 'channel',
+        path: 'uploader',
         select: 'name'
       })
       .populate({
-        path: 'model',
+        path: 'features',
         select: 'name'
       })
     res.status(200).json({ videoData })
@@ -35,7 +35,11 @@ router.get('/photo', async (req, res) => {
     }
     const photoData = await Photo.findById(req.query.id)
       .populate({
-        path: 'model',
+        path: 'uploader',
+        select: 'name'
+      })
+      .populate({
+        path: 'features',
         select: 'name'
       })
     res.status(200).json({ photoData })
@@ -45,40 +49,24 @@ router.get('/photo', async (req, res) => {
   }
 })
 
-router.get('/model', async (req, res) => {
+router.get('/profile', async (req, res) => {
   try {
-    const modelID = req.query.id
-    if (!modelID) {
-      return res.status(400).json({ message: 'Requires Model ID' })
+    const profileID = req.query.id
+    if (!profileID) {
+      return res.status(400).json({ message: 'Requires Profile ID' })
     }
-    const modelData = await Profile.findById(modelID)
-      .select('name videoList profilepicURL')
+    const profileData = await Profile.findById(profileID)
+      .select('name account email profilepicURL playlist video photo')
       .populate({
-        path: 'videoList',
-        select: 'title thumbnail video model'
+        path: 'video.uploads video.features video.watchlater video.likes video.dislikes',
+        select: 'title thumbnail video uploader'
+      })
+      .populate({
+        path: 'photo.uploads photo.features photo.likes photo.dislikes',
+        select: 'title thumbnail video uploader'
       })
 
-    res.status(200).json({ modelData })
-  } catch (e) {
-    console.error(e)
-    res.status(500).json({ message: 'Internal Server Error' })
-  }
-})
-
-router.get('/channel', async (req, res) => {
-  try {
-    const channelID = req.query.id
-    if (!channelID) {
-      return res.status(400).json({ message: 'Requires Channel ID' })
-    }
-    const channelData = await Profile.findById(channelID)
-    .select('name videoList profilepicURL')
-    .populate({
-      path: 'videoList',
-      select: 'title thumbnail video model'
-    })
-
-    res.status(200).json({ channelData })
+    res.status(200).json({ profileData })
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -91,7 +79,7 @@ router.get('/list/video', async (req, res) => {
     const offset = req.query.offset
     const sort = req.query.sort
     const videoList = await Video.find().sort(sort).skip(offset)
-      .limit(limit).populate('channel', 'name').populate('model', 'name')
+      .limit(limit).populate('uploader', 'name').populate('features', 'name')
 
     res.status(200).json({ videoList })
   } catch (e) {
@@ -106,7 +94,7 @@ router.get('/list/photo', async (req, res) => {
     const offset = req.query.offset
     const sort = req.query.sort
     const photoList = await Photo.find().sort(sort).skip(offset)
-      .limit(limit).populate('model', 'name')
+      .limit(limit).populate('uploader', 'name').populate('features', 'name')
 
     res.status(200).json({ photoList })
   } catch (e) {
@@ -119,9 +107,9 @@ router.get('/list/profiles', async (req, res) => {
   try {
     const limit = req.query.limit
     const offset = req.query.offset
-    const accountType = req.query.accountType
-    const profileList = await Profile.find({ accountType: { "$regex": accountType, "$options": "i" } }).skip(offset)
-      .limit(limit).select('name videoList')
+    const account = req.query.account
+    const profileList = await Profile.find({ account: { "$regex": account, "$options": "i" } }).skip(offset)
+      .limit(limit).select('name video photo')
 
     res.status(200).json({ profileList })
   } catch (e) {
@@ -147,7 +135,7 @@ router.get('/search', async (req, res) => {
       }]
     }
 
-    const resultVideoList = await Video.find(queryOptions).populate('channel', 'name').populate('model', 'name')
+    const resultVideoList = await Video.find(queryOptions).populate('uploader', 'name').populate('features', 'name')
     res.status(200).json({ resultVideoList })
   } catch (e) {
     console.error(e)
@@ -160,7 +148,7 @@ router.get('/morevideo', async (req, res) => {
     const videoID = req.query.id
     const limit = req.query.limit
     const offset = req.query.offset
-    if (offset >= 40) {
+    if (offset >= 20) {
       return res.status(200).json({ moreVideos: [] })
     }
     if (!videoID) {
@@ -170,11 +158,11 @@ router.get('/morevideo', async (req, res) => {
     const moreVideos = await Video.find({ tags: { $in: videoData.tags }, _id: { $ne: mongoose.Types.ObjectId(videoID) } }).skip(offset)
       .limit(limit)
       .populate({
-        path: 'channel',
+        path: 'uploader',
         select: 'name'
       })
       .populate({
-        path: 'model',
+        path: 'features',
         select: 'name'
       })
     res.status(200).json({ moreVideos })
