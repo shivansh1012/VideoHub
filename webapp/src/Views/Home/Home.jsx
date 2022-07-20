@@ -31,9 +31,9 @@ export default function Home() {
 
     return (
         <div className="container">
-            <div className="pagetitle">
+            {/* <div className="pagetitle">
                 <p>Top Videos</p>
-            </div>
+            </div> */}
             <div className="sortselect">
                 <select className="form-select w-50"
                     value={sort}

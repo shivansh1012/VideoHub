@@ -47,25 +47,23 @@ export default function VideoMatrixGrid(props) {
         )
     }
     return (
-        <div className="container">
             <div className="row g-3">
                 {
                     props.videoList.map((video, i) => {
                         if (props.lastVideoElementRef && props.videoList.length === i + 1)
                             return (
-                                <div className="col-12 col-sm-6 col-md-6 col-lg-3 outercardarea" key={video._id} ref={props.lastVideoElementRef}>
+                                <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={video._id} ref={props.lastVideoElementRef}>
                                     {Cards(video)}
                                 </div>
                             )
                         else
                             return (
-                                <div className="col-12 col-sm-6 col-md-6 col-lg-3 outercardarea" key={video._id}>
+                                <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={video._id}>
                                     {Cards(video)}
                                 </div>
                             )
                     })
                 }
             </div>
-        </div>
     );
 }

@@ -25,16 +25,28 @@ const profilepicStorage = multer.diskStorage({
   }
 })
 
-const uploadProfilePic = multer({ storage: profilepicStorage }).single('uploadedFile')
+const multerFilter = (req, file, cb) => {
+  if (["png", "jpg", "jpeg"].includes(file.mimetype.split("/")[1])) {
+    cb(null, true);
+  } else {
+    cb("Not a Valid Photo File!!", false);
+  }
+};
+
+const uploadProfilePic = multer({
+  storage: profilepicStorage,
+  fileFilter: multerFilter
+}).single('uploadedFile')
 
 router.post('/profilepic', ProfileAuth, async (req, res) => {
-  uploadProfilePic(req, res, async err => {
-    if (err) {
-      return res.json({ success: false, err })
+  uploadProfilePic(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.json({ success: false, message: "A Multer error occurred when uploading.", err }).status(400)
+    } else if (err) {
+      return res.json({ success: false, message: "An unknown error occurred when uploading.", err }).status(400)
     }
     const { id } = req.userInfo
     const newPath = res.req.file.destination.substring(9) + '/' + res.req.file.filename
-    // console.log(res.req)
     await Profile.findByIdAndUpdate(id, { profilepicURL: newPath })
     return res.json({ success: true, filePath: res.req.file.path, fileName: res.req.file.filename })
   })

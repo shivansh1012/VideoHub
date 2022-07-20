@@ -26,7 +26,7 @@ export default function NavBar(props) {
                 {/* <Link className="navbar-link my-3" to="/">
                     <img className="logo" src={`${SourceBaseUrl}/static/defaults/VideoHubTV3.png`} alt="VideoHub" />
                 </Link> */}
-                <Link className="navbar-link my-3" style={{ "fontSize": "50px" }} to="/">Video<span className="logospan">Hub</span></Link>
+                <Link className="navbar-link my-3" style={{ "fontSize": "50px" }} to="/">Local<span className="logospan">host</span></Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     More
                 </button>
