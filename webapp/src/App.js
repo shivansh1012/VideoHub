@@ -31,9 +31,9 @@ import PictureUpload from './UserComponents/PictureUpload/PictureUpload.jsx'
 import VideoUpload from './UserComponents/VideoUpload/VideoUpload.jsx'
 import Profile from './UserComponents/Profile/Profile.jsx'
 import ProfileSettings from './UserComponents/ProfileSettings/ProfileSettings'
-import PhotoList from './Views/PhotoList/PhotoList.jsx'
 
 import axios from 'axios'
+import PhotoList from './Views/PhotoList/PhotoList'
 axios.defaults.withCredentials = true
 
 function App () {
@@ -47,8 +47,8 @@ function App () {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/video/list' element={<VideoList />} />
+        <Route path='/profile/list' element={<ProfileList />} />
         <Route path='/photo/list' element={<PhotoList />} />
-        <Route path='/model/list' element={<ProfileList />} />
         <Route path='/video/:id' element={<Watch />} />
         <Route path='/photo/:id' element={<View />} />
         <Route path='/watch/:id' element={<VideoInfo />} />

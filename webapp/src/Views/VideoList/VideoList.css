@@ -19,3 +19,21 @@ td {
 tr:nth-child(even) {
   background-color: #bdbdbd;
 }
+
+.view-slider {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+.toggle-view {
+  position: relative;
+  display: inline-block;
+  height: 34px;
+  width: 60px;
+  margin: 0px 10px;
+}
+
+.toggle-view input {
+  display: none;
+}

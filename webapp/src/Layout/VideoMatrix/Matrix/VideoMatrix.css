@@ -1,0 +1,45 @@
+.video-matrix {
+  /* max-width: 1200px; */
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+}
+
+.video-card {
+  background-color: transparent !important;
+  /* color: white; */
+  /* padding: 1rem;
+  height: 4rem; */
+  width: inherit;
+  height: 250px;
+  display: grid;
+  word-break: break-all;
+}
+
+.video-card img {
+  object-fit: cover;
+  max-width: 100%;
+  height: 200px;
+  /* background-color: rgb(146, 146, 146); */
+  border-radius: 20px !important;
+}
+
+.video-card header {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.video-card footer {
+  padding: 5px;
+  color: black;
+}
+
+.video-card footer div {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -41,16 +41,13 @@ export default function NavBar(props) {
                             <Link className="nav-link active" to="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link active" to="/photo/grid">Photos</Link>
+                            <Link className="nav-link active" to="/photo/list">Photos</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link active" to="/video/list">VideoList</Link>
+                            <Link className="nav-link active" to="/video/list">Videos</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link active" to="/photo/list">PhotoList</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link active" to="/model/list">Profiles</Link>
+                            <Link className="nav-link active" to="/profile/list">Profiles</Link>
                         </li>
                         {(userLoggedIn === false || userLoggedIn === undefined) && (
                             <>

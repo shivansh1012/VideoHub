@@ -140,7 +140,7 @@ class Photo:
 class MongoDBConnection:
     def __init__(self) -> None:
         client = pymongo.MongoClient("mongodb://localhost:27017/")
-        database = client["VideoHub3"]
+        database = client["VideoHub4"]
         self.VideoCol = database["Video"]
         self.PhotoCol = database["Photo"]
         self.PlaylistCol = database["Playlist"]
@@ -300,7 +300,7 @@ class VideoHubReader:
                 dir = dirpath
                 path = os.path.join(dirpath, filename)
                 ext = filename.split(".")[-1]
-                if ext in ["mp4", "mkv", "mov"] and docChoice in [1, 3]:
+                if ext in ["mp4"] and docChoice in [1, 3]:
                     newVideo = Video(filename=filename,
                                      dir=dir, path=path, ext=ext)
                     newVideo.readFileData()
