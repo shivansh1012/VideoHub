@@ -5,8 +5,9 @@ import {
   Route
 } from 'react-router-dom'
 
-import './CSSProperties/Spinner.css'
-import './CSSProperties/Container.css'
+import './CSSProperties/spinner.css'
+import './CSSProperties/container.css'
+import './CSSProperties/commons.css'
 import './CSSProperties/Animate/animate-bottom.css'
 import './CSSProperties/Animate/animate-left.css'
 import './CSSProperties/Animate/animate-right.css'

@@ -48,7 +48,7 @@ class Video:
         self.tags = []
         self.uploadDate = 0
 
-    def readFileData(self):
+    def analyzeFileName(self):
         filename = "".join(self.video["filename"].split(".")[0:-1])
         split_filename = filename.split("-")
         self.uploader = None
@@ -60,17 +60,21 @@ class Video:
             split_casters = split_filename[1].split(",")
             self.uploader = MongoDBConnection().getProfileID(
                 name=split_casters[0].strip(), accountType="model")
+            self.tags.append(split_casters[0].strip())
             for i in range(1, len(split_casters)):
                 self.features.append(MongoDBConnection().getProfileID(
                     name=split_casters[i].strip(), accountType="model"))
+                self.tags.append(split_casters[i].strip())
         else:
             self.title = "".join(split_filename[0:-2]).strip()
             self.uploader = MongoDBConnection().getProfileID(
-                name=split_filename[-1], accountType="channel")
+                name=split_filename[-1].strip(), accountType="channel")
+            self.tags.append(split_filename[-1].strip())
             split_casters = split_filename[-2].split(",")
             for i in range(0, len(split_casters)):
                 self.features.append(MongoDBConnection().getProfileID(
                     name=split_casters[i].strip(), accountType="model"))
+                self.tags.append(split_casters[i].strip())
         self.uploadDate = int(
             os.path.getctime(os.path.join(
                 self.video["dir"], self.video["filename"])) * 1000
@@ -302,7 +306,7 @@ class VideoHubReader:
                 if ext in ["mp4"] and docChoice in [1, 3]:
                     newVideo = Video(filename=filename,
                                      dir=dir, path=path, ext=ext)
-                    newVideo.readFileData()
+                    newVideo.analyzeFileName()
                     newVideo.readVideoProperties()
                     videoID = self.mongoInstance.saveVideo(videoData=newVideo)
 

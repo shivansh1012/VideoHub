@@ -37,7 +37,6 @@ export default function VideoUpload() {
     let formData = new FormData(form);
     await axios.post(`${ApiBaseUrl}/upload/video/file`, formData)
       .then(res => {
-        console.log(res)
         if (res.data.success) {
           setVideoData({
             ...videoData,
@@ -74,7 +73,7 @@ export default function VideoUpload() {
 
   useEffect(() => {
     async function fetchData() {
-      await axios.get(`${ApiBaseUrl}/meta/list/profiles?limit=20&offset=0&accountType=model`).then((res) => {
+      await axios.get(`${ApiBaseUrl}/meta/list/profiles?account=.`).then((res) => {
         let options = []
         for (let i = 0; i < res.data.profileList.length; i++) {
           options.push({ value: res.data.profileList[i]._id, label: res.data.profileList[i].name })
@@ -119,9 +118,9 @@ export default function VideoUpload() {
             <label>Models</label>
             <Select
               isMulti
-              name="colors"
+              name="models"
               options={modelList}
-              className="basic-multi-select modelselect"
+              className="basic-multi-select"
               classNamePrefix="select"
               onChange={(newValue, actionMeta) => {
                 console.log(newValue)

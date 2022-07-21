@@ -58,7 +58,7 @@ export default function NavBar(props) {
                                     <Link className="nav-link active" to="/about">About</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link active" to="/profile/signin">SignIn</Link>
+                                    <Link className="nav-link active" to="/my/signin">SignIn</Link>
                                 </li>
                             </>
                         )}
