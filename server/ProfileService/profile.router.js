@@ -116,7 +116,20 @@ router.get('/userinfo', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
     const userInfo = await Profile.findById(id)
-      .populate({ path: 'videoList likedvideos dislikedvideos watchlater', populate: { path: 'model channel', select: 'name' } })
+      .populate({
+        path: 'video.uploads video.features video.watchlater video.likes video.dislikes',
+        select: 'title thumbnail video uploader',
+        populate: {
+          path: 'uploader'
+        }
+      })
+      .populate({
+        path: 'photo.uploads photo.features photo.likes photo.dislikes',
+        select: 'title thumbnail video uploader',
+        populate: {
+          path: 'uploader'
+        }
+      })
       .populate({ path: 'playlist', select: 'name byUser playlistpicURL', populate: { path: 'byUser', select: 'name' } })
     res.status(200).json({ userInfo })
   } catch (e) {
@@ -132,13 +145,13 @@ router.get('/userstatus', ProfileAuth, async (req, res) => {
     const userInfo = await Profile.findById(id).populate({ path: 'playlist', select: 'name videoList' })
     let likedStatus
     let watchlaterStatus = false
-    if (userInfo.likedvideos.includes(mongoose.Types.ObjectId(videoid))) {
+    if (userInfo.video.likes.includes(mongoose.Types.ObjectId(videoid))) {
       likedStatus = true
-    } else if (userInfo.dislikedvideos.includes(mongoose.Types.ObjectId(videoid))) {
+    } else if (userInfo.video.dislikes.includes(mongoose.Types.ObjectId(videoid))) {
       likedStatus = false
     }
 
-    if (userInfo.watchlater.includes(mongoose.Types.ObjectId(videoid))) {
+    if (userInfo.video.watchlater.includes(mongoose.Types.ObjectId(videoid))) {
       watchlaterStatus = true
     }
     const playlist = []
@@ -207,28 +220,28 @@ router.post('/managelike', ProfileAuth, async (req, res) => {
     const { videoid, action } = req.body
     let likedStatus
     if (action === 'like') {
-      await Profile.findByIdAndUpdate(id, { $push: { likedvideos: videoid } })
-      await Video.findByIdAndUpdate(videoid, { $push: { likedusers: id } })
+      await Profile.findByIdAndUpdate(id, { $push: { "video.likes": videoid } })
+      await Video.findByIdAndUpdate(videoid, { $push: { likes: id } })
       likedStatus = true
     } else if (action === 'dislike') {
-      await Profile.findByIdAndUpdate(id, { $push: { dislikedvideos: videoid } })
-      await Video.findByIdAndUpdate(videoid, { $push: { dislikedusers: id } })
+      await Profile.findByIdAndUpdate(id, { $push: { "video.dislikes": videoid } })
+      await Video.findByIdAndUpdate(videoid, { $push: { dislikes: id } })
       likedStatus = false
     } else if (action === 'unlike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid } })
-      await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id } })
+      await Profile.findByIdAndUpdate(id, { $pull: { "video.likes": videoid } })
+      await Video.findByIdAndUpdate(videoid, { $pull: { likes: id } })
       likedStatus = undefined
     } else if (action === 'undislike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid } })
-      await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id } })
+      await Profile.findByIdAndUpdate(id, { $pull: { "video.dislikes": videoid } })
+      await Video.findByIdAndUpdate(videoid, { $pull: { dislikes: id } })
       likedStatus = undefined
     } else if (action === 'liketodislike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { likedvideos: videoid }, $push: { dislikedvideos: videoid } })
-      await Video.findByIdAndUpdate(videoid, { $pull: { likedusers: id }, $push: { dislikedusers: id } })
+      await Profile.findByIdAndUpdate(id, { $pull: { "video.likes": videoid }, $push: { "video.dislikes": videoid } })
+      await Video.findByIdAndUpdate(videoid, { $pull: { likes: id }, $push: { dislikes: id } })
       likedStatus = false
     } else if (action === 'disliketolike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { dislikedvideos: videoid }, $push: { likedvideos: videoid } })
-      await Video.findByIdAndUpdate(videoid, { $pull: { dislikedusers: id }, $push: { likedusers: id } })
+      await Profile.findByIdAndUpdate(id, { $pull: { "video.dislikes": videoid }, $push: { "video.likes": videoid } })
+      await Video.findByIdAndUpdate(videoid, { $pull: { dislikes: id }, $push: { likes: id } })
       likedStatus = true
     }
     res.status(200).json({ likedStatus })
@@ -244,10 +257,10 @@ router.post('/managewatchlater', ProfileAuth, async (req, res) => {
     const { videoid, action } = req.body
     let updatedstate
     if (action === 'add') {
-      await Profile.findByIdAndUpdate(id, { $push: { watchlater: videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { "video.watchlater": videoid } })
       updatedstate = true
     } else {
-      await Profile.findByIdAndUpdate(id, { $pull: { watchlater: videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { "video.watchlater": videoid } })
       updatedstate = false
     }
     res.status(200).json({ updatedstate })
@@ -260,7 +273,12 @@ router.post('/managewatchlater', ProfileAuth, async (req, res) => {
 router.get('/myvideos', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
-    const videoList = (await Profile.findById(id).populate({ path: 'video', populate: { path: 'model channel', select: 'name' } })).videoList
+    const videoList = (await Profile.findById(id).populate({
+      path: 'video.uploads',
+      populate: {
+        path: 'uploader features'
+      }
+    })).video.uploads
     res.status(200).json({ videoList })
   } catch (e) {
     console.error(e)

@@ -1,7 +1,7 @@
 .video-card {
   background-color: transparent !important;
   width: inherit;
-  height: 250px;
+  height: 210px;
   display: grid;
   word-break: break-all;
   /* align-content: space-around; */

@@ -66,22 +66,19 @@ export default function NavBar(props) {
                             <li className="nav-item dropdown">
                                 <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown" style={{ cursor: "pointer" }}>Hello, {userName}</div>
                                 <div className="custom-dropdown-menu dropdown-menu">
-                                    <Link to="/profile">
+                                    <Link to="/my">
                                         <div className="dropdown-item">Profile</div>
                                     </Link>
                                     <Link to="/settings">
                                         <div className="dropdown-item">Settings</div>
                                     </Link>
-                                    <Link to="/profile/myvideos">
+                                    <Link to="/my/videos">
                                         <div className="dropdown-item">My Videos</div>
                                     </Link>
-                                    <Link to="/profile/videolist">
-                                        <div className="dropdown-item">My Video List</div>
-                                    </Link>
-                                    <Link to="/profile/upload/video">
+                                    <Link to="/my/upload/video">
                                         <div className="dropdown-item">Upload Video</div>
                                     </Link>
-                                    <Link to="/profile/upload/picture">
+                                    <Link to="/my/upload/picture">
                                         <div className="dropdown-item">Upload Picture</div>
                                     </Link>
                                     <Link to="/about">
