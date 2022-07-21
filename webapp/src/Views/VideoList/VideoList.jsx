@@ -78,11 +78,11 @@ export default function VideoList() {
             </div>
             {
                 view === true &&
-                    <VideoMatrix lastVideoElementRef={lastVideoElementRef} videoList={videoList} />
+                    <VideoMatrix animation="animate-right" lastVideoElementRef={lastVideoElementRef} videoList={videoList} />
             }
             {
                 view === false &&
-                    <VideoTable lastVideoElementRef={lastVideoElementRef} videoList={videoList} />
+                    <VideoTable animation="animate-left" lastVideoElementRef={lastVideoElementRef} videoList={videoList} />
             }
             <div>{isLoading && !error && <div className="spinner"></div>}</div>
             <div>{error && "Error..."}</div>

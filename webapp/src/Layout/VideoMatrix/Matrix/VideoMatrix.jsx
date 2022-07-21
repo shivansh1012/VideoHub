@@ -4,7 +4,7 @@ import "./VideoMatrix.css"
 export default function VideoMatrix(props) {
     return (
         <div className="container">
-            <div className="animate-bottom video-matrix">
+            <div className={`video-matrix ${props.animation}`}>
                 {
                     props.videoList.map((video, index) => {
                         if (props.videoList.length === index + 1) {

@@ -2,7 +2,7 @@ import VideoRow from "./VideoRow"
 
 export default function VideoTable(props) {
     return (
-        <div className="customcontainer" style={{ overflowX: "auto" }}>
+        <div className={`customcontainer ${props.animation}`} style={{ overflowX: "auto" }}>
             <table>
                 <colgroup>
                     <col style={{ width: "5%" }} />
@@ -20,9 +20,9 @@ export default function VideoTable(props) {
                         <th>Uploaded By</th>
                         <th>FileName</th>
                         <th>Featuring</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Type</th>
+                        <th>Upload Date</th>
+                        <th>Upload Time</th>
+                        <th>Duration</th>
                         <th>Action</th>
                     </tr>
                 </thead>

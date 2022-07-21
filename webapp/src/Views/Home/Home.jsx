@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import useFetchForVideo from "../../Service/useFetch/useFetchForVideo.jsx";
 import VideoMatrixGrid from "../../Layout/VideoMatrix/VideoMatrixGrid.jsx";
 import "./Home.css"
+import VideoMatrix from "../../Layout/VideoMatrix/Matrix/VideoMatrix.jsx";
 
 export default function Home() {
     const [offset, setOffset] = useState(0);
@@ -44,7 +45,8 @@ export default function Home() {
                 </select>
             </div>
             <div className="animate-bottom">
-                <VideoMatrixGrid videoList={videoList} lastVideoElementRef={lastVideoElementRef} />
+                {/* <VideoMatrixGrid videoList={videoList} lastVideoElementRef={lastVideoElementRef} /> */}
+                <VideoMatrix animation="animate-bottom" lastVideoElementRef={lastVideoElementRef} videoList={videoList} />
             </div>
             <div>{isLoading && !error && <div className="spinner"></div>}</div>
             <div>{error && "Error..."}</div>

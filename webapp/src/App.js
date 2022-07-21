@@ -7,6 +7,9 @@ import {
 
 import './CSSProperties/Spinner.css'
 import './CSSProperties/Container.css'
+import './CSSProperties/Animate/animate-bottom.css'
+import './CSSProperties/Animate/animate-left.css'
+import './CSSProperties/Animate/animate-right.css'
 
 import NavBar from './Layout/NavBar/NavBar.jsx'
 
