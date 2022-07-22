@@ -31,7 +31,7 @@ in webapp and server folders.
 
 ### Executing program
 
-* To start client, Go into .\webapp\ directory and execute
+* To start web application, Go into .\webapp\ directory and execute
   ```bash
   npm start
   ```
