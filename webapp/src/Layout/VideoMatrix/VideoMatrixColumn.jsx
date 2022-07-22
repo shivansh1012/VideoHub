@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SourceBaseUrl } from "../../config.js";
+import { ApiBaseUrl } from "../../config.js";
 import "./VideoMatrixColumn.css"
 
 export default function VideoMatrixColumn(props) {
@@ -28,7 +28,7 @@ export default function VideoMatrixColumn(props) {
                 <div className="videocardthumbnailcolumn">
                     <Link to={`/video/${video._id}`}>
                         <div className="videocardthumbnailimgoverlay">
-                            <img src={`${SourceBaseUrl}/static/uploads/thumbnails/${video.thumbnail.filename}`}
+                            <img src={`${ApiBaseUrl}/static/uploads/thumbnails/${video.thumbnail.filename}`}
                                 className="videocardthumbnailimg" alt={video.title} />
                         </div>
                         <p className="videocardthumbnaildurationoverlay">{fancyTimeFormat(video.video.duration)}</p>

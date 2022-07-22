@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Select from 'react-select'
-import { SourceBaseUrl, ApiBaseUrl } from '../../config.js'
+import { ApiBaseUrl } from '../../config.js'
 import "./VideoUpload.css"
 
 export default function VideoUpload() {
@@ -89,7 +89,7 @@ export default function VideoUpload() {
       <form className="videouploadform" id="videouploadform" encType="multipart/form-data" onSubmit={saveVideo}>
         <div className="uploadcontainer p-5">
           <div className="thumbnail py-3">
-            <img src={`${SourceBaseUrl}/static/${videoData.thumbnail.path}`} alt="haha" />
+            <img src={`${ApiBaseUrl}/static/${videoData.thumbnail.path}`} alt="haha" />
           </div>
           <div className="video py-3">
             {isLoading && <div className="simple-spinner"></div>}

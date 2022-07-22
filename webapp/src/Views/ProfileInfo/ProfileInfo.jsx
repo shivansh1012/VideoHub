@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom'
-import { SourceBaseUrl, ApiBaseUrl } from '../../config.js';
+import { ApiBaseUrl } from '../../config.js';
 import VideoMatrixGrid from "../../Layout/VideoMatrix/VideoMatrixGrid.jsx";
 
 export default function ProfileInfo() {
@@ -23,7 +23,7 @@ export default function ProfileInfo() {
             <div className="d-flex flex-row">
                 {
                     loading ? <div className="simple-spinner"></div> :
-                        <img src={`${SourceBaseUrl}/static/${profileData.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={profileData.name} />
+                        <img src={`${ApiBaseUrl}/static/${profileData.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={profileData.name} />
                 }
                 <div className="mx-4">
                     {

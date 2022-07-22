@@ -16,9 +16,8 @@ To index pre stored folder of videos, PreStoredVideoAutomate.py file is used. In
 This will **Generate Thumbnails** and **Save file meta data in MongoDB**.  
 
 Some of the ways the files are read are
-* < FileName > - < Model/Cast > - < Channel/SeasonName >.< FileExtension >
-* < FileName > - < Channel/SeasonName >.< FileExtension >
-* < FileName > - < Model/Cast >.< FileExtension >
+* < FileName > - < Features > - < Uploader >.< FileExtension >
+* < FileName > - < Uploader >.< FileExtension >
 * < FileName >.< FileExtension >
 
 ### Installing Required Dependencies for Web Application

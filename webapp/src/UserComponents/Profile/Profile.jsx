@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import UserAuthContext from '../UserAuthContext.js'
-import { SourceBaseUrl, ApiBaseUrl } from '../../config.js'
+import { ApiBaseUrl } from '../../config.js'
 import VideoMatrixGrid from '../../Layout/VideoMatrix/VideoMatrixGrid.jsx'
 import PlaylistMatrixGrid from '../../Layout/VideoMatrix/PlaylistMatrixGrid.jsx'
 import { Link } from 'react-router-dom'
@@ -33,7 +33,7 @@ export default function Profile() {
           <div>
             {
               isLoading ? <div className="simple-spinner"></div> :
-                <img src={`${SourceBaseUrl}/static/${userInfo.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={userName} />
+                <img src={`${ApiBaseUrl}/static/${userInfo.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={userName} />
             }
           </div>
           <div>
