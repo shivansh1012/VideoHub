@@ -33,11 +33,11 @@ in webapp and server folders.
 
 * To start client, Go into .\webapp\ directory and execute
   ```bash
-  npm run client
-  ```
-* To start server, Go  in .\server\ directory and execute
-  ```bash
   npm start
+  ```
+* To start server, Go in .\server\ directory and execute
+  ```bash
+  npm run server
   ```
 * Or Simply Run the Launch.bat file directly to start the application (Both).
 
