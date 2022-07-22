@@ -26,7 +26,7 @@ export default function NavBar(props) {
                 {/* <Link className="navbar-link my-3" to="/">
                     <img className="logo" src={`${SourceBaseUrl}/static/defaults/VideoHubTV3.png`} alt="VideoHub" />
                 </Link> */}
-                <Link className="navbar-link my-3" style={{ "fontSize": "50px" }} to="/">Video<span className="logospan">Hub</span></Link>
+                <Link className="navbar-link my-3" style={{ "fontSize": "50px" }} to="/">Local<span className="logospan">host</span></Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     More
                 </button>
@@ -41,13 +41,13 @@ export default function NavBar(props) {
                             <Link className="nav-link active" to="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link active" to="/video/list">VideoList</Link>
+                            <Link className="nav-link active" to="/photo/list">Photos</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link active" to="/model/list">ModelList</Link>
+                            <Link className="nav-link active" to="/video/list">Videos</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link active" to="/channel/list">ChannelList</Link>
+                            <Link className="nav-link active" to="/profile/list">Profiles</Link>
                         </li>
                         {(userLoggedIn === false || userLoggedIn === undefined) && (
                             <>
@@ -58,7 +58,7 @@ export default function NavBar(props) {
                                     <Link className="nav-link active" to="/about">About</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link active" to="/profile/signin">SignIn</Link>
+                                    <Link className="nav-link active" to="/my/signin">SignIn</Link>
                                 </li>
                             </>
                         )}
@@ -66,22 +66,19 @@ export default function NavBar(props) {
                             <li className="nav-item dropdown">
                                 <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown" style={{ cursor: "pointer" }}>Hello, {userName}</div>
                                 <div className="custom-dropdown-menu dropdown-menu">
-                                    <Link to="/profile">
+                                    <Link to="/my">
                                         <div className="dropdown-item">Profile</div>
                                     </Link>
                                     <Link to="/settings">
                                         <div className="dropdown-item">Settings</div>
                                     </Link>
-                                    <Link to="/profile/myvideos">
+                                    <Link to="/my/videos">
                                         <div className="dropdown-item">My Videos</div>
                                     </Link>
-                                    <Link to="/profile/videolist">
-                                        <div className="dropdown-item">My Video List</div>
-                                    </Link>
-                                    <Link to="/profile/upload/video">
+                                    <Link to="/my/upload/video">
                                         <div className="dropdown-item">Upload Video</div>
                                     </Link>
-                                    <Link to="/profile/upload/picture">
+                                    <Link to="/my/upload/picture">
                                         <div className="dropdown-item">Upload Picture</div>
                                     </Link>
                                     <Link to="/about">

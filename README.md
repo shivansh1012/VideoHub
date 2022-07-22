@@ -5,23 +5,22 @@ VideoHub - watch videos, get recommendations, search videos and share videos (up
 ExpressJS - Server  
 ReactJS   - Frontend  
 MongoDB   - Database  
-Python    - Automated Code to create thumbnails and index pre-existing videos meta data into database  
+Python    - Automated Code to create thumbnails and index pre-existing videos' meta data into database  
 
 ## Getting Started
 
-### File Formats for Automation
+### File Formats for Video Indexing Automation
 
-To index folder of videos LoadDataAndCreateThumbnail.py file is used. Install the requirements and run the python file. This will scan all the files in "./Files" directory.
+To index pre stored folder of videos, PreStoredVideoAutomate.py file is used. Install the requirements and run the python file. This will scan all the files in specified directory.
 
-This will **Generate Thumbnails** and **Save file Data in MongoDB**.  
+This will **Generate Thumbnails** and **Save file meta data in MongoDB**.  
 
 Some of the ways the files are read are
-* < FileName > - < Model/Cast > - < Channel/SeasonName >.< FileExtension >
-* < FileName > - < Channel/SeasonName >.< FileExtension >
-* < FileName > - < Model/Cast >.< FileExtension >
+* < FileName > - < Features > - < Uploader >.< FileExtension >
+* < FileName > - < Uploader >.< FileExtension >
 * < FileName >.< FileExtension >
 
-### Installing Required Dependencies for Application
+### Installing Required Dependencies for Web Application
 
 * After cloning the repository run command
   ```bash
@@ -40,7 +39,7 @@ in webapp and server folders.
   ```bash
   npm start
   ```
-* Or Run the Launch.bat file directly to start the application (Both).
+* Or Simply Run the Launch.bat file directly to start the application (Both).
 
 ## Views
 

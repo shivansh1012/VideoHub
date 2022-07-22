@@ -1,11 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import UserAuthContext from '../UserAuthContext.js'
-import { SourceBaseUrl, ApiBaseUrl } from '../../config.js'
+import { ApiBaseUrl } from '../../config.js'
 import VideoMatrixGrid from '../../Layout/VideoMatrix/VideoMatrixGrid.jsx'
 import PlaylistMatrixGrid from '../../Layout/VideoMatrix/PlaylistMatrixGrid.jsx'
 import { Link } from 'react-router-dom'
 import "./Profile.css"
+import VideoMatrix from '../../Layout/VideoMatrix/Matrix/VideoMatrix.jsx'
+import PhotoMatrix from '../../Layout/PhotoMatrix/Matrix/PhotoMatrix.jsx'
 
 export default function Profile() {
   const { userName, userEmail } = useContext(UserAuthContext)
@@ -31,7 +33,7 @@ export default function Profile() {
           <div>
             {
               isLoading ? <div className="simple-spinner"></div> :
-                <img src={`${SourceBaseUrl}/static/${userInfo.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={userName} />
+                <img src={`${ApiBaseUrl}/static/${userInfo.profilepicURL}`} style={{ maxWidth: "250px", maxHeight: "250px", "borderRadius": "20px" }} alt={userName} />
             }
           </div>
           <div>
@@ -48,8 +50,44 @@ export default function Profile() {
             isLoading ? <div className="simple-spinner"></div> :
               <>
                 {
-                  userInfo.dislikedvideos.length ? <VideoMatrixGrid videoList={userInfo.videoList} /> :
-                    <p>No Uploads</p>
+                  userInfo.video.uploads.length ? <VideoMatrix videoList={userInfo.video.uploads} /> :
+                    <p>No Video Uploads</p>
+                }
+              </>
+          }
+        </div>
+        <div className="videouploadsection py-3">
+          <h3>Video Features</h3>
+          {
+            isLoading ? <div className="simple-spinner"></div> :
+              <>
+                {
+                  userInfo.video.features.length ? <VideoMatrixGrid videoList={userInfo.video.features} /> :
+                    <p>No featuring Videos</p>
+                }
+              </>
+          }
+        </div>
+        <div className="videouploadsection py-3">
+          <h3>Photo Uploads</h3>
+          {
+            isLoading ? <div className="simple-spinner"></div> :
+              <>
+                {
+                  userInfo.photo.uploads.length ? <PhotoMatrix photoList={userInfo.photo.uploads} /> :
+                    <p>No Photo Uploads</p>
+                }
+              </>
+          }
+        </div>
+        <div className="videouploadsection py-3">
+          <h3>Photo Features</h3>
+          {
+            isLoading ? <div className="simple-spinner"></div> :
+              <>
+                {
+                  userInfo.photo.features.length ? <PhotoMatrix photoList={userInfo.photo.features} /> :
+                    <p>No Photo Features</p>
                 }
               </>
           }
@@ -60,7 +98,7 @@ export default function Profile() {
             isLoading ? <div className="simple-spinner"></div> :
               <>
                 {
-                  userInfo.likedvideos.length ? <VideoMatrixGrid videoList={userInfo.likedvideos} /> :
+                  userInfo.video.likes.length ? <VideoMatrixGrid videoList={userInfo.video.likes} /> :
                     <p>No Liked Videos</p>
                 }
               </>
@@ -72,7 +110,7 @@ export default function Profile() {
             isLoading ? <div className="simple-spinner"></div> :
               <>
                 {
-                  userInfo.dislikedvideos.length ? <VideoMatrixGrid videoList={userInfo.dislikedvideos} /> :
+                  userInfo.video.dislikes.length ? <VideoMatrixGrid videoList={userInfo.video.dislikes} /> :
                     <p>No Disliked Videos</p>
                 }
               </>
@@ -84,7 +122,7 @@ export default function Profile() {
             isLoading ? <div className="simple-spinner"></div> :
               <>
                 {
-                  userInfo.watchlater.length ? <VideoMatrixGrid videoList={userInfo.watchlater} /> :
+                  userInfo.video.watchlater.length ? <VideoMatrixGrid videoList={userInfo.video.watchlater} /> :
                     <p>No Watch Laters</p>
                 }
               </>

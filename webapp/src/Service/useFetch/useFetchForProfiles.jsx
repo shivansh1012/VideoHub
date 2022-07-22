@@ -16,7 +16,7 @@ export default function useFetchForProfiles(offset, accountType) {
         setError(false);
 
         axios
-            .get(`${ApiBaseUrl}/meta/list/profiles?limit=20&offset=${offset}&accountType=${accountType}`, {
+            .get(`${ApiBaseUrl}/meta/list/profiles?limit=20&offset=${offset}&account=${accountType}`, {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {
@@ -35,5 +35,5 @@ export default function useFetchForProfiles(offset, accountType) {
         return () => cancel();
     }, [offset, accountType]);
 
-    return { isLoading, error, profileList, hasMore };
+    return { isLoading, error, profileList, hasMore, setProfileList };
 }

@@ -7,36 +7,36 @@ const VideoSchema = new mongoose.Schema({
   },
   video: {
     type: Map,
-    of: String
+    of: mongoose.Schema.Types.Mixed
   },
   thumbnail: {
     type: Map,
     of: String
   },
-  channel: {
+  uploader: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Profile',
-    default: null
+    default: ''
   },
-  model: {
+  features: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Profile',
     default: []
   },
   tags: {
     type: Array,
-    default: [String]
+    default: []
   },
   uploaddate: {
     type: Number,
     default: Date.now()
   },
-  likedusers: {
+  likes: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Profile',
     default: []
   },
-  dislikedusers: {
+  dislikes: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Profile',
     default: []

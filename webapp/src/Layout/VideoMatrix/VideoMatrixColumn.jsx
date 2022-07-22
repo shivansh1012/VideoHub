@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SourceBaseUrl } from "../../config.js";
+import { ApiBaseUrl } from "../../config.js";
 import "./VideoMatrixColumn.css"
 
 export default function VideoMatrixColumn(props) {
@@ -19,20 +19,16 @@ export default function VideoMatrixColumn(props) {
     }
 
     const Cards = (video) => {
-        let channelOrModel = ""
-        if (video.channel && video.channel != null) {
-            channelOrModel = video.channel.name
-        } else if (video.model.length !== 0) {
-            channelOrModel = video.model['0'].name
-        } else {
-            channelOrModel = ""
+        let uploader = "Unknown"
+        if (video.uploader != null) {
+            uploader = video.uploader.name
         }
         return (
             <div className="card videocardcolumn">
                 <div className="videocardthumbnailcolumn">
                     <Link to={`/video/${video._id}`}>
                         <div className="videocardthumbnailimgoverlay">
-                            <img src={`${SourceBaseUrl}/static/uploads/thumbnails/${video.thumbnail.filename}`}
+                            <img src={`${ApiBaseUrl}/static/uploads/thumbnails/${video.thumbnail.filename}`}
                                 className="videocardthumbnailimg" alt={video.title} />
                         </div>
                         <p className="videocardthumbnaildurationoverlay">{fancyTimeFormat(video.video.duration)}</p>
@@ -43,7 +39,7 @@ export default function VideoMatrixColumn(props) {
                     <p className="card-text videocardtitle" title={video.title}>
                         <Link to={`/video/${video._id}`}>{video.title}</Link>
                     </p>
-                    <p className="card-title videocardchannel" title={channelOrModel}>{channelOrModel}</p>
+                    <p className="card-title videocardchannel" title={uploader}>{uploader}</p>
                 </div>
             </div>
         )

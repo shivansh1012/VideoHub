@@ -1,4 +1,4 @@
-import { SourceBaseUrl } from "../../config.js";
+import { ApiBaseUrl } from "../../config.js";
 
 export default function PlaylistMatrixGrid(props) {
     const Cards = (playlist) => {
@@ -6,7 +6,7 @@ export default function PlaylistMatrixGrid(props) {
             <div className="card videocard">
                 <div className="videocardthumbnail">
                     <div className="videocardthumbnailimgoverlay">
-                        <img src={`${SourceBaseUrl}/static/${playlist.playlistpicURL}`}
+                        <img src={`${ApiBaseUrl}/static/${playlist.playlistpicURL}`}
                             className="videocardthumbnailimg" alt={playlist.name} />
                     </div>
                 </div>

@@ -1,0 +1,31 @@
+.animate-left {
+  position: relative;
+  -webkit-animation-name: animateleft;
+  -webkit-animation-duration: 1s;
+  animation-name: animateleft;
+  animation-duration: 1s;
+}
+
+@-webkit-keyframes animateleft {
+  from {
+    left: -100px;
+    opacity: 0;
+  }
+
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animateleft {
+  from {
+    left: -100px;
+    opacity: 0;
+  }
+
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}

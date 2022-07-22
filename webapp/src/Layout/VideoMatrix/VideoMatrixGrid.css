@@ -1,29 +1,20 @@
 .videocard {
   border: 0 !important;
   background-color: transparent !important;
+  height: 250px;
 }
 
 .videocardthumbnail {
   width: unset !important;
   position: relative;
+  align-items: center;
 }
 
 .videocardthumbnailimgoverlay {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-@media (min-width: 576px) {
-  .videocardthumbnailimgoverlay {
-    max-height: 200px;
-  }
-}
-
-@media (max-width: 576px) {
-  .videocardthumbnailimgoverlay {
-    max-height: 300px;
-  }
+  max-height: 180px;
 }
 
 .videocardthumbnailimg {

@@ -29,7 +29,7 @@ export default function VideoInfo() {
       response.json()).then((json) => {
         console.log(json)
         setVideoData(json.videoData);
-        setMoreVideos(json.moreVideos)
+        setMoreVideos([])
       })
     setLoading(false);
   }, [id])

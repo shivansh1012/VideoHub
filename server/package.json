@@ -1,6 +1,6 @@
 {
   "name": "videohubserver",
-  "version": "3.4.0",
+  "version": "4.2.0",
   "description": "watch videos, get recommendations, search videos and share videos (upload) in the community.",
   "main": "index.js",
   "scripts": {
