@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function VideoRow(video,index) {
-    let uploader = "Unknown"
-    if (video['uploader'] && video.uploader !== null) uploader = video.uploader.name
-
+export default function VideoRow(video, index) {
     function fancyTimeFormat(duration) {
         var hrs = ~~(duration / 3600);
         var mins = ~~((duration % 3600) / 60);
@@ -20,10 +17,10 @@ export default function VideoRow(video,index) {
     return (
         <>
             <td>{index + 1}</td>
-            <td>{uploader}</td>
+            <td><Link to={`/profile/${video.uploader._id}`}>{video.uploader.name}</Link></td>
             <td>{video.title}</td>
             <td>{video.features.map((features, i) => {
-                return <p key={i} style={{ margin: "0" }}>{features.name}</p>
+                return <p key={i} style={{ margin: "0" }}><Link to={`/profile/${features._id}`}>{features.name}</Link></p>
             })}</td>
             <td>{(new Date(video.uploaddate).toDateString())}</td>
             <td>{(new Date(video.uploaddate).toLocaleTimeString())}</td>

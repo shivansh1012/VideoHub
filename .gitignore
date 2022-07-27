@@ -2,6 +2,8 @@ UselessStuff
 Files
 uploads
 
+__pycache__
+
 # dependencies
 node_modules
 .pnp

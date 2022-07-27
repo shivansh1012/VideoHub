@@ -127,12 +127,27 @@ router.get('/search', async (req, res) => {
     }
 
     const queryOptions = {
-      $and: [{
-        title: {
-          $regex: query,
-          $options: 'i'
+      $or: [
+        // {
+        //   tags: {
+        //     $in: [query]
+        //   }
+        // },
+        // {
+        //   title: {
+        //     $regex: query,
+        //     $options: 'i'
+        //   }
+        // },
+        {
+          tags: {
+            $elemMatch: {
+              $regex: query,
+              $options: 'i'
+            }
+          }
         }
-      }]
+      ]
     }
 
     const resultVideoList = await Video.find(queryOptions).populate('uploader', 'name').populate('features', 'name')
