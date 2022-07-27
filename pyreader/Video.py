@@ -30,8 +30,8 @@ class Video:
 
         self.title = ""
         self.uploader = None
-        self.features = list[int]
-        self.tags = set[int]
+        self.features: list[int] = []
+        self.tags: set[int] = {}
         self.uploadDate = 0
 
     def analyzeFileName(self):

@@ -13,10 +13,10 @@ class Photo:
         self.dir = dir
         self.path = path
         self.ext = ext
-        self.dimension = list[int]
-        self.tags = set[str]
+        self.dimension: list[int] = []
+        self.tags: set[str] = {}
         self.uploader = ""
-        self.features = list[int]
+        self.features: list[int] = []
         self.uploaddate = int(
             os.path.getctime(os.path.join(self.dir, self.filename)) * 1000
         )
