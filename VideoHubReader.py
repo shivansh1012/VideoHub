@@ -89,7 +89,7 @@ class VideoHubReader:
                         self.mongoInstance.updateList_in_Profile(
                             profileID=newVideo.uploader,
                             listname="video.uploads",
-                            itemID=videoID
+                            itemID=videoID,
                         )
                     for feature in newVideo.features:
                         self.mongoInstance.updateList_in_Profile(
@@ -120,7 +120,7 @@ class VideoHubReader:
                         self.mongoInstance.updateList_in_Profile(
                             profileID=newPhoto.uploader,
                             listname="photo.uploads",
-                            itemID=photoID
+                            itemID=photoID,
                         )
                     for feature in newPhoto.features:
                         self.mongoInstance.updateList_in_Profile(

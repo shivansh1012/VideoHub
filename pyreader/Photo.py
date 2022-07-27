@@ -14,7 +14,7 @@ class Photo:
         self.path = path
         self.ext = ext
         self.dimension: list[int] = []
-        self.tags: set[str] = {}
+        self.tags: set[str] = set()
         self.uploader = ""
         self.features: list[int] = []
         self.uploaddate = int(
@@ -48,7 +48,7 @@ class Photo:
             )
 
         for name in self.title.split():
-            if(name.isalpha() and name.lower() not in [
+            if name.isalpha() and name.lower() not in [
                 "a",
                 "an",
                 "at",
@@ -76,6 +76,6 @@ class Photo:
                 "when",
                 "what",
                 "where",
-                "whose"
-            ]):
+                "whose",
+            ]:
                 self.tags.add(name)

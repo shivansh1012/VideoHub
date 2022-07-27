@@ -31,7 +31,7 @@ class Video:
         self.title = ""
         self.uploader = None
         self.features: list[int] = []
-        self.tags: set[int] = {}
+        self.tags: set[int] = set()
         self.uploadDate = 0
 
     def analyzeFileName(self):
@@ -59,14 +59,14 @@ class Video:
                 name=split_filename[-1].strip(), accountType="channel"
             )
             self.tags.add(split_filename[-1].strip())
-            split_casters = split_filename[-2].split(",")
-            for i in range(0, len(split_casters)):
+            mid_split_casters = split_filename[-2].split(",")
+            for i in range(0, len(mid_split_casters)):
                 self.features.append(
                     MongoDBConnection().getProfileID(
-                        name=split_casters[i].strip(), accountType="model"
+                        name=mid_split_casters[i].strip(), accountType="model"
                     )
                 )
-                self.tags.add(split_casters[i].strip())
+                self.tags.add(mid_split_casters[i].strip())
         self.uploadDate = int(
             os.path.getctime(os.path.join(self.video["dir"], self.video["filename"]))
             * 1000
@@ -79,7 +79,7 @@ class Video:
             )
 
         for name in self.title.split():
-            if(name.isalpha() and name.lower() not in [
+            if name.isalpha() and name.lower() not in [
                 "a",
                 "an",
                 "at",
@@ -107,8 +107,8 @@ class Video:
                 "when",
                 "what",
                 "where",
-                "whose"
-            ]):
+                "whose",
+            ]:
                 self.tags.add(name)
 
     def readVideoProperties(self, base_thumbnails_dir: str):

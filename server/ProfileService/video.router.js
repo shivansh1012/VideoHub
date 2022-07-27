@@ -32,7 +32,7 @@ const multerFilter = (req, file, cb) => {
   } else {
     cb(new Error('Not a Valid video File!!'), false)
   }
-};
+}
 
 const uploadVideo = multer({
   storage: videoStorage,
@@ -110,7 +110,7 @@ router.post('/save', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
     const uploader = id
-    let features = []
+    const features = []
     for (let i = 0; i < req.body.model.length; i++) {
       features.push(req.body.model[i].value)
     }
