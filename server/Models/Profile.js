@@ -39,52 +39,52 @@ const ProfileSchema = new mongoose.Schema({
   //   type: Map,
   //   of: [{type:mongoose.Schema.Types.ObjectId, ref: Video}],
   //   default: {
-  //     "uploads" : [],
-  //     "features" : [],
-  //     "likes": [],
-  //     "dislikes": [],
-  //     "watchlater": []
+  //     'uploads' : [],
+  //     'features' : [],
+  //     'likes': [],
+  //     'dislikes': [],
+  //     'watchlater': []
   //   }
   // },
   video: {
-    "uploads": {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
-      default: [],
-    },
-    "features": {
+    uploads: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
       default: []
     },
-    "watchlater": {
+    features: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
       default: []
     },
-    "likes": {
+    watchlater: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
       default: []
     },
-    "dislikes": {
+    likes: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
       default: []
     },
+    dislikes: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: Video }],
+      default: []
+    }
   },
   photo: {
-    "uploads": {
+    uploads: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: Photo }],
       default: []
     },
-    "features": {
+    features: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: Photo }],
       default: []
     },
-    "likes": {
+    likes: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: Photo }],
       default: []
     },
-    "dislikes": {
+    dislikes: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: Photo }],
       default: []
-    },
+    }
   }
 })
 

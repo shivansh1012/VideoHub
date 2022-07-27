@@ -5,7 +5,6 @@ import random
 
 from moviepy.editor import VideoFileClip
 from PIL import Image
-
 from pyreader.MongoDBConnection import MongoDBConnection
 
 
@@ -19,7 +18,7 @@ class Video:
             "fps": "",
             "nframes": "",
             "duration": "",
-            "dimension": ""
+            "dimension": "",
         }
 
         self.thumbnail = {
@@ -31,8 +30,8 @@ class Video:
 
         self.title = ""
         self.uploader = None
-        self.features = []
-        self.tags = set()
+        self.features = list[int]
+        self.tags = set[int]
         self.uploadDate = 0
 
     def analyzeFileName(self):
@@ -44,40 +43,72 @@ class Video:
             self.title = split_filename[0].strip()
             split_casters = split_filename[1].split(",")
             self.uploader = MongoDBConnection().getProfileID(
-                name=split_casters[0].strip(), accountType="model")
+                name=split_casters[0].strip(), accountType="model"
+            )
             self.tags.add(split_casters[0].strip())
             for i in range(1, len(split_casters)):
-                self.features.append(MongoDBConnection().getProfileID(
-                    name=split_casters[i].strip(), accountType="model"))
+                self.features.append(
+                    MongoDBConnection().getProfileID(
+                        name=split_casters[i].strip(), accountType="model"
+                    )
+                )
                 self.tags.add(split_casters[i].strip())
         else:
             self.title = "".join(split_filename[0:-2]).strip()
             self.uploader = MongoDBConnection().getProfileID(
-                name=split_filename[-1].strip(), accountType="channel")
+                name=split_filename[-1].strip(), accountType="channel"
+            )
             self.tags.add(split_filename[-1].strip())
             split_casters = split_filename[-2].split(",")
             for i in range(0, len(split_casters)):
-                self.features.append(MongoDBConnection().getProfileID(
-                    name=split_casters[i].strip(), accountType="model"))
+                self.features.append(
+                    MongoDBConnection().getProfileID(
+                        name=split_casters[i].strip(), accountType="model"
+                    )
+                )
                 self.tags.add(split_casters[i].strip())
         self.uploadDate = int(
-            os.path.getctime(os.path.join(
-                self.video["dir"], self.video["filename"])) * 1000
+            os.path.getctime(os.path.join(self.video["dir"], self.video["filename"]))
+            * 1000
         )
 
-        if self.uploader == None:
+        if self.uploader is None:
             self.tags.add("Unknown")
             self.uploader = MongoDBConnection().getProfileID(
-                name="Unknown", accountType="user")
+                name="Unknown", accountType="user"
+            )
 
         for name in self.title.split():
             if(name.isalpha() and name.lower() not in [
-                "a", "an", "at", "are", "and",
-                "for", "from",
-                "i", "is", "in", "isnt", "isn't",
+                "a",
+                "an",
+                "at",
+                "are",
+                "and",
+                "for",
+                "from",
+                "i",
+                "is",
+                "in",
+                "isnt",
+                "isn't",
                 "on",
-                "to", "the", "that", "then", "than", "there", "their", "those",
-                    "was", "with", "when", "what", "where", "whose"]):
+                "of",
+                "to",
+                "the",
+                "that",
+                "then",
+                "than",
+                "there",
+                "their",
+                "those",
+                "was",
+                "with",
+                "when",
+                "what",
+                "where",
+                "whose"
+            ]):
                 self.tags.add(name)
 
     def readVideoProperties(self, base_thumbnails_dir: str):
@@ -95,12 +126,13 @@ class Video:
 
         while True:
             try:
-                # here is the time where you want to take the thumbnail at second, it should be smaller than max_duration
+                # here is the time where you want to take the thumbnail at second,
+                # it should be smaller than max_duration
                 frame_at_second = random.randint(1, max_duration)
                 # Gets a numpy array representing the RGB picture of the clip at time frame_at_second
                 frame = clip.get_frame(frame_at_second)
                 break
-            except Exception as e:
+            except Exception:
                 pass
 
         self.thumbnail["filename"] = self.title + ".jpg"
@@ -110,7 +142,6 @@ class Video:
         new_image = Image.fromarray(frame)  # convert numpy array to image
         new_image.save(new_image_filepath)  # save the image
 
-        self.thumbnail["path"] = self.thumbnail["dir"] + \
-            self.thumbnail["filename"]
+        self.thumbnail["path"] = self.thumbnail["dir"] + self.thumbnail["filename"]
 
         clip.close()

@@ -24,7 +24,7 @@ class MongoDBConnection:
             print("Failed to drop the collections")
             print("Error", e)
 
-    def createProfile(self, name, accountType) -> str:
+    def createProfile(self, name, accountType):
         try:
             profile = {}
 
@@ -42,14 +42,14 @@ class MongoDBConnection:
                 "features": [],
                 "likes": [],
                 "dislikes": [],
-                "watchlater": []
+                "watchlater": [],
             }
 
             profile["photo"] = {
                 "uploads": [],
                 "features": [],
                 "likes": [],
-                "dislikes": []
+                "dislikes": [],
             }
 
             savedProfile = self.ProfileCol.insert_one(profile)
@@ -59,7 +59,7 @@ class MongoDBConnection:
             print("Error", e)
             return None
 
-    def saveVideo(self, videoData) -> str:
+    def saveVideo(self, videoData):
         try:
             newVideo = {}
             newVideo["title"] = videoData.title
@@ -79,7 +79,7 @@ class MongoDBConnection:
             print("Error", e)
             return None
 
-    def savePhoto(self, photoData) -> str:
+    def savePhoto(self, photoData):
         try:
             newPhoto = {}
             newPhoto["title"] = photoData.title
@@ -103,7 +103,7 @@ class MongoDBConnection:
             print("Error", e)
             return None
 
-    def getProfileID(self, name: str, accountType: str) -> str:
+    def getProfileID(self, name: str, accountType: str):
         try:
             profileData = self.ProfileCol.find_one({"name": name})
             if profileData is None:

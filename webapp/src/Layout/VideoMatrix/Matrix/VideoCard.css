@@ -1,9 +1,10 @@
 .video-card {
   background-color: transparent !important;
   width: inherit;
-  height: 210px;
+  height: 220px;
   display: grid;
   word-break: break-all;
+
   /* align-content: space-around; */
 }
 
@@ -11,7 +12,7 @@
   display: flex;
   justify-content: center;
   max-width: 100%;
-  height: 160px;
+  height: 170px;
   align-items: center;
   background-color: rgb(224, 224, 224);
   border-radius: 15px;
@@ -21,10 +22,11 @@
 .video-card img {
   max-width: 100%;
   max-height: 100%;
-  /* object-fit: cover; */
-  /* height: 200px; */
-  /* background-color: rgb(146, 146, 146); */
-  /* border-radius: 20px !important; */
+
+  /* object-fit: cover;
+  height: 200px;
+  background-color: rgb(146, 146, 146);
+  border-radius: 20px !important; */
 }
 
 .video-card footer {

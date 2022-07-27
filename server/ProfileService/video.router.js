@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const multer = require('multer')
 const path = require('path')
-var fs = require('fs');
+const fs = require('fs')
 
 const Video = require('../Models/Video.js')
 const Profile = require('../Models/Profile.js')
@@ -16,8 +16,8 @@ ffmpeg.setFfprobePath(ffprobePath)
 
 const videoStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    if (!fs.existsSync("./public/uploads/videos/")) {
-      fs.mkdirSync("./public/uploads/videos/", { recursive: true });
+    if (!fs.existsSync('./public/uploads/videos/')) {
+      fs.mkdirSync('./public/uploads/videos/', { recursive: true })
     }
     cb(null, './public/uploads/videos/')
   },
@@ -27,14 +27,14 @@ const videoStorage = multer.diskStorage({
 })
 
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.split("/")[1] === "mp4") {
-    cb(null, true);
+  if (file.mimetype.split('/')[1] === 'mp4') {
+    cb(null, true)
   } else {
-    cb("Not a Valid video File!!", false);
+    cb(new Error('Not a Valid video File!!'), false)
   }
 };
 
-const uploadVideo = multer({ 
+const uploadVideo = multer({
   storage: videoStorage,
   fileFilter: multerFilter
 }).single('uploadedFile')
@@ -42,9 +42,9 @@ const uploadVideo = multer({
 router.post('/file', (req, res) => {
   uploadVideo(req, res, function (err) {
     if (err instanceof multer.MulterError) {
-      return res.json({ success: false, message: "A Multer error occurred when uploading.", err }).status(400)
+      return res.json({ success: false, message: 'A Multer error occurred when uploading.', err }).status(400)
     } else if (err) {
-      return res.json({ success: false, message: "An unknown error occurred when uploading.", err }).status(400)
+      return res.json({ success: false, message: 'An unknown error occurred when uploading.', err }).status(400)
     }
     const origpath = res.req.file.path.replace(/\\/g, '/')
     let thumbnailfilePath = ''
@@ -109,9 +109,9 @@ router.post('/file', (req, res) => {
 router.post('/save', ProfileAuth, async (req, res) => {
   try {
     const { id } = req.userInfo
-    uploader = [id]
-    features = []
-    for(let i=0; i< req.body.model.length; i++) {
+    const uploader = id
+    let features = []
+    for (let i = 0; i < req.body.model.length; i++) {
       features.push(req.body.model[i].value)
     }
     const newVideo = new Video({
@@ -138,10 +138,10 @@ router.post('/save', ProfileAuth, async (req, res) => {
 
     const newSavedVideo = await newVideo.save()
 
-    await Profile.findByIdAndUpdate(id, { $push: { "video.uploads": newSavedVideo._id } })
-    
-    for(let i=0; i< req.body.model.length; i++) {
-      await Profile.findByIdAndUpdate(req.body.model[i].value, { $push: { "video.features": newSavedVideo._id } })
+    await Profile.findByIdAndUpdate(id, { $push: { 'video.uploads': newSavedVideo._id } })
+
+    for (let i = 0; i < req.body.model.length; i++) {
+      await Profile.findByIdAndUpdate(req.body.model[i].value, { $push: { 'video.features': newSavedVideo._id } })
     }
 
     res.status(200).json({ message: 'Video Saved' })

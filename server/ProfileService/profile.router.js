@@ -220,27 +220,27 @@ router.post('/managelike', ProfileAuth, async (req, res) => {
     const { videoid, action } = req.body
     let likedStatus
     if (action === 'like') {
-      await Profile.findByIdAndUpdate(id, { $push: { "video.likes": videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { 'video.likes': videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { likes: id } })
       likedStatus = true
     } else if (action === 'dislike') {
-      await Profile.findByIdAndUpdate(id, { $push: { "video.dislikes": videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { 'video.dislikes': videoid } })
       await Video.findByIdAndUpdate(videoid, { $push: { dislikes: id } })
       likedStatus = false
     } else if (action === 'unlike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { "video.likes": videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'video.likes': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { likes: id } })
       likedStatus = undefined
     } else if (action === 'undislike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { "video.dislikes": videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'video.dislikes': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikes: id } })
       likedStatus = undefined
     } else if (action === 'liketodislike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { "video.likes": videoid }, $push: { "video.dislikes": videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'video.likes': videoid }, $push: { 'video.dislikes': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { likes: id }, $push: { dislikes: id } })
       likedStatus = false
     } else if (action === 'disliketolike') {
-      await Profile.findByIdAndUpdate(id, { $pull: { "video.dislikes": videoid }, $push: { "video.likes": videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'video.dislikes': videoid }, $push: { 'video.likes': videoid } })
       await Video.findByIdAndUpdate(videoid, { $pull: { dislikes: id }, $push: { likes: id } })
       likedStatus = true
     }
@@ -257,10 +257,10 @@ router.post('/managewatchlater', ProfileAuth, async (req, res) => {
     const { videoid, action } = req.body
     let updatedstate
     if (action === 'add') {
-      await Profile.findByIdAndUpdate(id, { $push: { "video.watchlater": videoid } })
+      await Profile.findByIdAndUpdate(id, { $push: { 'video.watchlater': videoid } })
       updatedstate = true
     } else {
-      await Profile.findByIdAndUpdate(id, { $pull: { "video.watchlater": videoid } })
+      await Profile.findByIdAndUpdate(id, { $pull: { 'video.watchlater': videoid } })
       updatedstate = false
     }
     res.status(200).json({ updatedstate })

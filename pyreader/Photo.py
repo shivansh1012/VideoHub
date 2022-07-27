@@ -3,7 +3,6 @@
 import os
 
 from PIL import Image
-
 from pyreader.MongoDBConnection import MongoDBConnection
 
 
@@ -14,10 +13,10 @@ class Photo:
         self.dir = dir
         self.path = path
         self.ext = ext
-        self.dimension = []
-        self.tags = set()
+        self.dimension = list[int]
+        self.tags = set[str]
         self.uploader = ""
-        self.features = []
+        self.features = list[int]
         self.uploaddate = int(
             os.path.getctime(os.path.join(self.dir, self.filename)) * 1000
         )
@@ -30,25 +29,53 @@ class Photo:
             split_casters = split_filename[1].split(",")
             self.tags.add(split_casters[0].strip())
             self.uploader = MongoDBConnection().getProfileID(
-                name=split_casters[0].strip(), accountType="model")
+                name=split_casters[0].strip(), accountType="model"
+            )
             for i in range(1, len(split_casters)):
                 self.tags.add(split_casters[i].strip())
-                self.features.append(MongoDBConnection().getProfileID(
-                    name=split_casters[i].strip(), accountType="model"))
+                self.features.append(
+                    MongoDBConnection().getProfileID(
+                        name=split_casters[i].strip(), accountType="model"
+                    )
+                )
         img = Image.open(self.dir + "\\" + self.filename)
         self.dimension = img.size
 
-        if self.uploader == None:
+        if self.uploader is None:
             self.tags.add("Unknown")
             self.uploader = MongoDBConnection().getProfileID(
-                name="Unknown", accountType="user")
+                name="Unknown", accountType="user"
+            )
 
         for name in self.title.split():
             if(name.isalpha() and name.lower() not in [
-                "a", "an", "at", "are", "and",
-                "for", "from",
-                "i", "is", "in", "isnt", "isn't",
+                "a",
+                "an",
+                "at",
+                "are",
+                "and",
+                "for",
+                "from",
+                "i",
+                "is",
+                "in",
+                "isnt",
+                "isn't",
                 "on",
-                "to", "the", "that", "then", "than", "there", "their", "those",
-                    "was", "with", "when", "what", "where", "whose"]):
+                "of",
+                "to",
+                "the",
+                "that",
+                "then",
+                "than",
+                "there",
+                "their",
+                "those",
+                "was",
+                "with",
+                "when",
+                "what",
+                "where",
+                "whose"
+            ]):
                 self.tags.add(name)

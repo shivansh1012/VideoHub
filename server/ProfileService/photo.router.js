@@ -1,7 +1,6 @@
 const router = require('express').Router()
 const multer = require('multer')
-const path = require('path')
-var fs = require('fs');
+const fs = require('fs')
 
 const Profile = require('../Models/Profile.js')
 const ProfileAuth = require('./profileAuth.js')
@@ -15,8 +14,8 @@ ffmpeg.setFfprobePath(ffprobePath)
 
 const profilepicStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    if (!fs.existsSync("./public/uploads/profilepics/")) {
-      fs.mkdirSync("./public/uploads/profilepics/", { recursive: true });
+    if (!fs.existsSync('./public/uploads/profilepics/')) {
+      fs.mkdirSync('./public/uploads/profilepics/', { recursive: true })
     }
     cb(null, './public/uploads/profilepics')
   },
@@ -26,12 +25,12 @@ const profilepicStorage = multer.diskStorage({
 })
 
 const multerFilter = (req, file, cb) => {
-  if (["png", "jpg", "jpeg"].includes(file.mimetype.split("/")[1])) {
-    cb(null, true);
+  if (['png', 'jpg', 'jpeg'].includes(file.mimetype.split('/')[1])) {
+    cb(null, true)
   } else {
-    cb("Not a Valid Photo File!!", false);
+    cb(new Error('Not a Valid Photo File!!'), false)
   }
-};
+}
 
 const uploadProfilePic = multer({
   storage: profilepicStorage,
@@ -41,9 +40,9 @@ const uploadProfilePic = multer({
 router.post('/profilepic', ProfileAuth, async (req, res) => {
   uploadProfilePic(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
-      return res.json({ success: false, message: "A Multer error occurred when uploading.", err }).status(400)
+      return res.json({ success: false, message: 'A Multer error occurred when uploading.', err }).status(400)
     } else if (err) {
-      return res.json({ success: false, message: "An unknown error occurred when uploading.", err }).status(400)
+      return res.json({ success: false, message: 'An unknown error occurred when uploading.', err }).status(400)
     }
     const { id } = req.userInfo
     const newPath = res.req.file.destination.substring(9) + '/' + res.req.file.filename
