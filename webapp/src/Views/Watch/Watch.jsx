@@ -41,7 +41,7 @@ export default function Watch() {
 
     const handleLike = async (actionType) => {
         if (!userLoggedIn) {
-            navigate('/profile/signin')
+            navigate('/my/signin')
         }
         const payload = {
             videoid: id,
@@ -74,7 +74,7 @@ export default function Watch() {
 
     const handleWatchLater = async () => {
         if (!userLoggedIn) {
-            navigate('/profile/signin')
+            navigate('/my/signin')
         }
         const payload = {
             videoid: id,
@@ -94,7 +94,7 @@ export default function Watch() {
 
     const handlePlaylistRequest = async (actionType, playlistid, laststatus) => {
         if (!userLoggedIn) {
-            navigate('/profile/signin')
+            navigate('/my/signin')
         }
         const payload = {
             videoid: id,

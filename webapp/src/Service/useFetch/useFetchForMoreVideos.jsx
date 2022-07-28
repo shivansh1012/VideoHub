@@ -15,7 +15,7 @@ export default function useFetchForMoreVideos(offset, id) {
         setMoreVideosLoading(true);
         setError(false);
         axios
-            .get(`${ApiBaseUrl}/meta/morevideo?id=${id}&limit=10&offset=${offset}`, {
+            .get(`${ApiBaseUrl}/meta/video/more?id=${id}&limit=10&offset=${offset}`, {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {

@@ -15,7 +15,7 @@ export default function useFetchForPhoto(offset, sort) {
         setIsLoading(true);
         setError(false);
         axios
-            .get(`${ApiBaseUrl}/meta/list/photo?limit=20&offset=${offset}&sort=${sort}`, {
+            .get(`${ApiBaseUrl}/meta/photo/list?limit=20&offset=${offset}&sort=${sort}`, {
                 cancelToken: new CancelToken((c) => (cancel = c))
             })
             .then((res) => {
