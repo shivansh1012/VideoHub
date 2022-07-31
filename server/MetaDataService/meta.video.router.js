@@ -78,7 +78,7 @@ router.get('/random', async (req, res) => {
         $sample: {
           size: offset
         }
-      },
+      }
       // {
       //   $lookup: {
       //     from: 'Profile',
@@ -88,7 +88,7 @@ router.get('/random', async (req, res) => {
       //   }
       // }
     ])
-    await Video.populate(randomVideolist, { path: 'uploader' })
+    await Video.populate(randomVideolist, { path: 'uploader features', select: 'name' })
     res.status(200).json({ randomVideolist })
   } catch (e) {
     console.error(e)

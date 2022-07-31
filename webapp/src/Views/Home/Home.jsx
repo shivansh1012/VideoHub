@@ -42,7 +42,7 @@ export default function Home() {
         <div>
           {
             loadingVideos ? <div className="simple-spinner"></div> :
-              <VideoMatrix videoList={randomVideoList} />
+              <VideoMatrix animation="animate-bottom" videoList={randomVideoList} />
           }
         </div>
       </div>

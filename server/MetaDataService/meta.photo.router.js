@@ -48,7 +48,7 @@ router.get('/random', async (req, res) => {
         $sample: {
           size: offset
         }
-      },
+      }
       // {
       //   $lookup: {
       //     from: 'Profile',
@@ -58,7 +58,7 @@ router.get('/random', async (req, res) => {
       //   }
       // }
     ])
-    await Photo.populate(randomPhotolist, { path: 'uploader' })
+    await Photo.populate(randomPhotolist, { path: 'uploader features', select: 'name' })
     res.status(200).json({ randomPhotolist })
   } catch (e) {
     console.error(e)

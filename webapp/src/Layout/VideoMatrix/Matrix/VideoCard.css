@@ -47,5 +47,9 @@
 }
 
 .video-uploader {
-  color: gray;
+  color: darklightslategraygrey !important;
+}
+
+.video-feature {
+  color: gray !important;
 }

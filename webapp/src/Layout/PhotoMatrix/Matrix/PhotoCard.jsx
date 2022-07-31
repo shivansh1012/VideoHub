@@ -3,8 +3,36 @@ import { Link } from "react-router-dom";
 import "./PhotoCard.css"
 
 export default function PhotoCard(photo) {
-    let uploader = "Unknown"
-    if (photo['uploader'] && photo.uploader !== null) uploader = photo.uploader.name
+    const uploader = () => {
+        if (!photo['uploader'] && photo.uploader === null) {
+            return <div className="photo-uploader" title="Unknown">
+                Unknown
+            </div>
+        } else {
+            return <div className="photo-uploader">
+                <Link to={`/profile/${photo.uploader._id}`} title={photo.uploader.name}>
+                    {photo.uploader.name}
+                </Link>
+                {features()}
+            </div>
+        }
+    }
+
+    const features = () => {
+        if (photo.features.length !== 0) {
+            return <>
+                &nbsp;&#40;
+                {
+                    photo.features.map((feature, index) => {
+                        return <Link to={`/profile/${feature._id}`} title={feature.name} key={feature._id}>
+                            &nbsp;{feature.name}{index !== photo.features.length - 1 && <>,</>}
+                        </Link>
+                    })
+                }
+                &nbsp;&#41;
+            </>
+        }
+    }
     return (
         <article className="photo-card">
             <Link to={`/photo/${photo._id}`}>
@@ -13,12 +41,12 @@ export default function PhotoCard(photo) {
                 </header>
             </Link>
             <footer>
-                <div>
-                    {photo.title}
+                <div className="photo-title" title={photo.title}>
+                    <Link to={`/photo/${photo._id}`}>
+                        {photo.title}
+                    </Link>
                 </div>
-                <div>
-                    {uploader}
-                </div>
+                {uploader()}
             </footer>
         </article>
     )

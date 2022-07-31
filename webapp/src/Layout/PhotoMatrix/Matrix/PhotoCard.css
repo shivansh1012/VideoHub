@@ -40,3 +40,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.photo-title {
+  color: black;
+}
+
+.photo-uploader {
+  color: gray;
+}
+
+.photo-feature {
+  color: aqua;
+}
