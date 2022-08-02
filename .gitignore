@@ -4,6 +4,8 @@ uploads
 
 __pycache__
 
+build
+
 # dependencies
 node_modules
 .pnp

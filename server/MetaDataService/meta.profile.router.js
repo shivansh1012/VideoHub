@@ -47,17 +47,17 @@ router.get('/files', async (req, res) => {
     if (!profileID) {
       return res.status(400).json({ message: 'Requires Profile ID' })
     }
-    if (!offset || offset === "undefined") {
+    if (!offset || offset === 'undefined') {
       offset = 0
     }
-    if (!limit || limit === "undefined") {
+    if (!limit || limit === 'undefined') {
       limit = 50
     }
     const profileData = (await Profile.aggregate(
       [
         {
           $match: {
-            "_id": mongoose.Types.ObjectId(profileID)
+            _id: mongoose.Types.ObjectId(profileID)
           }
         },
         {
@@ -72,9 +72,9 @@ router.get('/files', async (req, res) => {
         {
           $lookup: {
             from: type,
-            localField: "outputlist",
-            foreignField: "_id",
-            as: "populatedlist"
+            localField: 'outputlist',
+            foreignField: '_id',
+            as: 'populatedlist'
           }
         }
       ]

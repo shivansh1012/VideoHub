@@ -28,6 +28,8 @@ const requestLogger = (req, res, next) => {
 app.use(requestLogger)
 
 // Links
+app.use('/', express.static('./public/build'))
+
 app.use('/static', express.static('public'))
 
 app.use('/meta', require('./MetaDataService/metadata.router.js'))

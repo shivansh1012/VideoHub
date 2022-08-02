@@ -1,5 +1,4 @@
 const router = require('express').Router()
-const fs = require('fs')
 
 const Photo = require('../Models/Photo.js')
 
@@ -12,7 +11,7 @@ router.get('/', async (req, res, next) => {
 
     const photoData = await Photo.findById(req.query.id)
 
-    var options = {
+    const options = {
       dotfiles: 'deny',
       headers: {
         'x-timestamp': Date.now(),
