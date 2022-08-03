@@ -5,4 +5,4 @@ export const LanServerUrl = `http://${ipaddr}:5000`
 export const TetheredServerUrl = 'http://192.168.43.250:5000'
 export const GlobalServerUrl = 'http://_._._._:5000'
 
-export const ApiBaseUrl = LanServerUrl
+export const ApiBaseUrl = process.env.NODE_ENV === 'development' ? LanServerUrl : ''

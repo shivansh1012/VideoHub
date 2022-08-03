@@ -4,9 +4,9 @@ import { ApiBaseUrl } from '../../config.js';
 import axios from 'axios';
 import useFetchForMoreVideos from '../../Service/useFetch/useFetchForMoreVideos.jsx';
 import VideoPlayer from "../../Layout/VideoPlayer/VideoPlayer.jsx"
-import VideoMatrixColumn from "../../Layout/VideoMatrix/VideoMatrixColumn.jsx"
 import UserAuthContext from '../../UserComponents/UserAuthContext.js';
 import "./Watch.css"
+import VideoMatrix from '../../Layout/VideoMatrix/Matrix/VideoMatrix.jsx';
 
 export default function Watch() {
     const { id } = useParams();
@@ -305,7 +305,7 @@ export default function Watch() {
                 <div className="morevideo">
                     <h3 className="py-3">More Videos</h3>
                     <div>
-                        <VideoMatrixColumn videoList={moreVideos} lastVideoElementRef={lastVideoElementRef} />
+                        <VideoMatrix videoList={moreVideos} lastVideoElementRef={lastVideoElementRef}/>
                     </div>
                     <div>{moreVideosLoading && <div className="spinner"></div>}</div>
                 </div>

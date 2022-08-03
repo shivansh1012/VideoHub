@@ -63,7 +63,7 @@ export default function VideoInfo() {
               <div className="d-flex flex-wrap">
                 <p>Models: </p>
                 {
-                  videoData.model.map((model, index) => {
+                  videoData.features.map((model, index) => {
                     return (
                       <p key={index} style={{ paddingInline: "3px", marginInline: "2px", border: "1px", borderRadius: "10px", backgroundColor: "pink" }}>
                         <Link to={`/model/${model['_id']}`}>{model.name}</Link>
