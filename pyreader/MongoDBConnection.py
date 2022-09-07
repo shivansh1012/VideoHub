@@ -3,11 +3,13 @@
 
 import pymongo
 
+DATABASEURI  = "mongodb://localhost:27017/"
+DATABASENAME = "VideoHub2"
 
 class MongoDBConnection:
     def __init__(self) -> None:
-        client = pymongo.MongoClient("mongodb://localhost:27017/")
-        database = client["VideoHub"]
+        client = pymongo.MongoClient(DATABASEURI)
+        database = client[DATABASENAME]
         self.VideoCol = database["Video"]
         self.PhotoCol = database["Photo"]
         self.PlaylistCol = database["Playlist"]

@@ -17,12 +17,12 @@ router.get('/search', async (req, res) => {
         //     $in: [query]
         //   }
         // },
-        // {
-        //   title: {
-        //     $regex: query,
-        //     $options: 'i'
-        //   }
-        // },
+        {
+          title: {
+            $regex: query,
+            $options: 'i'
+          }
+        },
         {
           tags: {
             $elemMatch: {
