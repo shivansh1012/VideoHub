@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const mongoose = require('mongoose')
 
-const Profile = require('../Models/Profile.js')
-const Video = require('../Models/Video.js')
+const Profile = require('../models/Profile.js')
+const Video = require('../models/Video.js')
 
 router.get('/', async (req, res) => {
   try {

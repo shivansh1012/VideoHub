@@ -3,8 +3,8 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 
-const Video = require('../Models/Video.js')
-const Profile = require('../Models/Profile.js')
+const Video = require('../models/Video.js')
+const Profile = require('../models/Profile.js')
 const ProfileAuth = require('./profileAuth.js')
 
 const ffmpeg = require('fluent-ffmpeg')

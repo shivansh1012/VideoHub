@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const mongoose = require('mongoose')
 
-const Video = require('../Models/Video.js')
+const Video = require('../models/Video.js')
 
 router.get('/', async (req, res) => {
   try {

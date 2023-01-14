@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const Profile = require('../Models/Profile.js')
+const Profile = require('../models/Profile.js')
 
 async function userAuth (req, res, next) {
   try {

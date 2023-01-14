@@ -2,7 +2,7 @@ const router = require('express').Router()
 const multer = require('multer')
 const fs = require('fs')
 
-const Profile = require('../Models/Profile.js')
+const Profile = require('../models/Profile.js')
 const ProfileAuth = require('./profileAuth.js')
 
 const ffmpeg = require('fluent-ffmpeg')

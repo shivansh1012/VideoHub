@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const Photo = require('../Models/Photo.js')
+const Photo = require('../models/Photo.js')
 
 router.get('/', async (req, res) => {
   try {

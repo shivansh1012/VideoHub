@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const MONGO_URI = process.env.MONGO_ATLAS_URI || "mongodb://localhost:27017/PlayChess"
+const MONGO_URI = process.env.MONGO_ATLAS_URI || "mongodb://localhost:27017/VideoHub"
 
 console.log("Connecting to DB...");
 mongoose.connect(

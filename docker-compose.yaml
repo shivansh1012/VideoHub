@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  server:
+    container_name: apistream
+    build:
+      context: ./api-stream
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    env_file:
+      - ./api-stream/.env
+  webapp:
+    container_name: webstream
+    build:
+      context: ./web-stream
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server

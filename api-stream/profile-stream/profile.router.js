@@ -3,9 +3,9 @@ const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
-const Video = require('../Models/Video.js')
-const Profile = require('../Models/Profile.js')
-const Playlist = require('../Models/Playlist.js')
+const Video = require('../models/Video.js')
+const Profile = require('../models/Profile.js')
+const Playlist = require('../models/Playlist.js')
 const ProfileAuth = require('./profileAuth.js')
 
 router.post('/register', async (req, res) => {
