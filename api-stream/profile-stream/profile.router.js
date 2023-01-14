@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body
 
     if (!email || !password) {
-      return res.status(401).json({ message: 'fill all the fields' })
+      return res.status(400).json({ message: 'fill all the fields' })
     }
 
     const existingProfile = await Profile.findOne({ email: email }).select('+password +hashedpassword')

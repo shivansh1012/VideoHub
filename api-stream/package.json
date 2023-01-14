@@ -1,15 +1,14 @@
 {
-  "name": "videohubserver",
-  "version": "4.2.0",
-  "description": "watch videos, get recommendations, search videos and share videos (upload) in the community.",
+  "name": "api-stream",
+  "version": "5.0.0",
+  "description": "Store upcoming Files(Videos, Pictures), Stream videos and photos, User Functions",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "client": "npm run start --prefix ../webapp",
-    "build": "npm run build --prefix ../webapp",
+    "webapp": "npm run start --prefix ../web-stream",
     "server": "nodemon index.js",
-    "dev": "concurrently \"npm run client\" \"npm run server\""
+    "dev": "concurrently \"npm run webapp\" \"npm run server\""
   },
   "repository": {
     "type": "git",

@@ -61,7 +61,7 @@ class VideoHubReader:
             filename=filename, filetype="video"
         ):
             self.videoSkipCount += 1
-            print(self.videoSkipCount, "Video Already Present", filename)
+            # print(self.videoSkipCount, "Video Already Present", filename)
             return
 
         newVideo = Video(filename=filename, dir=dir, path=path, ext=ext)
@@ -92,8 +92,8 @@ class VideoHubReader:
     
     def handlePhotoFile(self, filename, dir, path, ext):
         if self.mongoInstance.checkFileInDB(filename=filename, filetype="photo"):
-            self.photoSaveCount += 1
-            print(self.photoSaveCount, "Photo Already Present", filename)
+            self.photoSkipCount += 1
+            # print(self.photoSaveCount, "Photo Already Present", filename)
             return
 
         newPhoto = Photo(filename=filename, dir=dir, path=path, ext=ext)
