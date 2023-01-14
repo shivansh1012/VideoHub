@@ -49,10 +49,10 @@ Docker Container Images
   docker run --rm -d --name apistream --env-file .env -p 5000:5000 userverse/apistream:latest
   ```
 
-  Environmental Variables (Store in .env file):
-  JWT_SECRET=
-  MONGO_ATLAS_URI=
-  SERVER_PORT=5000
+  Environmental Variables (Store in .env file):  
+  JWT_SECRET=  
+  MONGO_ATLAS_URI=  
+  SERVER_PORT=5000  
 
 ## Getting Started ( Developers )  
 ### Installing Required Dependencies
@@ -76,10 +76,10 @@ in web-stream and api-stream directories.
   npm run server
   ```
 
-  Environmental Variables (Store in .env file):
-  JWT_SECRET=
-  MONGO_ATLAS_URI=
-  SERVER_PORT=5000
+  Environmental Variables (Store in .env file):  
+  JWT_SECRET=  
+  MONGO_ATLAS_URI=  
+  SERVER_PORT=5000  
 
 ## Build Images
 
