@@ -1,0 +1,15 @@
+# envs
+.env
+
+# dependencies
+node_modules
+npm-debug.log
+
+# caches
+__pycache__
+
+# target
+target
+
+# Config Files
+.idea
